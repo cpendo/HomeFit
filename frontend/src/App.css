@@ -4,4 +4,11 @@
 @theme{
   --font-primary: "Roboto Flex", serif;
   --font-secondary: "Oswald", serif;
+
+  --color-red-primary: #E5383B;
+  --color-red-secondary: #A4161A;
+}
+
+body {
+  font-family: var(--font-primary);
 }
