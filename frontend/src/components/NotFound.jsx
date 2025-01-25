@@ -4,11 +4,11 @@ import { Link } from "react-router";
 const NotFound = () => {
   return (
     <div className="h-dvh flex flex-col justify-center items-center">
-      <FaDumbbell className="size-72 text-red-secondary" />
+      <FaDumbbell className="size-48 text-red-secondary sm:size-72" />
       <h1 className="text-4xl uppercase font-secondary font-semibold">
         Page not Found
       </h1>
-      <p className="text-2xl mt-4 mb-10 font-light">
+      <p className="text-base sm:text-2xl mt-4 mb-10 font-light">
         The page you&apos;re looking for does not exist
       </p>
       <Link to="/">

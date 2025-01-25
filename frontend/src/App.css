@@ -12,3 +12,10 @@
 body {
   font-family: var(--font-primary);
 }
+
+.bg-auth {
+  background-image: url('./assets/radiant-gradient.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
