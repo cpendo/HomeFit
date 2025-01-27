@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import App from "../App";
 import Login from "../pages/auth/Login";
 import Auth from "../pages/auth/Auth";
@@ -10,6 +10,10 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <Auth />,
     children: [
+      {
+        index: true, 
+        element: <Navigate to="login" replace /> 
+      },
       {
         path: "login",
         element: <Login />
@@ -23,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/wt:id",
+    element: <p>Workout</p>
   },
   {
     path: "*",
