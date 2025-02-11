@@ -1,4 +1,4 @@
-import Display from "./pages/home/Display";
+// import Display from "./pages/home/Display";
 import Navbar from "./pages/home/Navbar";
 import Sidebar from "./pages/home/Sidebar";
 
@@ -8,7 +8,7 @@ const App = () => {
       <Navbar />
       <main className="flex flex-1 w-screen h-full pt-4">
          <Sidebar/>
-       <Display />
+       {/* <Display /> */}
 
       </main> 
     </div>
