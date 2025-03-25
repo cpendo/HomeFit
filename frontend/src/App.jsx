@@ -1,16 +1,13 @@
-// import Display from "./pages/home/Display";
-import Navbar from "./pages/home/Navbar";
-import Sidebar from "./pages/home/Sidebar";
+import { Outlet } from "react-router";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 const App = () => {
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden">
+    <div className="h-screen w-screen max-w-full overflow-x-hidden">
       <Navbar />
-      <main className="flex flex-1 w-screen h-full pt-4">
-         <Sidebar/>
-       {/* <Display /> */}
-
-      </main> 
+      <Outlet />
+      <Footer />
     </div>
   );
 };

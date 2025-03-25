@@ -1,17 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
 
 @import "tailwindcss";
 
-@theme{
+@theme {
   /* --font-primary: "Roboto Flex", serif; */
   /* --font-secondary: "Oswald", serif; */
   --font-secondary: "Anton", serif;
   --font-primary: "Lexend Deca", serif;
 
-
-  --color-red-primary: #E5383B;
-  --color-red-secondary: #A4161A;
+  --color-red-primary: #e5383b;
+  --color-red-secondary: #a4161a;
 }
 
 body {
@@ -19,8 +18,38 @@ body {
 }
 
 .bg-auth {
-  background-image: url('./assets/radiant-gradient.svg');
+  background-image: url("./assets/radiant-gradient.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+}
+
+.blob-bg {
+  background-image: url("./assets/blob.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.card-bg {
+  background: rgb(229, 56, 59);
+  background: radial-gradient(
+    circle,
+    rgba(229, 56, 59, 1) 20%,
+    rgba(229, 56, 59, 1) 31%,
+    rgba(255, 162, 162, 1) 38%,
+    rgba(229, 56, 59, 1) 70%,
+    rgba(229, 56, 59, 1) 93%
+  );
+}
+
+.card:hover {
+  transform: scale(1.02);
+  cursor: pointer;
+}
+
+/* Pulse effect only on hover */
+.card:hover .play-button {
+  animation: pulse 2s infinite;
+  transition: transform 0.2s ease;
 }

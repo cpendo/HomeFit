@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaDumbbell } from "react-icons/fa6";
-import AuthVideo from "../../assets/option_1.mp4";
+// import AuthVideo from "../../assets/option_1.mp4";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -41,19 +41,24 @@ const Register = () => {
   return (
     <div className="h-dvh flex lg:my-0 my-10">
       <div className="bg-auth h-full w-1/2 p-16 hidden lg:flex flex-col gap-y-8 justify-center items-center">
-        <video src={AuthVideo} className="" autoPlay muted loop></video>
+        {/* <video src={AuthVideo} className="" autoPlay muted loop></video> */}
+        <video autoPlay muted loop>
+          <source src="/video.mp4" type="video/mp4" />{" "}
+        </video>
         <h1 className="font-secondary uppercase text-5xl text-white text-center">
-          Simply your <span className="text-black text-6xl"> fitness</span>, one{" "}
-          <span className="text-black text-6xl"> workout </span> at a time
+          Simplify your <span className="text-black text-6xl"> fitness</span>{" "}
+          one <span className="text-black text-6xl"> workout </span> at a time
         </h1>
       </div>
 
       <div className="h-full lg:w-1/2 w-full flex flex-col justify-center">
         <div className="flex justify-center items-center lg:mb-8 mb-5">
           <FaDumbbell className="lg:size-14 size-10 text-red-secondary rotate-90" />
-          <h2 className="uppercase font-secondary lg:text-5xl text-4xl">
-            Homefit
-          </h2>
+          <Link to="/">
+            <h2 className="uppercase font-secondary lg:text-5xl text-4xl">
+              Homefit
+            </h2>
+          </Link>
         </div>
 
         <form

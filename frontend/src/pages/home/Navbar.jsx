@@ -9,7 +9,7 @@ const navigation = [
   { name: "Settings", href: "/settings" },
 ];
 
-const Navbar = () => {
+const Navbr = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -63,4 +63,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Navbr;
