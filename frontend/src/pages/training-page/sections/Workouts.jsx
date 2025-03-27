@@ -15,8 +15,6 @@ const Workouts = () => {
     fetchWorkouts();
   });
 
-  // console.log(workouts.filter((workout) => workout.id < 9));
-
   return (
     <div className="w-full px-7 mt-5 mb-10">
       <div className="flex flex-col justify-center items-center gap-5 bg-red-secondary p-3">

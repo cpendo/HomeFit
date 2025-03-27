@@ -73,6 +73,7 @@ const Navbar = () => {
                   className={({ isActive }) =>
                     isActive ? "text-red-secondary" : "text-black"
                   }
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
                 >
                   {text}
                 </NavLink>

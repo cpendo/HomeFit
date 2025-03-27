@@ -32,15 +32,8 @@ body {
 }
 
 .card-bg {
-  background: rgb(229, 56, 59);
-  background: radial-gradient(
-    circle,
-    rgba(229, 56, 59, 1) 20%,
-    rgba(229, 56, 59, 1) 31%,
-    rgba(255, 162, 162, 1) 38%,
-    rgba(229, 56, 59, 1) 70%,
-    rgba(229, 56, 59, 1) 93%
-  );
+  background-image: url("./assets/29620.jpg");
+  background-repeat: no-repeat;
 }
 
 .card:hover {
@@ -48,8 +41,6 @@ body {
   cursor: pointer;
 }
 
-/* Pulse effect only on hover */
 .card:hover .play-button {
-  animation: pulse 2s infinite;
-  transition: transform 0.2s ease;
+  color: red;
 }

@@ -5,7 +5,8 @@ import NotFound from "../components/NotFound";
 import Register from "../pages/auth/Register";
 import LandingPage from "../pages/landing-page/LandingPage";
 import HelpPage from "../pages/contact-us/HelpPage";
-import TrainingPage from "../pages/training/TrainingPage";
+import TrainingPage from "../pages/training-page/TrainingPage";
+import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
       },
       {
         path: "training/workout/:id",
-        element: <p>Workout ID</p>,
+        element: <WorkoutDetailsPage />,
       },
     ],
   },
