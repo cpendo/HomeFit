@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import useYoutubeSearch from "../../hooks/useYoutubeSearch";
 
+import spinner from "../../assets/fade-stagger-squares.svg"
+
 const WorkoutDetailsPage = () => {
   const { id } = useParams();
   const [workout, setWorkout] = useState(null);
@@ -19,7 +21,10 @@ const WorkoutDetailsPage = () => {
     fetchWorkout();
   }, [id]);
 
-  if (!workout) return <p>loading...</p>;
+  if (!workout) return (<div>
+    <img src={spinner} alt="Loading..." className="size-30" />;
+    <p>Geting workout details!</p>
+  </div>);
 
   return (
     <section className="flex flex-col my-5 mx-12">
@@ -34,12 +39,17 @@ const WorkoutDetailsPage = () => {
         </p>
       </div>
 
-      {/* <button>show instructions</button>
-      <div>{workout.instructions}</div> */}
-       {loading && <p>Loading video...</p>}
+      {/* <button>show instructions</button> */}
+      {/* <div>{workout.instructions}</div>  */}
+       {loading && (
+        <div className="">
+           <img src={spinner} alt="Loading..." className="size-40" />
+           <p className="text-3xl">Geting workout demo video</p>
+        </div>
+       )}
        {error && <p>{error}</p>}
 
-      <div className="bg-amber-300 h-screen w-full mt-8">
+      <div className="h-screen w-full mt-8">
       {videoId && (
         <iframe
           src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playlist=${videoId}&loop=1`}

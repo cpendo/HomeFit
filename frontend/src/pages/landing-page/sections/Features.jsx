@@ -25,7 +25,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="w-full flex flex-col items-center gap-12 bg-gray-200 py-16">
+    <section className="w-full flex flex-col items-center gap-12 bg-[#D3D3D3] py-16">
       <h1 className="font-secondary text-5xl capitalize">what we offer</h1>
 
       <div className="w-[90%] flex lg:flex-row flex-col items-center gap-5 lg:h-[500px]">
@@ -67,42 +67,6 @@ const Features = () => {
           </p>
         </div>
         ))}
-
-        {/* <div className="flex flex-col items-center gap-4">
-          <IoBarChartSharp className="text-7xl text-red-secondary" />
-
-          <h2 className="text-black font-secondary text-3xl font-semibold tracking-wide">
-            Workout tracking
-          </h2>
-          <p className="text-center font-light text-lg text-gray-700">
-            Log exercises, sets, reps, and durations to keep track of your
-            progress.
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3 items-center ">
-          <RiListSettingsLine className="text-7xl text-red-secondary" />
-
-          <h2 className="text-black font-secondary text-3xl font-semibold tracking-wide">
-            Personalization
-          </h2>
-          <p className="text-center font-light text-lg text-gray-700">
-            Create personalized workout sets for different fitness goals (e.g.,
-            &quot;Leg Day&quot;, &quot;Cardio Blast&quot;).
-          </p>
-        </div>
-
-        <div className="flex flex-col gap-3 items-center ">
-          <RiListCheck className="text-7xl text-red-secondary" />
-
-          <h2 className="text-black font-secondary text-3xl font-semibold tracking-wide">
-            Exercise Library
-          </h2>
-          <p className="text-center font-light text-lg text-gray-700">
-            Explore a diverse range of exercises, complete with descriptions,
-            and demonstrations.
-          </p>
-        </div> */}
       </div>
     </section>
   );

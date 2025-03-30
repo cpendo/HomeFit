@@ -1,11 +1,41 @@
-import Workouts from "./sections/Workouts"
+import WorkoutCard from "./components/WorkoutCard";
+import Filter from "./sections/Filter";
+import { useEffect, useState } from "react";
 
 const TrainingPage = () => {
+  const [workouts, setWorkouts] = useState([]);
+
+  useEffect(() => {
+    const fetchWorkouts = async () => {
+      const response = await fetch("workout.json");
+      const data = await response.json();
+      setWorkouts(data);
+    };
+
+    fetchWorkouts();
+  });
+
   return (
     <section className="w-full min-h-screen">
-        <Workouts />
-    </section>
-  )
-}
+      <div className="w-full px-7 mt-5 mb-10">
+        <div className="flex flex-col justify-center items-center gap-5 bg-red-secondary p-3">
+          <h2 className="font-secondary sm:text-5xl text-5xl uppercase">
+            All Workouts
+          </h2>
 
-export default TrainingPage
+          <Filter />
+        </div>
+
+        <div className=" flex flex-row flex-wrap justify-center items-center gap-8 pt-8">
+          {workouts
+            .filter((workout) => workout.id < 9)
+            .map((workout) => (
+              <WorkoutCard key={workout.id} workout={workout} />
+            ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TrainingPage;
