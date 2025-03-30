@@ -10,7 +10,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRegisterUserMutation } from "../../features/users/usersApi";
 
 const Register = () => {
-  const [registerUser, { isLoading, error, data }] = useRegisterUserMutation();
+  const [registerUser, { isLoading }] = useRegisterUserMutation();
 
   const schema = yup.object({
     first_name: yup.string().required("First name is required"),
@@ -38,6 +38,7 @@ const Register = () => {
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
+    // eslint-disable-next-line no-unused-vars
     const { checkbox, confirmPassword, ...filteredData } = data;
 
     try {
