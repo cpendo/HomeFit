@@ -7,11 +7,14 @@ import { FaDumbbell } from "react-icons/fa6";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRegisterUserMutation } from "../../features/users/usersApi";
 
 const Register = () => {
+  const [registerUser, { isLoading, error, data }] = useRegisterUserMutation();
+
   const schema = yup.object({
-    firstName: yup.string().required("First name is required"),
-    lastName: yup.string().required("Last name is required"),
+    first_name: yup.string().required("First name is required"),
+    last_name: yup.string().required("Last name is required"),
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup
       .string()
@@ -33,10 +36,16 @@ const Register = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => {
-    // eslint-disable-next-line no-unused-vars
-    const { checkbox, ...filteredData } = data;
-    console.log(filteredData);
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+    const { checkbox, confirmPassword, ...filteredData } = data;
+
+    try {
+      const response = await registerUser(filteredData).unwrap();
+      console.log("User registered :" + response);
+    } catch (error) {
+      console.error("Registration failed:", error);
+    }
   };
   return (
     <div className="h-dvh flex lg:my-0 my-10">
@@ -76,7 +85,7 @@ const Register = () => {
             <div>
               <label htmlFor="firstName">First name</label>
               <input
-                {...register("firstName")}
+                {...register("first_name")}
                 type="text"
                 id="firstName"
                 className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2"
@@ -91,7 +100,7 @@ const Register = () => {
             <div>
               <label htmlFor="lastName">Last name</label>
               <input
-                {...register("lastName")}
+                {...register("last_name")}
                 type="text"
                 id="lastName"
                 className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2"
@@ -186,8 +195,10 @@ const Register = () => {
             </span>
           )}
 
-          <button className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline">
-            Sign Up
+          <button disabled={isLoading} className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline">
+            {/* Sign Up */}
+            {isLoading ? "Registering..." : "Sign Up"}
+
           </button>
           <p className="font-secondary text-gray-800 lg:text-lg text-base mt-2">
             Already Registered?{" "}
