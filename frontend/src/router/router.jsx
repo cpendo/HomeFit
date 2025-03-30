@@ -7,6 +7,7 @@ import LandingPage from "../pages/landing-page/LandingPage";
 import HelpPage from "../pages/contact-us/HelpPage";
 import TrainingPage from "../pages/training-page/TrainingPage";
 import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
+import VerifyUser from "../pages/auth/VerifyUser";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/login/:token",
+    element: <VerifyUser />
   },
   {
     path: "/register",

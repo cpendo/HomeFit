@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { FaDumbbell } from "react-icons/fa6";
 // import AuthVideo from "../../assets/option_1.mp4";
+import Swal from "sweetalert2";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,6 +34,7 @@ const Register = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
@@ -44,8 +46,19 @@ const Register = () => {
     try {
       const response = await registerUser(filteredData).unwrap();
       console.log("User registered :" + response);
+      Swal.fire({
+        title: "User registered!",
+        text: "Check your email for verification.",
+        icon: "success"
+      });
+      reset();
     } catch (error) {
       console.error("Registration failed:", error);
+      Swal.fire({
+        title: "Registration Failed!",
+        text: error?.data?.message,
+        icon: "error"
+      });
     }
   };
   return (

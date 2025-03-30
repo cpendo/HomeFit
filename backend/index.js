@@ -19,7 +19,7 @@ app.use("/api/users", userRoutes);
 //Start Server and Connect to DB
 const startServer = async () => {
   await connectDB();
-  await sequelize.sync({ alter: true }); // Ensures models match database schema
+  await sequelize.sync({ force: true }); // Ensures models match database schema
   console.log("All models synced with database.");
 
   app.listen(process.env.PORT, () =>

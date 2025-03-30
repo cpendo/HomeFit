@@ -7,13 +7,16 @@ export const usersApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   endpoints: (build) => ({
     registerUser: build.mutation({
-      query: ({ newUser }) => ({
+      query: (newUser) => ({
         url: "/register",
         method: "POST",
         body: newUser,
       }),
     }),
+    verifyUser: build.query({
+      query: (token) => `/verify/${token}`
+    })
   }),
 });
 
-export const { useRegisterUserMutation } = usersApi;
+export const { useRegisterUserMutation, useVerifyUserQuery } = usersApi;

@@ -9,7 +9,9 @@ const createUser = async (req, res) => {
 
   const result = validationResult(req);
   if (!result.isEmpty())
-    return res.status(400).send({ errors: result.array() });
+    return res
+      .status(400)
+      .json({ message: "Validation error", errors: result.array() });
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -46,7 +48,9 @@ const verifyUser = async (req, res) => {
 
     await user.update({ is_verified: true });
 
-    return res.redirect("http://localhost:5000/api/users/");
+    // return res.redirect("http://localhost:5173/login");
+    return res.json({ message: "Verification successful!" });
+
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

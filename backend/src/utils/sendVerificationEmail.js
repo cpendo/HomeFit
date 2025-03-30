@@ -14,7 +14,8 @@ const sendVerificationEmail = async (userID, userEmail, userName) => {
     expiresIn: "1h",
   });
 
-  const verificationLink = `http://localhost:5000/api/users/verify/${verificationToken}`
+  // const verificationLink = `http://localhost:5000/api/users/verify/${verificationToken}`
+  const verificationLink = `http://localhost:5173/login/${verificationToken}`;
 
   const emailTemplate = `
     <!DOCTYPE html>
@@ -27,7 +28,7 @@ const sendVerificationEmail = async (userID, userEmail, userName) => {
         <h3 style="">You're Almost There ${userName}!</h3>
         <p style="margin-bottom: 20px;">Please verify your email to activate your account.</p>
         <a href="${verificationLink}"
-            style="background:#A4161A;padding:10px 20px;color:white;text-decoration:none;border-radius:5px; margin-bottom: 20px;>Activate My
+            style="background:#A4161A;padding:10px 20px;color:white;text-decoration:none;border-radius:5px;margin-bottom:10px;">Activate My
             Account</a>
     </body>
     </html>
@@ -39,7 +40,6 @@ const sendVerificationEmail = async (userID, userEmail, userName) => {
     subject: "Activate Your Account",
     html: emailTemplate,
   });
-
 };
 
 module.exports = sendVerificationEmail;
