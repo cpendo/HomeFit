@@ -7,23 +7,16 @@ const sendVerificationEmail = require("../utils/sendVerificationEmail");
 const createUser = async (req, res) => {
   const { first_name, last_name, email, password } = matchedData(req);
 
-  const result = validationResult(req);
-  if (!result.isEmpty())
-    return res
-      .status(400)
-      .json({ message: "Validation error", errors: result.array() });
-
   try {
     const existingUser = await User.findOne({ where: { email } });
     if (existingUser)
       return res.status(400).json({ message: "Email already in use" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       first_name,
       last_name,
       email,
-      password: hashedPassword,
+      password,
     });
 
     await sendVerificationEmail(newUser.id, newUser.email, newUser.first_name);
@@ -48,13 +41,18 @@ const verifyUser = async (req, res) => {
 
     await user.update({ is_verified: true });
 
-    // return res.redirect("http://localhost:5173/login");
     return res.json({ message: "Verification successful!" });
-
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-const loginUser = async (req, res) => {};
+const loginUser = async (req, res) => {
+  if (req.session.messages) {
+    const messages = req.session.messages;
+    req.session.messages = []; // Clear messages after accessing
+    return res.status(401).json({ message: messages });
+  }
+  res.status(200).json({ message: "Logged In" });
+};
 
 module.exports = { createUser, verifyUser, loginUser };

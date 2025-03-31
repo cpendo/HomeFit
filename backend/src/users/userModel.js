@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
-const { sequelize } = require("../../config/sequelize");
+const bcrypt = require("bcrypt");
+const { sequelize } = require("../config/sequelize");
 
 const User = sequelize.define(
   "User",
@@ -47,14 +48,18 @@ const User = sequelize.define(
 );
 
 // Define named hooks
-const lowercaseFields = (user) => {
+const processUserData = async (user) => {
   if (user.first_name) user.first_name = user.first_name.toLowerCase();
   if (user.last_name) user.last_name = user.last_name.toLowerCase();
   if (user.email) user.email = user.email.toLowerCase();
+
+  if (user.changed("password")) {
+    user.password = await bcrypt.hash(user.password, 10);
+  }
 };
 
 // Attach hooks
-User.addHook("beforeCreate", "lowercaseHook", lowercaseFields);
-User.addHook("beforeUpdate", "lowercaseHook", lowercaseFields);
+User.addHook("beforeCreate", "lowercaseHook", processUserData);
+User.addHook("beforeUpdate", "lowercaseHook", processUserData);
 
 module.exports = User;
