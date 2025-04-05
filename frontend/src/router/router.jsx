@@ -8,6 +8,7 @@ import HelpPage from "../pages/contact-us/HelpPage";
 import TrainingPage from "../pages/training-page/TrainingPage";
 import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
 import VerifyUser from "../pages/auth/VerifyUser";
+import DashboardLayout from "../pages/dashboard/DashboardLayout";
 
 const router = createBrowserRouter([
   {
@@ -33,12 +34,32 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/dashboard",
+    element: <DashboardLayout />,
+    children: [
+      {
+        index: true,
+        element: <p>Dash Home</p>,
+      },
+      {
+        path: "workouts",
+        element: <p>Workouts</p>,
+      },
+      {
+        path: "sets",
+        element: <p>sets</p>,
+      },
+      { path: "logs", element: <p>logs</p> },
+      {path: "settings", element: <p>settings</p>}
+    ],
+  },
+  {
     path: "/login",
     element: <Login />,
   },
   {
     path: "/login/:token",
-    element: <VerifyUser />
+    element: <VerifyUser />,
   },
   {
     path: "/register",
