@@ -2,6 +2,8 @@ const User = require("./userModel");
 const { validationResult, matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const passport = require("passport");
+
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const createUser = async (req, res) => {
@@ -46,13 +48,29 @@ const verifyUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
-const loginUser = async (req, res) => {
-  if (req.session.messages) {
-    const messages = req.session.messages;
-    req.session.messages = []; // Clear messages after accessing
-    return res.status(401).json({ message: messages });
-  }
-  res.status(200).json({ message: "Logged In" });
+
+const loginUser = async (req, res, next) => {
+  passport.authenticate("local", { failureMessage: true }, (err, user, info) => {
+    if (err) {
+      return next(err); // Handle unexpected errors
+    }
+
+    if (!user) {
+      return res.status(401).json({ message: info.message }); // Send failure message to client
+    }
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err); // Handle login error
+      }
+      return res.status(200).json({ message: "Logged In" });
+    });
+  })(req, res, next);
 };
+
+module.exports = {
+  loginUser
+};
+
 
 module.exports = { createUser, verifyUser, loginUser };
