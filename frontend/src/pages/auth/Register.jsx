@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { FaDumbbell } from "react-icons/fa6";
-// import AuthVideo from "../../assets/option_1.mp4";
-import Swal from "sweetalert2";
-
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import Swal from "sweetalert2";
 import { useRegisterUserMutation } from "../../features/users/usersApi";
+import SidePanel from "./components/SidePanel";
+import FormInput from "./components/FormInput";
+import PasswordInput from "./components/PasswordInput";
+import { FaDumbbell } from "react-icons/fa6";
 
 const Register = () => {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
@@ -30,7 +29,6 @@ const Register = () => {
       .oneOf([true], "Please accept the terms and conditions to register"),
   });
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const {
     register,
     handleSubmit,
@@ -49,45 +47,33 @@ const Register = () => {
       Swal.fire({
         title: "User registered!",
         text: "Check your email for verification.",
-        icon: "success"
+        icon: "success",
       });
       reset();
     } catch (error) {
       console.error("Registration failed:", error);
+      console.log(filteredData)
       Swal.fire({
         title: "Registration Failed!",
         text: error?.data?.message,
-        icon: "error"
+        icon: "error",
       });
     }
   };
   return (
-    <div className="h-dvh flex lg:my-0 my-10">
-      <div className="bg-auth h-full w-1/2 p-16 hidden lg:flex flex-col gap-y-8 justify-center items-center">
-        {/* <video src={AuthVideo} className="" autoPlay muted loop></video> */}
-        <video autoPlay muted loop>
-          <source src="/video.mp4" type="video/mp4" />{" "}
-        </video>
-        <h1 className="font-secondary uppercase text-5xl text-white text-center">
-          Simplify your <span className="text-black text-6xl"> fitness</span>{" "}
-          one <span className="text-black text-6xl"> workout </span> at a time
-        </h1>
-      </div>
+    <div className="h-max lg:h-dvh flex lg:my-0 my-10">
+      <SidePanel />
 
       <div className="h-full lg:w-1/2 w-full flex flex-col justify-center">
-        <div className="flex justify-center items-center lg:mb-8 mb-5">
-          <FaDumbbell className="lg:size-14 size-10 text-red-secondary rotate-90" />
-          <Link to="/">
-            <h2 className="uppercase font-secondary lg:text-5xl text-4xl">
-              Homefit
-            </h2>
+        <div className="mx-auto w-4/5">
+          <Link
+            to="/"
+            className="flex justify-center items-center lg:mb-8 mb-5"
+          >
+            <FaDumbbell className="lg:size-12 size-8 text-red-secondary rotate-90" />
+            <p className="text-5xl font-secondary">Homefit</p>
           </Link>
-        </div>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mx-auto w-4/5 font-light text-base"
-        >
           <h3 className="uppercase font-secondary font-normal lg:text-3xl text-2xl">
             Hello,👋
           </h3>
@@ -95,132 +81,89 @@ const Register = () => {
             Create an account to start using HomeFit
           </p>
 
-          <div className="flex lg:flex-row flex-col lg:gap-3">
-            <div>
-              <label htmlFor="firstName">First name</label>
-              <input
-                {...register("first_name")}
-                type="text"
-                id="firstName"
-                className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2"
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="font-light text-base w-full"
+          >
+            <div className="flex lg:flex-row flex-col lg:gap-3">
+              <FormInput
+                label="First name"
+                id="first_name"
+                register={register}
+                error={errors.first_name}
               />
-              {errors.firstName && (
-                <span className="text-red-600 text-sm">
-                  {errors.firstName?.message}
-                </span>
-              )}
+              <FormInput
+                label="Last name"
+                id="last_name"
+                register={register}
+                error={errors.last_name}
+              />
             </div>
 
-            <div>
-              <label htmlFor="lastName">Last name</label>
-              <input
-                {...register("last_name")}
-                type="text"
-                id="lastName"
-                className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2"
-              />
-              {errors.lastName && (
-                <span className="text-red-600 text-sm">
-                  {errors.lastName?.message}
-                </span>
-              )}
-            </div>
-          </div>
-
-          <div className="flex flex-col mt-3">
-            <label htmlFor="email">Email</label>
-            <input
-              {...register("email")}
-              type="email"
+            <FormInput
+              label="Email"
               id="email"
-              className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2"
+              type="email"
+              register={register}
+              error={errors.email}
             />
-          </div>
-          {errors.email && (
-            <span className="text-red-600 text-sm">
-              {errors.email?.message}
-            </span>
-          )}
 
-          <div className="flex flex-col mt-3">
-            <label htmlFor="password">Password</label>
-
-            <div className="relative">
-              <input
-                {...register("password")}
-                type={isPasswordVisible ? "text" : "password"}
+            <div className="flex lg:flex-row flex-col lg:gap-3">
+              <PasswordInput
+                label="Password"
                 id="password"
-                className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2 pr-10"
+                register={register}
+                error={errors.password}
               />
-              <button
-                type="button"
-                onClick={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                {isPasswordVisible ? (
-                  <FaEye className="absolute top-1/2 right-3 transform -translate-y-1/2 text-black cursor-pointer" />
-                ) : (
-                  <FaEyeSlash className="absolute top-1/2 right-3 transform -translate-y-1/2 text-black cursor-pointer" />
-                )}
-              </button>
+
+              <PasswordInput
+                label="Confirm password"
+                id="confirmPassword"
+                register={register}
+                error={errors.confirmPassword}
+              />
             </div>
-          </div>
-          {errors.password && (
-            <span className="text-red-600 text-sm">
-              {errors.password?.message}
-            </span>
-          )}
 
-          <div className="flex flex-col mt-3">
-            <label htmlFor="password">Confirm password</label>
-            <input
-              {...register("confirmPassword")}
-              type="password"
-              id="confirmPassword"
-              className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none focus:bg-white focus:border-2 pr-10"
-            />
-          </div>
-          {errors.confirmPassword && (
-            <span className="text-red-600 text-sm">
-              {errors.confirmPassword?.message}
-            </span>
-          )}
+            <div className="flex flex-row gap-2 items-center mt-2">
+              <input
+                {...register("checkbox")}
+                type="checkbox"
+                id="checkbox"
+                className="size-4 focus:outline"
+              />
+              <label
+                htmlFor="checkbox"
+                className="text-sm font-medium text-nowrap"
+              >
+                {" "}
+                Accept our{" "}
+                <span className="text-blue-600 underline">
+                  Terms & Conditions
+                </span>{" "}
+              </label>
+            </div>
+            {errors.checkbox && (
+              <span className="text-red-600 text-sm">
+                {errors.checkbox?.message}
+              </span>
+            )}
 
-          <div className="flex flex-row gap-2 items-center mt-2">
-            <input
-              {...register("checkbox")}
-              type="checkbox"
-              id="checkbox"
-              className="size-4 focus:outline"
-            />
-            <label
-              htmlFor="checkbox"
-              className="text-sm font-medium text-nowrap"
+            <button
+              disabled={isLoading}
+              className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline"
             >
-              {" "}
-              Accept our{" "}
-              <span className="text-blue-600 underline">
-                Terms & Conditions
-              </span>{" "}
-            </label>
-          </div>
-          {errors.checkbox && (
-            <span className="text-red-600 text-sm">
-              {errors.checkbox?.message}
-            </span>
-          )}
+              {/* Sign Up */}
+              {isLoading ? "Registering..." : "Sign Up"}
+            </button>
+          </form>
 
-          <button disabled={isLoading} className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline">
-            {/* Sign Up */}
-            {isLoading ? "Registering..." : "Sign Up"}
-
-          </button>
           <p className="font-secondary text-gray-800 lg:text-lg text-base mt-2">
             Already Registered?{" "}
             <Link to="/login" className="underline text-black">
               Sign In
             </Link>
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
