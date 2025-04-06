@@ -1,46 +1,177 @@
-import { FaDumbbell } from "react-icons/fa6";
-import spinner from "../../assets/fade-stagger-squares.svg";
+import { useState } from "react";
+import { useCodeInputs } from "../../hooks/useCodeInputs";
+import { useResendTimer } from "../../hooks/useResendTimer";
+import SidePanel from "./components/SidePanel";
+import CodeInput from "./components/CodeInput";
 
-import { useNavigate, useParams } from "react-router-dom";
-import { Link } from "react-router";
-import { useVerifyUserQuery } from "../../features/users/usersApi";
-import { useEffect } from "react";
+import { FaDumbbell } from "react-icons/fa6";
+import { BiSolidEditAlt } from "react-icons/bi";
+import { BsSendFill } from "react-icons/bs";
+import { IoCloseSharp } from "react-icons/io5";
+import Swal from "sweetalert2";
+import * as yup from "yup";
 
 const VerifyAccount = () => {
-  const { token } = useParams();
-  console.log(token);
+  const user = "johndoe@gmail.com";
 
-  const { isLoading, isSuccess, isError } = useVerifyUserQuery(token, {
-    skip: !token, // Ensures query doesn't run if token is missing
+  const emailSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Enter a valid email")
+      .required("Email is required"),
   });
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isSuccess) setTimeout(() => navigate("/login"), 1500);
-  }, [isSuccess, navigate]);
+  const [userEmail, setUserEmail] = useState(user);
+  const [emailEditable, setEmailEditable] = useState(false);
+
+  const { values, isComplete, handleChange, handleKeyDown, inputRefs } =
+    useCodeInputs();
+  const { timeLeft, formatTime, resendAvailable, resetTimer } =
+    useResendTimer();
+
+  const handleChangeEmail = async () => {
+    // Prevent submitting the same email
+    if (userEmail === user) {
+      return Swal.fire("No Changes", "You entered the same email.", "info");
+    }
+
+    try {
+      await emailSchema.validate({ email: userEmail });
+
+      Swal.fire({
+        title: "Are you sure ?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showDenyButton: true,
+        confirmButtonText: "Yes! Edit my email",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          ///send new email to backend
+          console.log("Changed Email to :" + userEmail);
+        } else if (result.isDenied) {
+          //reset to current email
+          setUserEmail(user);
+        }
+      });
+    } catch (error) {
+      Swal.fire("Invalid Email", error.message, "error");
+    }
+  };
+
+  const handleResendCode = async () => {
+    // Call your resend function (e.g., API request)
+    // await resendCode(); // <- You’ll need to define this
+
+    // Reset the timer
+    if (resendAvailable) {
+      // Trigger resend logic
+      resetTimer();
+    }
+  };
 
   return (
-    <div className="h-dvh flex flex-col justify-center items-center">
-      <FaDumbbell className="size-28 text-red-secondary sm:size-32" />
-      <h1 className="sm:text-4xl text-2xl uppercase font-secondary">
-        Verify your Account
-      </h1>
-      {isLoading && <img src={spinner} alt="Loading..." className="size-40" />}
-      {isError && (
-        <div className="flex flex-col justify-center items-center">
-          <p className="text-red-600 mt-2 mb-4">Verification Failed. Try Again Later.</p>
-          <Link to="/">
-            <button className="bg-red-primary px-3 py-2 text-white text-2xl rounded-xs hover:bg-red-secondary">
-              Home
-            </button>
-          </Link>
+    <div className="h-dvh flex">
+      <div className="h-full lg:w-1/2 w-full flex flex-col">
+        <div className="flex items-center lg:p-3 p-1">
+          <FaDumbbell className="lg:size-8 size-8 text-red-secondary rotate-90" />
+          <p className="text-4xl font-secondary">Homefit</p>
         </div>
-      )}
-      {isSuccess && (
-        <p className="text-green-600">
-          Verification Successful! Redirecting...
-        </p>
-      )}
+
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <div className="flex flex-col justify-center items-center">
+            <h1 className="font-secondary text-5xl mb-2">Check your inbox</h1>
+            <p className="text-xl">
+              We have sent you a verification code via email
+            </p>
+          </div>
+
+          <div className="flex justify-center text-2xl gap-2 mt-2">
+            <input
+              type="text"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              disabled={!emailEditable}
+              className={`text-center outline-0 py-1 border-black rounded-xl ${
+                emailEditable ? "border-2 bg-gray-200" : "border-1"
+              }`}
+            />
+            {emailEditable && (
+              <button
+                onClick={handleChangeEmail}
+                className={`text-red-secondary text-2xl ${
+                  emailEditable ? "inline" : "hidden"
+                }`}
+              >
+                <BsSendFill />
+              </button>
+            )}
+
+            {emailEditable ? (
+              <button
+                onClick={() => {
+                  setEmailEditable(false);
+                  setUserEmail(user);
+                }}
+                className={`text-red-secondary text-4xl`}
+              >
+                <IoCloseSharp />
+              </button>
+            ) : (
+              <button
+                onClick={() => setEmailEditable(true)}
+                className="text-red-secondary text-3xl"
+              >
+                <BiSolidEditAlt />
+              </button>
+            )}
+          </div>
+
+          <form className="flex flex-col justify-center items-center gap-5 my-9">
+            <div className="flex flex-row gap-3">
+              {values.map((val, index) => (
+                <CodeInput
+                  key={index}
+                  value={val}
+                  onChange={(e) => handleChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  inputRef={(el) => (inputRefs.current[index] = el)}
+                />
+              ))}
+            </div>
+
+            <div className="w-full text-lg flex flex-row justify-between items-center ">
+              <div>
+                Can&apos;t find the code?
+                <button
+                  onClick={handleResendCode}
+                  disabled={!resendAvailable}
+                  className={`ml-2 underline transition-opacity ${
+                    !resendAvailable
+                      ? "text-gray-400 cursor-not-allowed opacity-50"
+                      : "text-red-secondary hover:opacity-80"
+                  }`}
+                >
+                  Resend
+                </button>
+              </div>
+
+              <div>{formatTime(timeLeft)}</div>
+            </div>
+
+            <button
+              disabled={!isComplete}
+              className={`w-full font-secondary text-2xl p-2 rounded-sm mt-4 ${
+                isComplete
+                  ? "bg-red-secondary text-white"
+                  : "bg-gray-300 text-gray-600 cursor-not-allowed"
+              }`}
+            >
+              Verify
+            </button>
+          </form>
+        </div>
+      </div>
+      <SidePanel />
     </div>
   );
 };
