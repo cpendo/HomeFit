@@ -7,7 +7,7 @@ const CodeInput = ({value, onChange, onKeyDown, inputRef}) => {
       onKeyDown={onKeyDown}
       ref={inputRef}
       maxLength={1}
-      className="bg-gray-300 size-14 text-5xl text-center outline-none border-gray-300 border-2 rounded-xl focus:border-black"
+      className="bg-gray-300 sm:size-14 size-10 sm:text-5xl text-3xl text-center outline-none border-gray-300 border-2 rounded-xl focus:border-black"
     />
   );
 };

@@ -26,27 +26,30 @@ const Login = () => {
 
   return (
     <div className="h-dvh flex">
-      <SidePanel />
-
-      <div className="h-full lg:w-1/2 w-full flex flex-col justify-center">
-        <div className="mx-auto w-4/5">
+      <div className="h-full lg:w-1/2 w-full flex flex-col">
+        <div className="flex items-center lg:p-3 p-1">
           <Link
             to="/"
             className="flex justify-center items-center lg:mb-8 mb-5"
           >
-            <FaDumbbell className="lg:size-12 size-8 text-red-secondary rotate-90" />
-            <p className="text-5xl font-secondary">Homefit</p>
+            <FaDumbbell className="sm:size-8 size-7 text-red-secondary rotate-90" />
+            <p className="sm:text-4xl text-3xl font-secondary">Homefit</p>
           </Link>
-          <h3 className="uppercase font-secondary font-normal lg:text-3xl text-2xl">
-            Hello,👋
-          </h3>
-          <p className="lg:text-xl text-lg font-light pt-1 pb-2">
-            Enter your account details{" "}
-          </p>
+        </div>
+
+        <div className="w-4/5 mx-auto flex-1 flex flex-col justify-center items-center">
+          <div className="w-full flex flex-col">
+            <h3 className="uppercase font-secondary font-normal lg:text-3xl text-2xl">
+              Hello,👋
+            </h3>
+            <p className="lg:text-xl text-lg font-light pt-1 pb-2">
+              Enter your account details{" "}
+            </p>
+          </div>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="font-light text-base"
+            className="font-light text-base w-full"
           >
             <FormInput
               label="Email"
@@ -76,14 +79,16 @@ const Login = () => {
             </button>
           </form>
 
-          <p className="font-secondary text-gray-800 lg:text-lg text-base mt-2">
+          <button className="font-secondary text-gray-800 lg:text-lg text-base mt-2">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="underline text-black">
               Sign Up
             </Link>
-          </p>
+          </button>
         </div>
       </div>
+
+      <SidePanel />
     </div>
   );
 };

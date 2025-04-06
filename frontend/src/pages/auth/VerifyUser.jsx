@@ -73,19 +73,19 @@ const VerifyAccount = () => {
     <div className="h-dvh flex">
       <div className="h-full lg:w-1/2 w-full flex flex-col">
         <div className="flex items-center lg:p-3 p-1">
-          <FaDumbbell className="lg:size-8 size-8 text-red-secondary rotate-90" />
-          <p className="text-4xl font-secondary">Homefit</p>
+          <FaDumbbell className="sm:size-8 size-7 text-red-secondary rotate-90" />
+          <p className="sm:text-4xl text-3xl font-secondary">Homefit</p>
         </div>
 
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="flex flex-col justify-center items-center">
-            <h1 className="font-secondary text-5xl mb-2">Check your inbox</h1>
-            <p className="text-xl">
+            <h1 className="font-secondary sm:text-5xl text-4xl mb-2">Check your inbox</h1>
+            <p className="sm:text-xl text-lg sm:text-start text-center">
               We have sent you a verification code via email
             </p>
           </div>
 
-          <div className="flex justify-center text-2xl gap-2 mt-2">
+          <div className="flex justify-center sm:text-2xl text-base gap-2 sm:mt-2 mt-6">
             <input
               type="text"
               value={userEmail}
@@ -98,7 +98,7 @@ const VerifyAccount = () => {
             {emailEditable && (
               <button
                 onClick={handleChangeEmail}
-                className={`text-red-secondary text-2xl ${
+                className={`text-red-secondary sm:text-2xl text-xl ${
                   emailEditable ? "inline" : "hidden"
                 }`}
               >
@@ -112,14 +112,14 @@ const VerifyAccount = () => {
                   setEmailEditable(false);
                   setUserEmail(user);
                 }}
-                className={`text-red-secondary text-4xl`}
+                className={`text-red-secondary sm:text-4xl text-2xl`}
               >
                 <IoCloseSharp />
               </button>
             ) : (
               <button
                 onClick={() => setEmailEditable(true)}
-                className="text-red-secondary text-3xl"
+                className="text-red-secondary sm:text-3xl text-2xl"
               >
                 <BiSolidEditAlt />
               </button>
@@ -127,7 +127,7 @@ const VerifyAccount = () => {
           </div>
 
           <form className="flex flex-col justify-center items-center gap-5 my-9">
-            <div className="flex flex-row gap-3">
+            <div className="flex flex-row sm:gap-3 gap-2">
               {values.map((val, index) => (
                 <CodeInput
                   key={index}
@@ -139,7 +139,7 @@ const VerifyAccount = () => {
               ))}
             </div>
 
-            <div className="w-full text-lg flex flex-row justify-between items-center ">
+            <div className="w-full sm:text-lg text-sm flex flex-row justify-between items-center ">
               <div>
                 Can&apos;t find the code?
                 <button
