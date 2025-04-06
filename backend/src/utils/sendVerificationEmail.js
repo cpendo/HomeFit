@@ -9,30 +9,25 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendVerificationEmail = async (userID, userEmail, userName) => {
-  const verificationToken = jwt.sign({ id: userID }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
-
-  // const verificationLink = `http://localhost:5000/api/users/verify/${verificationToken}`
-  const verificationLink = `http://localhost:5173/login/${verificationToken}`;
-
+const sendVerificationEmail = async ( userEmail, userName,PIN) => {
+ 
   const emailTemplate = `
     <!DOCTYPE html>
     <html lang="en">
-        <body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-        <div>
-            <img src="https://res.cloudinary.com/drixoqiw9/image/upload/v1743346456/pq05kusgrg31lqaa3afo.png"
-            alt="Brand Logo">
+    <body style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; width: 100vw;">
+    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0; padding: 0; width: 500px; margin: 0 auto;">
+      <div>
+        <img src="https://res.cloudinary.com/drixoqiw9/image/upload/v1743346456/pq05kusgrg31lqaa3afo.png"
+          alt="Brand Logo">
         </div>
-        <h3 style="">You're Almost There ${userName}!</h3>
-        <p style="margin-bottom: 20px;">Please verify your email to activate your account.</p>
-        <a href="${verificationLink}"
-            style="background:#A4161A;padding:10px 20px;color:white;text-decoration:none;border-radius:5px;margin-bottom:10px;">Activate My
-            Account</a>
-    </body>
-    </html>
-  `;
+        <h3>You're Almost There ${userName}!</h3>
+        <p style="text-align: center;">Before you finish creating your account, we need to verify your identity. On the
+            verification page, enter the following code.</p>
+        <p style="font-size: 2rem; font-weight: 700;">${PIN}</p>
+        <p style="font-style: italic; font-size: 1rem;">This code will expire in 60 minutes.</p>
+    </div>
+  </body>
+  </html>`;
 
   await transporter.sendMail({
     from: `HomeFit ${process.env.GMAIL_ACCOUNT}`,

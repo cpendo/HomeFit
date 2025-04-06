@@ -8,6 +8,11 @@ const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const createUser = async (req, res) => {
   const { first_name, last_name, email, password } = matchedData(req);
+  const verificationPin = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString(); // 6-digit
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 60 mins later
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -19,13 +24,20 @@ const createUser = async (req, res) => {
       last_name,
       email,
       password,
+      email_pin: verificationPin,
+      pin_expires_at: expiresAt,
     });
 
-    await sendVerificationEmail(newUser.id, newUser.email, newUser.first_name);
+    await sendVerificationEmail(
+      newUser.email,
+      newUser.first_name,
+      verificationPin
+    );
 
-    return res
-      .status(201)
-      .json({ message: "User registered. Check your email for verification." });
+    return res.status(201).json({
+      message: "User registered. Verification pin sent.",
+      email: newUser.email,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
@@ -50,27 +62,30 @@ const verifyUser = async (req, res) => {
 };
 
 const loginUser = async (req, res, next) => {
-  passport.authenticate("local", { failureMessage: true }, (err, user, info) => {
-    if (err) {
-      return next(err); // Handle unexpected errors
-    }
-
-    if (!user) {
-      return res.status(401).json({ message: info.message }); // Send failure message to client
-    }
-
-    req.logIn(user, (err) => {
+  passport.authenticate(
+    "local",
+    { failureMessage: true },
+    (err, user, info) => {
       if (err) {
-        return next(err); // Handle login error
+        return next(err); // Handle unexpected errors
       }
-      return res.status(200).json({ message: "Logged In" });
-    });
-  })(req, res, next);
+
+      if (!user) {
+        return res.status(401).json({ message: info.message }); // Send failure message to client
+      }
+
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err); // Handle login error
+        }
+        return res.status(200).json({ message: "Logged In" });
+      });
+    }
+  )(req, res, next);
 };
 
 module.exports = {
-  loginUser
+  loginUser,
 };
-
 
 module.exports = { createUser, verifyUser, loginUser };

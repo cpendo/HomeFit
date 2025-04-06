@@ -38,6 +38,14 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: false,
     },
+    email_pin: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    pin_expires_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   },
   {
     tableName: "users",
@@ -55,6 +63,10 @@ const processUserData = async (user) => {
 
   if (user.changed("password")) {
     user.password = await bcrypt.hash(user.password, 10);
+  }
+
+  if (user.email_pin) {
+    user.email_pin = await bcrypt.hash(user.email_pin, 10)
   }
 };
 
