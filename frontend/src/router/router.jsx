@@ -1,15 +1,14 @@
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import Login from "../pages/auth/Login";
 import NotFound from "../components/NotFound";
-import Register from "../pages/auth/Register";
 import LandingPage from "../pages/landing-page/LandingPage";
 import HelpPage from "../pages/contact-us/HelpPage";
 import TrainingPage from "../pages/training-page/TrainingPage";
 import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
-import VerifyUser from "../pages/auth/VerifyUser";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
+
+import { AuthLayout, Login, Register, VerifyUser } from "../pages/auth";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +34,28 @@ const router = createBrowserRouter([
     ],
   },
   {
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "verify-user",
+        element: (
+          <PrivateRoute>
+            <VerifyUser />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  {
     path: "/dashboard",
     element: <DashboardLayout />,
     children: [
@@ -53,22 +74,6 @@ const router = createBrowserRouter([
       { path: "logs", element: <p>logs</p> },
       { path: "settings", element: <p>settings</p> },
     ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/login/verify-user",
-    element: (
-      <PrivateRoute>
-        <VerifyUser />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: "/register",
-    element: <Register />,
   },
   {
     path: "*",

@@ -51,7 +51,7 @@ const Navbar = () => {
         </div>
 
         <div className="sm:flex hidden items-center gap-2">
-          <Link to="/register">
+          <Link to="/auth/register">
             <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
               Register
             </button>
@@ -80,7 +80,7 @@ const Navbar = () => {
               ))}
 
               <li>
-                <Link to="/register">
+                <Link to="/auth/register">
                   <button className="bg-black py-1 px-4 rounded-xs">
                     Register
                   </button>
