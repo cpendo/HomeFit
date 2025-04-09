@@ -3,12 +3,10 @@ import App from "../App";
 import NotFound from "../components/NotFound";
 import LandingPage from "../pages/landing-page/LandingPage";
 import HelpPage from "../pages/contact-us/HelpPage";
-import TrainingPage from "../pages/training-page/TrainingPage";
-import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
-
 import { AuthLayout, Login, Register, VerifyUser } from "../pages/auth";
+import {TrainingPage, WorkoutDetailsPage} from "../pages/training-page";
 
 const router = createBrowserRouter([
   {
