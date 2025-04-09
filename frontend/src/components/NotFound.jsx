@@ -9,9 +9,7 @@ const NotFound = () => {
       <div className="flex w-full items-center justify-between bg-black text-white py-2 sm:px-4 px-1">
         <div className="flex flex-row items-center">
           <FaDumbbell className="size-8 text-red-secondary rotate-90" />
-          <h1 className="font-secondary text-4xl font-medium">
-            HomeFit
-          </h1>
+          <h1 className="font-secondary text-4xl font-medium">HomeFit</h1>
         </div>
         <p className="sm:block hidden text-3xl font-secondary">
           Train. <span className="text-red-secondary text-4xl">Track.</span>{" "}
@@ -20,13 +18,13 @@ const NotFound = () => {
       </div>
 
       <div className="w-full lg:h-[90%] h-min flex lg:flex-row flex-col-reverse sm:gap-0 gap-5">
-        <div className="flex flex-1 flex-col justify-center items-center gap-8 ps-6">
-          <h1 className="sm:text-6xl text-4xl font-secondary font-semibold text-black text-center">
-            <span className="block mb-3">Ooops...</span>
-            Page not Found
-          </h1>
+        <div className="flex flex-1 flex-col justify-center items-center gap-8 px-3">
+          <h1 className="text-red-secondary sm:text-7xl text-5xl">Oops...</h1>
+          <h2 className="sm:text-6xl text-4xl font-secondary font-semibold text-black text-center">
+            Something went wrong!
+          </h2>
 
-          <p className="lg:w-full sm:w-2/3 w-4/5 text-base sm:text-xl text-gray-600 text-center">
+          <p className="lg:w-full sm:w-2/3 w-full text-lg sm:text-xl text-gray-600 text-center">
             The page you&apos;re looking for does not exist. We suggest going
             back to the home page.
           </p>
@@ -36,8 +34,7 @@ const NotFound = () => {
             </button>
           </Link>
         </div>
-
-        <div className="flex lg:flex-2 justify-center items-center lg:w-full lg:h-full w-[90%] md:h-100  m-auto">
+        <div className="flex lg:flex-1 justify-center items-center lg:w-full lg:h-full w-[90%] md:h-100  m-auto">
           <img
             src={Image1}
             alt="error-404 illustration"

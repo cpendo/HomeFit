@@ -13,10 +13,14 @@ export const usersApi = createApi({
         body: newUser,
       }),
     }),
-    verifyUser: build.query({
-      query: (token) => `/verify/${token}`
+    verifyUser: build.mutation({
+      query: ({token, pin}) => ({
+        url: "/verify-user",
+        method: "POST",
+        body: {token, pin}
+      })
     })
   }),
 });
 
-export const { useRegisterUserMutation, useVerifyUserQuery } = usersApi;
+export const { useRegisterUserMutation, useVerifyUserMutation } = usersApi;

@@ -17,6 +17,14 @@ body {
   font-family: var(--font-primary);
 }
 
+.not-found-text {
+  font-size: 12rem;
+  padding: 0;
+  margin: 0;
+  font-family: var(--font-secondary);
+  letter-spacing: 15px;
+}
+
 .bg-auth {
   background-image: url("./assets/radiant-gradient.svg");
   background-repeat: no-repeat;

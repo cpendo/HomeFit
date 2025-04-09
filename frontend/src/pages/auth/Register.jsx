@@ -2,15 +2,17 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 import { useRegisterUserMutation } from "../../features/users/usersApi";
 import SidePanel from "./components/SidePanel";
 import FormInput from "./components/FormInput";
 import PasswordInput from "./components/PasswordInput";
+import Swal from "sweetalert2";
 import { FaDumbbell } from "react-icons/fa6";
 
 const Register = () => {
   const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const navigate = useNavigate();
 
   const schema = yup.object({
     first_name: yup.string().required("First name is required"),
@@ -42,18 +44,18 @@ const Register = () => {
     const { checkbox, confirmPassword, ...filteredData } = data;
 
     try {
-      const response = await registerUser(filteredData).unwrap();
-      console.log("User registered :" + response);
-      Swal.fire(
-        "User registered!",
-        "Check your email for verification.",
-        "success"
-      );
+      const response =  await registerUser(filteredData).unwrap();
+
+      const { verifyToken } = response
+      sessionStorage.setItem('verify_token', verifyToken);
+      
       reset();
+      navigate("/login/verify-user");
+      
     } catch (error) {
       console.error("Registration failed:", error);
       console.log(filteredData);
-      Swal.fire("Registration Failed!", `${error?.data?.message}`, "error");
+      Swal.fire("Registration Failed!", error?.data?.message, "error");
     }
   };
   return (

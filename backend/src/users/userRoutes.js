@@ -8,7 +8,7 @@ const {
 const router = express.Router();
 
 router.post("/register", createUserValidation, createUser);
-router.get("/verify/:token", verifyUser);
+router.post("/verify-user", verifyUser);
 router.post("/login", loginUserValidation, loginUser);
 router.get("/status", (req, res) => {
   return req.user ? res.json(req.user) : res.sendStatus(401);

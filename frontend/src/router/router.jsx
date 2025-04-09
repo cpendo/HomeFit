@@ -9,6 +9,7 @@ import TrainingPage from "../pages/training-page/TrainingPage";
 import WorkoutDetailsPage from "../pages/training-page/WorkoutDetailsPage";
 import VerifyUser from "../pages/auth/VerifyUser";
 import DashboardLayout from "../pages/dashboard/DashboardLayout";
+import PrivateRoute from "./PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ const router = createBrowserRouter([
         element: <p>sets</p>,
       },
       { path: "logs", element: <p>logs</p> },
-      {path: "settings", element: <p>settings</p>}
+      { path: "settings", element: <p>settings</p> },
     ],
   },
   {
@@ -59,7 +60,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/login/verify-user",
-    element: <VerifyUser />,
+    element: (
+      <PrivateRoute>
+        <VerifyUser />
+      </PrivateRoute>
+    ),
   },
   {
     path: "/register",

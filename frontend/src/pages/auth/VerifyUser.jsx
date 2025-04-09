@@ -1,68 +1,37 @@
-import { useState } from "react";
 import { useCodeInputs } from "../../hooks/useCodeInputs";
 import { useResendTimer } from "../../hooks/useResendTimer";
 import SidePanel from "./components/SidePanel";
 import CodeInput from "./components/CodeInput";
 
 import { FaDumbbell } from "react-icons/fa6";
-import { BiSolidEditAlt } from "react-icons/bi";
-import { BsSendFill } from "react-icons/bs";
-import { IoCloseSharp } from "react-icons/io5";
-import Swal from "sweetalert2";
-import * as yup from "yup";
+import { useVerifyUserMutation } from "../../features/users/usersApi";
+//import Swal from "sweetalert2";
 
 const VerifyAccount = () => {
-  const user = "johndoe@gmail.com";
-
-  const emailSchema = yup.object().shape({
-    email: yup
-      .string()
-      .email("Enter a valid email")
-      .required("Email is required"),
-  });
-
-  const [userEmail, setUserEmail] = useState(user);
-  const [emailEditable, setEmailEditable] = useState(false);
+  const [verifyUser, { isLoading }] = useVerifyUserMutation();
 
   const { values, isComplete, handleChange, handleKeyDown, inputRefs } =
     useCodeInputs();
   const { timeLeft, formatTime, resendAvailable, resetTimer } =
     useResendTimer();
 
-  const handleChangeEmail = async () => {
-    // Prevent submitting the same email
-    if (userEmail === user) {
-      return Swal.fire("No Changes", "You entered the same email.", "info");
-    }
+  const handleVerifyUser = async (e) => {
+    e.preventDefault();
+    const token = sessionStorage.getItem("verify_token");
+    const pin = values.join("");
 
-    try {
-      await emailSchema.validate({ email: userEmail });
+    const response = await verifyUser({token, pin})
+    console.log(response)
 
-      Swal.fire({
-        title: "Are you sure ?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showDenyButton: true,
-        confirmButtonText: "Yes! Edit my email",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          ///send new email to backend
-          console.log("Changed Email to :" + userEmail);
-        } else if (result.isDenied) {
-          //reset to current email
-          setUserEmail(user);
-        }
-      });
-    } catch (error) {
-      Swal.fire("Invalid Email", error.message, "error");
+
+    if (resendAvailable) {
+      // Trigger resend logic
+      resetTimer();
     }
-  };
+  }
 
   const handleResendCode = async () => {
-    // Call your resend function (e.g., API request)
-    // await resendCode(); // <- You’ll need to define this
-
-    // Reset the timer
+    
     if (resendAvailable) {
       // Trigger resend logic
       resetTimer();
@@ -79,54 +48,15 @@ const VerifyAccount = () => {
 
         <div className="flex-1 flex flex-col justify-center items-center">
           <div className="flex flex-col justify-center items-center">
-            <h1 className="font-secondary sm:text-5xl text-4xl mb-2">Check your inbox</h1>
+            <h1 className="font-secondary sm:text-5xl text-4xl mb-2">
+              Check your inbox
+            </h1>
             <p className="sm:text-xl text-lg sm:text-start text-center">
-              We have sent you a verification code via email
+              We have sent you a verification pin via email
             </p>
           </div>
 
-          <div className="flex justify-center sm:text-2xl text-base gap-2 sm:mt-2 mt-6">
-            <input
-              type="text"
-              value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
-              disabled={!emailEditable}
-              className={`text-center outline-0 py-1 border-black rounded-xl ${
-                emailEditable ? "border-2 bg-gray-200" : "border-1"
-              }`}
-            />
-            {emailEditable && (
-              <button
-                onClick={handleChangeEmail}
-                className={`text-red-secondary sm:text-2xl text-xl ${
-                  emailEditable ? "inline" : "hidden"
-                }`}
-              >
-                <BsSendFill />
-              </button>
-            )}
-
-            {emailEditable ? (
-              <button
-                onClick={() => {
-                  setEmailEditable(false);
-                  setUserEmail(user);
-                }}
-                className={`text-red-secondary sm:text-4xl text-2xl`}
-              >
-                <IoCloseSharp />
-              </button>
-            ) : (
-              <button
-                onClick={() => setEmailEditable(true)}
-                className="text-red-secondary sm:text-3xl text-2xl"
-              >
-                <BiSolidEditAlt />
-              </button>
-            )}
-          </div>
-
-          <form className="flex flex-col justify-center items-center gap-5 my-9">
+          <form className="flex flex-col justify-center items-center gap-5 my-9" onSubmit={handleVerifyUser}>
             <div className="flex flex-row sm:gap-3 gap-2">
               {values.map((val, index) => (
                 <CodeInput
@@ -164,9 +94,9 @@ const VerifyAccount = () => {
                 isComplete
                   ? "bg-red-secondary text-white"
                   : "bg-gray-300 text-gray-600 cursor-not-allowed"
-              }`}
+              } `}
             >
-              Verify
+              {isLoading ? "Verifying" : "Verify"}
             </button>
           </form>
         </div>

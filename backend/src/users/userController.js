@@ -1,18 +1,20 @@
 const User = require("./userModel");
-const { validationResult, matchedData } = require("express-validator");
+const { matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
 
+const generatePin = require("../utils/generatePin")
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
 
 const createUser = async (req, res) => {
   const { first_name, last_name, email, password } = matchedData(req);
-  const verificationPin = Math.floor(
-    100000 + Math.random() * 900000
-  ).toString(); // 6-digit
-  const now = new Date();
-  const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 60 mins later
+
+  const verificationPin = generatePin();
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 60 mins later
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -28,6 +30,15 @@ const createUser = async (req, res) => {
       pin_expires_at: expiresAt,
     });
 
+    const verifyToken = jwt.sign(
+      {
+        user_id: newUser.id,
+        purpose: 'verify_email',
+      },
+      JWT_SECRET,
+      { expiresIn: '10m' }
+    )
+
     await sendVerificationEmail(
       newUser.email,
       newUser.first_name,
@@ -35,8 +46,9 @@ const createUser = async (req, res) => {
     );
 
     return res.status(201).json({
-      message: "User registered. Verification pin sent.",
-      email: newUser.email,
+      title: "User registered!",
+      //message: "Verification pin sent to registered email.",
+      verifyToken
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -44,18 +56,50 @@ const createUser = async (req, res) => {
 };
 
 const verifyUser = async (req, res) => {
-  const { token } = req.params;
-  if (!token) return res.status(400).json({ message: "Token is required." });
+  const { token, pin } = req.body;
+
+  if (!token || !pin) {
+    return res.status(400).json({ message: 'Missing token or PIN' })
+  }
+
+  let payload
+  try {
+    // 1️⃣ Verify the token using your JWT secret
+    payload = jwt.verify(token, JWT_SECRET)
+  } catch (err) {
+    return res.status(401).json({ message: 'Invalid or expired token' })
+  }
+
+  // 2️⃣ Make sure the token is for verification
+  if (payload.purpose !== 'verify_email') {
+    return res.status(403).json({ message: 'Invalid token purpose' })
+  }
 
   try {
-    const verificationToken = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findOne({ where: { id: verificationToken.id } });
+    //const user = await User.findOne({ where: { email } });
+    const user = await User.findByPk(payload.user_id)
+    if (!user) return res.status(404).json({ message: "User not found" });
+    if (user.is_verified)
+      return res.status(400).json({ message: "User already verified." });
 
-    if (!user) return res.status(404).json({ message: "User not found." });
+    const now = new Date();
+    if (now > user.pin_expires_at) {
+      return res.status(400).json({
+        title: "Pin expired.",
+        message: "Click resend button to get a new one",
+      });
+    }
 
-    await user.update({ is_verified: true });
+    const matchPin = await bcrypt.compare(pin, user.email_pin);
+    if (!matchPin)
+      return res.status(400).json({ message: "Invalid verification pin." });
 
-    return res.json({ message: "Verification successful!" });
+    await user.update({
+      is_verified: true,
+      email_pin: null,
+      pin_expires_at: null,
+    });
+    res.status(200).json({ message: "Account verified!" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }
