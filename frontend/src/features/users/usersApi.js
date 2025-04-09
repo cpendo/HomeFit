@@ -14,13 +14,20 @@ export const usersApi = createApi({
       }),
     }),
     verifyUser: build.mutation({
-      query: ({token, pin}) => ({
+      query: ({ token, pin }) => ({
         url: "/verify-user",
         method: "POST",
-        body: {token, pin}
-      })
-    })
+        body: { token, pin },
+      }),
+    }),
+    resendPin: build.mutation({
+      query: ({ token }) => ({
+        url: "resend-pin",
+        method: "POST",
+        body: { token },
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation, useVerifyUserMutation } = usersApi;
+export const { useRegisterUserMutation, useVerifyUserMutation, useResendPinMutation } = usersApi;

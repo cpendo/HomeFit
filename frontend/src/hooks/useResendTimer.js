@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const useResendTimer = (initialSeconds = 180) => {
+export const useResendTimer = (initialSeconds = 120) => {
   const [timeLeft, setTimeLeft] = useState(initialSeconds);
   const [resendAvailable, setResendAvailable] = useState(false);
 

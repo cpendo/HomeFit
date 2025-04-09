@@ -1,12 +1,19 @@
+import CodeInput from "./CodeInput";
 import { useCodeInputs } from "../../../hooks/useCodeInputs";
 import { useResendTimer } from "../../../hooks/useResendTimer";
-import CodeInput from "./CodeInput";
-
-import { useVerifyUserMutation } from "../../../features/users/usersApi";
-//import Swal from "sweetalert2";
+import {
+  useResendPinMutation,
+  useVerifyUserMutation,
+} from "../../../features/users/usersApi";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const VerifyAccount = () => {
-  const [verifyUser, { isLoading }] = useVerifyUserMutation();
+  const token = sessionStorage.getItem("verify_token");
+
+  const [verifyUser, { isLoading: isVerifying }] = useVerifyUserMutation();
+  const [resendPin] = useResendPinMutation();
+  const navigate = useNavigate();
 
   const { values, isComplete, handleChange, handleKeyDown, inputRefs } =
     useCodeInputs();
@@ -15,22 +22,36 @@ const VerifyAccount = () => {
 
   const handleVerifyUser = async (e) => {
     e.preventDefault();
-    const token = sessionStorage.getItem("verify_token");
     const pin = values.join("");
 
-    const response = await verifyUser({ token, pin });
-    console.log(response);
+    try {
+      await verifyUser({ token, pin }).unwrap();
 
-    if (resendAvailable) {
-      // Trigger resend logic
+      sessionStorage.removeItem("verify_token");
       resetTimer();
+
+      navigate("/dashboard");
+    } catch (error) {
+      await Swal.fire("Verification Failed!", error?.data?.message, "error");
+
+      if (error.status === 400 && error.data.redirect) {
+        navigate("/auth");
+      }
     }
   };
 
   const handleResendCode = async () => {
-    if (resendAvailable) {
-      // Trigger resend logic
+    try {
+      const response = await resendPin({ token }).unwrap();
+      await Swal.fire(response.message, "", "success");
+
       resetTimer();
+    } catch (error) {
+      await Swal.fire("Resend Failed!", error?.data?.message, "error");
+
+      if (error.status === 400 && error.data.redirect) {
+        navigate("/auth");
+      }
     }
   };
 
@@ -45,10 +66,7 @@ const VerifyAccount = () => {
         </p>
       </div>
 
-      <form
-        className="flex flex-col justify-center items-center gap-5 my-9"
-        onSubmit={handleVerifyUser}
-      >
+      <form className="flex flex-col justify-center items-center gap-5 my-9">
         <div className="flex flex-row sm:gap-3 gap-2">
           {values.map((val, index) => (
             <CodeInput
@@ -65,6 +83,7 @@ const VerifyAccount = () => {
           <div>
             Can&apos;t find the code?
             <button
+              type="button"
               onClick={handleResendCode}
               disabled={!resendAvailable}
               className={`ml-2 underline transition-opacity ${
@@ -81,6 +100,8 @@ const VerifyAccount = () => {
         </div>
 
         <button
+          type="button"
+          onClick={handleVerifyUser}
           disabled={!isComplete}
           className={`w-full font-secondary text-2xl p-2 rounded-sm mt-4 ${
             isComplete
@@ -88,7 +109,7 @@ const VerifyAccount = () => {
               : "bg-gray-300 text-gray-600 cursor-not-allowed"
           } `}
         >
-          {isLoading ? "Verifying" : "Verify"}
+          {isVerifying ? "Verifying" : "Verify"}
         </button>
       </form>
     </div>

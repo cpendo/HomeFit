@@ -1,5 +1,5 @@
 const express = require("express");
-const { createUser, loginUser, verifyUser } = require("./userController");
+const { createUser, loginUser, verifyUser, resendPin } = require("./userController");
 const {
   createUserValidation,
   loginUserValidation,
@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post("/register", createUserValidation, createUser);
 router.post("/verify-user", verifyUser);
+router.post("/resend-pin", resendPin);
 router.post("/login", loginUserValidation, loginUser);
 router.get("/status", (req, res) => {
   return req.user ? res.json(req.user) : res.sendStatus(401);
