@@ -27,7 +27,7 @@ const Hero = () => {
             <p className="text-red-secondary">equipment</p>
           </div>
         </div>
-        <Link to="/register">
+        <Link to="/auth/register">
           <button className="lg:w-50 w-full bg-black text-white text-2xl font-secondary rounded-xs p-3 hover:bg-red-secondary cursor-pointer">
             Get Started
           </button>

@@ -49,7 +49,7 @@ const Register = () => {
       sessionStorage.setItem("verify_token", verifyToken);
 
       reset();
-      navigate("/login/verify-user");
+      navigate("/auth/verify-user");
     } catch (error) {
       console.error("Registration failed:", error);
       console.log(filteredData);
