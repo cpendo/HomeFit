@@ -3,7 +3,7 @@ import { useCodeInputs } from "../../../hooks/useCodeInputs";
 import { useResendTimer } from "../../../hooks/useResendTimer";
 import {
   useResendPinMutation,
-  useVerifyUserMutation,
+  useVerifyMutation,
 } from "../../../features/users/usersApi";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 const VerifyAccount = () => {
   const token = sessionStorage.getItem("verify_token");
 
-  const [verifyUser, { isLoading: isVerifying }] = useVerifyUserMutation();
+  const [verify, { isLoading: isVerifying }] = useVerifyMutation();
   const [resendPin] = useResendPinMutation();
   const navigate = useNavigate();
 
@@ -25,12 +25,11 @@ const VerifyAccount = () => {
     const pin = values.join("");
 
     try {
-      await verifyUser({ token, pin }).unwrap();
+      await verify({ token, pin }).unwrap();
 
       sessionStorage.removeItem("verify_token");
       resetTimer();
-
-      navigate("/dashboard");
+      navigate("/auth");
     } catch (error) {
       await Swal.fire("Verification Failed!", error?.data?.message, "error");
 

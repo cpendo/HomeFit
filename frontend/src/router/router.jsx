@@ -3,10 +3,10 @@ import App from "../App";
 import NotFound from "../components/NotFound";
 import LandingPage from "../pages/landing-page/LandingPage";
 import HelpPage from "../pages/contact-us/HelpPage";
-import PrivateRoute from "./PrivateRoute";
 import { AuthLayout, Login, Register, VerifyUser } from "../pages/auth";
 import { TrainingPage, WorkoutDetailsPage } from "../pages/training-page";
 import { DashboardLayout } from "../pages/dashboard";
+import { PrivateRoute, ProtectedRoute } from "./index";
 
 const router = createBrowserRouter([
   {
@@ -55,7 +55,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

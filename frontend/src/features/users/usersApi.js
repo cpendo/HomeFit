@@ -6,14 +6,14 @@ export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   endpoints: (build) => ({
-    registerUser: build.mutation({
+    register: build.mutation({
       query: (newUser) => ({
         url: "/register",
         method: "POST",
         body: newUser,
       }),
     }),
-    verifyUser: build.mutation({
+    verify: build.mutation({
       query: ({ token, pin }) => ({
         url: "/verify-user",
         method: "POST",
@@ -22,12 +22,35 @@ export const usersApi = createApi({
     }),
     resendPin: build.mutation({
       query: ({ token }) => ({
-        url: "resend-pin",
+        url: "/resend-pin",
         method: "POST",
         body: { token },
       }),
     }),
+    login: build.mutation({
+      query: (user) => ({
+        url: "/login",
+        method: "POST",
+        body: user,
+      }),
+    }),
+    getStatus: build.query({
+      query: () => "/status"
+    }),
+    logout: build.mutation({
+      query: () => ({
+        url: "/logout",
+        method: "POST",
+      }),
+    })
   }),
 });
 
-export const { useRegisterUserMutation, useVerifyUserMutation, useResendPinMutation } = usersApi;
+export const {
+  useRegisterMutation,
+  useVerifyMutation,
+  useResendPinMutation,
+  useLoginMutation,
+  useGetStatusQuery,
+  useLogoutMutation
+} = usersApi;

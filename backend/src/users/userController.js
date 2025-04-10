@@ -153,7 +153,7 @@ const loginUser = async (req, res, next) => {
         if (err) {
           return next(err); // Handle login error
         }
-        return res.status(200).json({ message: "Logged In" });
+        return res.status(200).json({ message: "Logged In", username: user.first_name });
       });
     }
   )(req, res, next);

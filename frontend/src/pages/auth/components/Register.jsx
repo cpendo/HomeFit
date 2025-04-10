@@ -7,10 +7,10 @@ import FormInput from "./FormInput";
 import PasswordInput from "./PasswordInput";
 import Swal from "sweetalert2";
 
-import { useRegisterUserMutation } from "../../../features/users/usersApi";
+import { useRegisterMutation } from "../../../features/users/usersApi";
 
 const Register = () => {
-  const [registerUser, { isLoading }] = useRegisterUserMutation();
+  const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
 
   const schema = yup.object({
@@ -31,7 +31,7 @@ const Register = () => {
   });
 
   const {
-    register,
+    register: registerInput,
     handleSubmit,
     reset,
     formState: { errors },
@@ -43,7 +43,7 @@ const Register = () => {
     const { checkbox, confirmPassword, ...filteredData } = data;
 
     try {
-      const response = await registerUser(filteredData).unwrap();
+      const response = await register(filteredData).unwrap();
 
       const { verifyToken } = response;
       sessionStorage.setItem("verify_token", verifyToken);
@@ -51,8 +51,6 @@ const Register = () => {
       reset();
       navigate("/auth/verify-user");
     } catch (error) {
-      console.error("Registration failed:", error);
-      console.log(filteredData);
       Swal.fire("Registration Failed!", error?.data?.message, "error");
     }
   };
@@ -75,13 +73,13 @@ const Register = () => {
           <FormInput
             label="First name"
             id="first_name"
-            register={register}
+            register={registerInput}
             error={errors.first_name}
           />
           <FormInput
             label="Last name"
             id="last_name"
-            register={register}
+            register={registerInput}
             error={errors.last_name}
           />
         </div>
@@ -90,7 +88,7 @@ const Register = () => {
           label="Email"
           id="email"
           type="email"
-          register={register}
+          register={registerInput}
           error={errors.email}
         />
 
@@ -98,21 +96,21 @@ const Register = () => {
           <PasswordInput
             label="Password"
             id="password"
-            register={register}
+            register={registerInput}
             error={errors.password}
           />
 
           <PasswordInput
             label="Confirm password"
             id="confirmPassword"
-            register={register}
+            register={registerInput}
             error={errors.confirmPassword}
           />
         </div>
 
         <div className="flex flex-row gap-2 items-center mt-2">
           <input
-            {...register("checkbox")}
+            {...registerInput("checkbox")}
             type="checkbox"
             id="checkbox"
             className="size-4 focus:outline"

@@ -4,15 +4,18 @@ import {
   FaNoteSticky,
   FaBell,
   FaGear,
+  FaPowerOff,
 } from "react-icons/fa6";
 import { MdDashboard } from "react-icons/md";
 import { AiFillHome } from "react-icons/ai";
 import ActiveWorkoutImg from "../assets/biceps.png";
 import DefaultWorkoutImg from "../assets/biceps-1.png";
-
-import { NavLink } from "react-router";
-import { useState } from "react";
+import { LuUserCog } from "react-icons/lu";
 import { FaUser } from "react-icons/fa";
+
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLogoutMutation } from "../features/users/usersApi";
 
 const mainMenuItems = [
   {
@@ -35,16 +38,33 @@ const mainMenuItems = [
     route: "logs",
     icon: FaNoteSticky,
   },
-];
-
-const iconMenuItems = [
-  { icon: FaBell },
-  { icon: FaGear, route: "settings" },
-  { icon: AiFillHome, route: "/" },
+  {
+    text: "Settings",
+    route: "settings",
+    icon: FaGear,
+  },
 ];
 
 const DashboardNavbar = () => {
-  const [notificationsVisibility, setNotificationsVisibility] = useState(false);
+  const username = sessionStorage.getItem("user");
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation(); // Call the hook in the component body
+
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showDropDown, setShowDropDown] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      const result = await logout().unwrap(); // Trigger the query and wait for the result
+      if (result) {
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Logout failed:", err);
+      navigate("/");
+    }
+  };
+
   return (
     <header>
       <nav className="flex items-center justify-between">
@@ -93,58 +113,47 @@ const DashboardNavbar = () => {
         <div className="flex flex-row gap-2">
           <div className="dashboard-menu-div px-2">
             <ul className="flex flex-row gap-2">
-              {iconMenuItems.map(({ icon: Icon, route }, index) => (
-                <li key={index}>
-                  {route ? (
-                    <NavLink
-                      to={route}
-                      className={({ isActive }) =>
-                        `dashboard-menu-item ${
-                          isActive
-                            ? "text-white bg-red-secondary"
-                            : "text-black bg-gray-200"
-                        }`
-                      }
-                    >
-                      <Icon className="text-2xl" />
-                    </NavLink>
-                  ) : (
-                    <div
-                      className={`dashboard-menu-item ${
-                        notificationsVisibility
-                          ? "text-white bg-red-secondary"
-                          : "text-black bg-gray-200"
-                      }`}
-                      onClick={() =>
-                        setNotificationsVisibility(!notificationsVisibility)
-                      }
-                    >
-                      <Icon className="text-2xl" />
-                    </div>
-                  )}
-                </li>
-
-                //   <NavLink
-                //     key={index}
-                //     to={route}
-                //     end
-                //     className={({ isActive }) =>
-                //       `dashboard-menu-item ${
-                //         isActive
-                //           ? "text-white bg-red-secondary"
-                //           : "text-black bg-gray-200"
-                //       }`
-                //     }
-                //   >
-                //     <Icon className="text-2xl" />
-                //   </NavLink>
-              ))}
+              <li
+                className={`dashboard-menu-item w-9 ${
+                  showNotifications
+                    ? "text-white bg-black"
+                    : "text-black bg-gray-200"
+                }`}
+                onClick={() => setShowNotifications(!showNotifications)}
+              >
+                <FaBell className="text-xl" />
+              </li>
+              <NavLink to="/" className="dashboard-menu-item w-9 bg-[#EEEEEE]">
+                <AiFillHome className="text-2xl" />
+              </NavLink>
             </ul>
           </div>
 
-          <div className="dashboard-menu-div px-3">
+          <div
+            className="dashboard-menu-div px-3"
+            onClick={() => setShowDropDown(!showDropDown)}
+          >
             <FaUser className="text-2xl" />
           </div>
+          {showDropDown && (
+            <div className="absolute right-5 top-18 w-30 p-3 bg-white shadow-xl rounded-lg z-40">
+              <ul className="flex flex-col justify-center  gap-1">
+                <li className="flex flex-row items-center gap-2 capitalize">
+                  <LuUserCog className="inline text-xl" /> {username || "John"}
+                </li>
+                <hr className="w-full text-gray-200" />
+                <li
+                  className="flex flex-row items-center gap-2 hover:cursor-pointer"
+                
+                >
+                  <button   onClick={handleLogout}>
+                    {" "}
+                    <FaPowerOff className="inline" /> Logout{" "}
+                  </button>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
       </nav>
     </header>

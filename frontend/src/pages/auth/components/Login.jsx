@@ -1,26 +1,44 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import FormInput from "./FormInput";
 import PasswordInput from "./PasswordInput";
+import { useLoginMutation } from "../../../features/users/usersApi";
+import Swal from "sweetalert2";
 
 const Login = () => {
+  const [login, { isLoading }] = useLoginMutation();
+  const navigate = useNavigate();
+
   const schema = yup.object({
     email: yup.string().email("Invalid email").required("Email is required"),
     password: yup
       .string()
-      .min(8, "Password must be at least 8 characters")
-      .required(),
+      .required("Password is required"),
   });
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data, e) => {
+    e.preventDefault();
+    try {
+      const response = await login(data).unwrap();
+
+      const { username } = response;
+      sessionStorage.setItem("user", username);
+
+      reset();
+      navigate("/dashboard");
+    } catch (error) {
+      Swal.fire("Login Failed!", error?.data?.message, "error");
+    }
+  };
 
   return (
     <div className="w-4/5 mx-auto flex-1 flex flex-col justify-center items-center">
@@ -60,8 +78,11 @@ const Login = () => {
           </Link>
         </div>
 
-        <button className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline">
-          Sign In
+        <button
+          disabled={isLoading}
+          className="w-full mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline"
+        >
+          {isLoading ? "Signing In" : "Sign In"}
         </button>
       </form>
 
