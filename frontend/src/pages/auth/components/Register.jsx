@@ -45,8 +45,8 @@ const Register = () => {
     try {
       const response = await register(filteredData).unwrap();
 
-      const { verifyToken } = response;
-      sessionStorage.setItem("verify_token", verifyToken);
+      const { token } = response;
+      sessionStorage.setItem("token", token);
 
       reset();
       navigate("/auth/verify-user");

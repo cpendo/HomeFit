@@ -1,30 +1,44 @@
-import { Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+// import { jwtDecode } from "jwt-decode";
 import PropTypes from "prop-types";
+import { useVerifyTokenMutation } from "../features/users/usersApi";
+import { useEffect, useState } from "react";
+import LoadingPage from "../components/LoadingPage";
 
 const PrivateRoute = ({ children }) => {
-  const token = sessionStorage.getItem("verify_token");
-  if (!token) return <Navigate to="/auth" />; 
+  const navigate = useNavigate();
 
-  try {
-    const { exp } = jwtDecode(token) 
-    const now = Date.now() / 1000 
+  const token = sessionStorage.getItem("token");
+  const [verifyToken, { isLoading }] = useVerifyTokenMutation();
+  const [isAllowed, setIsAllowed] = useState(false);
 
-    if (exp < now) {
-      sessionStorage.removeItem('verify_token')
-      return <Navigate to="/auth" /> 
+  useEffect(() => {
+    if (!token) {
+      navigate("/auth");
+      return;
     }
 
-    return children;
-  } catch (error) {
-    console.log("Error", error)
-    sessionStorage.removeItem('verify_token')
-    return <Navigate to="/auth" /> 
-  }
+    const verify = async () => {
+      try {
+        await verifyToken({ token });
+        setIsAllowed(true);
+      } catch (error) {
+        sessionStorage.removeItem("token");
+        console.log("Error :", error);
+        navigate("/auth");
+      }
+    };
+    verify();
+  }, [token, navigate, verifyToken]);
+
+  if (isLoading) return <LoadingPage />;
+  if (!isAllowed) return null;
+
+  return children;
 };
 
 PrivateRoute.propTypes = {
-    children: PropTypes.element
-}
+  children: PropTypes.element,
+};
 
 export default PrivateRoute;

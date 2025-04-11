@@ -13,6 +13,13 @@ export const usersApi = createApi({
         body: newUser,
       }),
     }),
+    verifyToken: build.mutation({
+      query: ({ token }) => ({
+        url: "/verifyUser", // or /verifyUser/check if you separate GET + POST
+        method: "POST",
+        body: token,
+      }),
+    }),
     verify: build.mutation({
       query: ({ token, pin }) => ({
         url: "/verify-user",
@@ -34,23 +41,24 @@ export const usersApi = createApi({
         body: user,
       }),
     }),
-    getStatus: build.query({
-      query: () => "/status"
+    getProfile: build.query({
+      query: () => "/me",
     }),
     logout: build.mutation({
       query: () => ({
         url: "/logout",
         method: "POST",
       }),
-    })
+    }),
   }),
 });
 
 export const {
   useRegisterMutation,
+  useVerifyTokenMutation,
   useVerifyMutation,
   useResendPinMutation,
   useLoginMutation,
-  useGetStatusQuery,
-  useLogoutMutation
+  useGetProfileQuery,
+  useLogoutMutation,
 } = usersApi;

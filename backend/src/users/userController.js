@@ -6,14 +6,13 @@ const passport = require("passport");
 
 const generatePin = require("../utils/generatePin");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+const generateVerifyToken = require("../utils/generateVerifyToken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const createUser = async (req, res) => {
   const { first_name, last_name, email, password } = matchedData(req);
-
-  const verificationPin = generatePin();
-  const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 mins later
+  const { pin, pinExpiry } = generatePin();
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -25,32 +24,36 @@ const createUser = async (req, res) => {
       last_name,
       email,
       password,
-      email_pin: verificationPin,
-      pin_expires_at: expiresAt,
+      email_pin: pin,
+      pin_expires_at: pinExpiry,
+      is_verified: false,
     });
 
-    const verifyToken = jwt.sign(
-      {
-        user_id: newUser.id,
-        purpose: "verify_email",
-      },
-      JWT_SECRET,
-      { expiresIn: "10m" }
-    );
+    const jwtToken = generateVerifyToken(newUser.id);
 
-    await sendVerificationEmail(
-      newUser.email,
-      newUser.first_name,
-      verificationPin
-    );
+    await sendVerificationEmail(newUser.email, pin);
 
-    return res.status(201).json({
-      title: "User registered!",
-      //message: "Verification pin sent to registered email.",
-      verifyToken,
-    });
+    return res.status(201).json({ token: jwtToken });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const checkUserToken = async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ message: "Token missing" });
+
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    const user = await User.findByPk(payload.user_id);
+
+    if (!user || user.verified) {
+      return res.status(403).json({ message: "Invalid or already verified" });
+    }
+
+    return res.status(200).json({ message: "Token is valid" });
+  } catch (err) {
+    return res.status(401).json({ message: "Token is invalid or expired" });
   }
 };
 
@@ -70,7 +73,10 @@ const verifyUser = async (req, res) => {
 
   try {
     const user = await User.findByPk(payload.user_id);
-    if (!user) return res.status(404).json({ message: "User not found", redirect: true });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "User not found", redirect: true });
     if (user.is_verified)
       return res.status(400).json({ message: "User already verified." });
 
@@ -128,7 +134,7 @@ const resendPin = async (req, res) => {
       pin_expires_at: expiresAt,
     });
 
-    await sendVerificationEmail(user.email, user.first_name, newPin); 
+    await sendVerificationEmail(user.email, user.first_name, newPin);
 
     res.status(200).json({ message: "New PIN sent to your email." });
   } catch (error) {
@@ -146,14 +152,28 @@ const loginUser = async (req, res, next) => {
       }
 
       if (!user) {
-        return res.status(401).json({ message: info.message }); // Send failure message to client
+        const { message, token } = info;
+
+        if (token) {
+          // User exists but is not verified
+          return res.status(403).json({
+            message,
+            redirect: true,
+            token,
+          });
+        }
+
+
+        return res.status(401).json({ message }); // Send failure message to client
       }
 
       req.logIn(user, (err) => {
         if (err) {
           return next(err); // Handle login error
         }
-        return res.status(200).json({ message: "Logged In", username: user.first_name });
+        return res
+          .status(200)
+          .json({ message: "Logged In", username: user.first_name });
       });
     }
   )(req, res, next);
@@ -163,4 +183,10 @@ module.exports = {
   loginUser,
 };
 
-module.exports = { createUser, verifyUser, loginUser, resendPin };
+module.exports = {
+  createUser,
+  checkUserToken,
+  verifyUser,
+  loginUser,
+  resendPin,
+};

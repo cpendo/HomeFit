@@ -2,6 +2,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 const User = require("../users/userModel");
+const generateVerifyToken = require("../utils/generateVerifyToken");
+
 
 passport.use(
   new LocalStrategy(
@@ -15,13 +17,14 @@ passport.use(
         if (!matchPassword)
           return done(null, false, { message: "Invalid Credentials" });
 
-        if (!user.is_verified)
-          return done(null, false, { message: "Account not verified" });
-
-        //   if (!matchPassword || !user.is_verified) {
-        //     return done(null, false, { message: "Authentication failed" });
-        //   }
-
+        if (!user.is_verified) {
+          const jwtToken = generateVerifyToken(user.id);
+          return done(null, false, {
+            message: "Account not verified",
+            token: jwtToken,
+          });
+        }
+       
         done(null, user);
       } catch (error) {
         done(error, null);

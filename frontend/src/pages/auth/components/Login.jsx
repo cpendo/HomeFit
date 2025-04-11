@@ -13,9 +13,7 @@ const Login = () => {
 
   const schema = yup.object({
     email: yup.string().email("Invalid email").required("Email is required"),
-    password: yup
-      .string()
-      .required("Password is required"),
+    password: yup.string().required("Password is required"),
   });
 
   const {
@@ -28,15 +26,27 @@ const Login = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
     try {
-      const response = await login(data).unwrap();
+       await login(data).unwrap();
 
-      const { username } = response;
-      sessionStorage.setItem("user", username);
+      // const { username } = response;
+      // sessionStorage.setItem("user", username);
 
       reset();
       navigate("/dashboard");
     } catch (error) {
-      Swal.fire("Login Failed!", error?.data?.message, "error");
+      const { message, token, redirect } = error?.data || {};
+
+      if (redirect && token) {
+        sessionStorage.setItem("token", token);
+        await Swal.fire(
+          "Account Not Verified",
+          "Redirecting to verification page...",
+          "info"
+        );
+        navigate("/auth/verify-user");
+      } else {
+        Swal.fire("Login Failed!", message || "An error occurred", "error");
+      }
     }
   };
 

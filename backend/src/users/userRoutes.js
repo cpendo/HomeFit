@@ -2,6 +2,7 @@ const express = require("express");
 const {
   createUser,
   loginUser,
+  checkUserToken,
   verifyUser,
   resendPin,
 } = require("./userController");
@@ -13,13 +14,22 @@ const {
 const router = express.Router();
 
 router.post("/register", createUserValidation, createUser);
+router.post("/verify-user/check", checkUserToken);
 router.post("/verify-user", verifyUser);
 router.post("/resend-pin", resendPin);
 router.post("/login", loginUserValidation, loginUser);
-router.get("/status", (req, res) => {
-  return req.user
-    ? res.status(200).json({ status: "OK" })
-    : res.status(401).json({ status: "Unauthorized" });
+router.get("/me", (req, res) => {
+  if (req.user) {
+    const userData = {
+      first_name: req.user.first_name,
+      last_name: req.user.last_name,
+      email: req.user.email,
+    };
+
+    return res.status(200).json({ status: "OK", user: userData });
+  }
+
+  return res.status(401).json({ status: "Unauthorized" });
 });
 
 router.post("/logout", (req, res) => {

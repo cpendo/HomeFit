@@ -1,20 +1,20 @@
-import { useGetStatusQuery } from "../features/users/usersApi";
+import { useGetProfileQuery } from "../features/users/usersApi";
 import { Navigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import LoadingPage from "../components/LoadingPage";
 
 const ProtectedRoute = ({ children }) => {
-  const { data, error, isLoading } = useGetStatusQuery();
+  const { data, error, isLoading } = useGetProfileQuery();
   if (isLoading) {
-    return <div>Loading...</div>; 
+    return <LoadingPage />;
   }
 
-
   if (error || !data || data.status !== "OK") {
-    console.log(error)
+    console.log(error);
     return <Navigate to="/auth" />;
   }
 
- return children;
+  return children;
 };
 
 ProtectedRoute.propTypes = {

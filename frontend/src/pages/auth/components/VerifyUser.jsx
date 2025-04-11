@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const VerifyAccount = () => {
-  const token = sessionStorage.getItem("verify_token");
+  const token = sessionStorage.getItem("token");
 
   const [verify, { isLoading: isVerifying }] = useVerifyMutation();
   const [resendPin] = useResendPinMutation();
@@ -27,7 +27,7 @@ const VerifyAccount = () => {
     try {
       await verify({ token, pin }).unwrap();
 
-      sessionStorage.removeItem("verify_token");
+      sessionStorage.removeItem("token");
       resetTimer();
       navigate("/auth");
     } catch (error) {
@@ -102,9 +102,9 @@ const VerifyAccount = () => {
           type="button"
           onClick={handleVerifyUser}
           disabled={!isComplete}
-          className={`w-full font-secondary text-2xl p-2 rounded-sm mt-4 ${
+          className={`w-full font-secondary text-2xl p-2 rounded-sm mt-4  ${
             isComplete
-              ? "bg-red-secondary text-white"
+              ? "bg-red-secondary text-white hover:bg-black cursor-pointer"
               : "bg-gray-300 text-gray-600 cursor-not-allowed"
           } `}
         >
