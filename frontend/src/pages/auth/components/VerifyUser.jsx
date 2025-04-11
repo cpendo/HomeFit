@@ -31,7 +31,7 @@ const VerifyAccount = () => {
       resetTimer();
       navigate("/auth");
     } catch (error) {
-      await Swal.fire("Verification Failed!", error?.data?.message, "error");
+      await Swal.fire(error?.data?.title || "Verification Failed!", error?.data?.message, "error");
 
       if (error.status === 400 && error.data.redirect) {
         navigate("/auth");

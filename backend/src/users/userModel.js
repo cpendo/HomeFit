@@ -62,11 +62,11 @@ const processUserData = async (user) => {
   if (user.email) user.email = user.email.toLowerCase();
 
   if (user.changed("password")) {
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await bcrypt.hash(user.password, 12);
   }
 
   if (user.email_pin) {
-    user.email_pin = await bcrypt.hash(user.email_pin, 10)
+    user.email_pin = await bcrypt.hash(user.email_pin, 12)
   }
 };
 

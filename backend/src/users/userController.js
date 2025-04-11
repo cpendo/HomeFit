@@ -126,15 +126,11 @@ const resendPin = async (req, res) => {
         .json({ message: "User is already verified", redirect: true });
     }
 
-    const newPin = generatePin();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // expires in 10 minutes
+    const { pin: newPin, pinExpiry } = generatePin();
 
-    await user.update({
-      email_pin: newPin,
-      pin_expires_at: expiresAt,
-    });
+    await user.update({ email_pin: newPin, pin_expires_at: pinExpiry });
 
-    await sendVerificationEmail(user.email, user.first_name, newPin);
+    await sendVerificationEmail(user.email, newPin);
 
     res.status(200).json({ message: "New PIN sent to your email." });
   } catch (error) {
