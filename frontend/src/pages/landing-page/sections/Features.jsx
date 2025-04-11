@@ -25,8 +25,8 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="w-full flex flex-col items-center gap-12 bg-[#D3D3D3] py-16">
-      <h1 className="font-secondary text-5xl capitalize">what we offer</h1>
+    <section className="w-full flex flex-col items-center gap-12 bg-[#D3D3D3] sm:py-16 py-10">
+      <h1 className="font-secondary sm:text-5xl text-4xl capitalize">what we offer</h1>
 
       <div className="w-[90%] flex lg:flex-row flex-col items-center gap-5 lg:h-[500px]">
         <div className="flex-2 h-full flex justify-center">

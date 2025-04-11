@@ -2,7 +2,7 @@ const ContactForm = () => {
   return (
     <section className="w-4/5 sm:w-2/3 mt-10 sm:mt-15 mb-20 bg-gray-200">
       <div className="w-full h-full  flex flex-col gap-5">
-        <header className="w-full ">
+        <header className="w-full mb-6">
           <h2 className="text-3xl sm:text-4xl font-secondary text-red-secondary">
             Contact us
           </h2>

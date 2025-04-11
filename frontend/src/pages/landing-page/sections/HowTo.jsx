@@ -17,14 +17,14 @@ const usageInstructions = [
 
 const HowTo = () => {
   return (
-    <section className="w-full flex flex-col items-center gap-8 py-16">
-      <h1 className="font-secondary text-5xl capitalize">How to get started</h1>
+    <section className="w-full flex flex-col items-center gap-8 sm:py-16 py-10">
+      <h1 className="font-secondary sm:text-5xl text-4xl capitalize">How to get started</h1>
 
-      <div className="flex flex-row items-center justify-between gap-10">
+      <div className="flex lg:flex-row flex-col items-center justify-between flex-wrap gap-10">
         
 
         {usageInstructions.map(({ title, description}, index) => (
-          <div key={index} className="size-80 flex flex-col justify-center gap-5 px-4 border-2 bg-[#d3d3d3]">
+          <div key={index} className="slg:size-80 size-70 flex flex-col justify-center gap-5 px-4 border-2 bg-[#d3d3d3]">
             <h3 className="text-6xl font-secondary">{`0${index + 1}`}</h3>
             <h4 className="text-3xl capitalize font-secondary text-red-secondary">
               {title}
