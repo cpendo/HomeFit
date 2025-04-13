@@ -4,7 +4,7 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("./strategies/local-strategy");
 const { sequelize, connectDB } = require("./config/sequelize");
-const userRoutes = require("./users/userRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 

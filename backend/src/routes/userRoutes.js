@@ -5,7 +5,7 @@ const {
   checkUserToken,
   verifyUser,
   resendPin,
-} = require("./userController");
+} = require("../controllers/userController");
 const {
   createUserValidation,
   loginUserValidation,

@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const { sequelize } = require("../config/sequelize");
+const Workout = require("./workoutModel");
 
 const User = sequelize.define(
   "User",
@@ -54,6 +55,9 @@ const User = sequelize.define(
     updatedAt: "updated_at",
   }
 );
+
+User.hasMany(Workout, { foreignKey: "creator_id", as: "workouts" });
+
 
 // Define named hooks
 const processUserData = async (user) => {

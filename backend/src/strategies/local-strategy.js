@@ -1,7 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const User = require("../users/userModel");
+const User = require("../models/userModel");
 const generateVerifyToken = require("../utils/generateVerifyToken");
 
 
