@@ -7,7 +7,7 @@ const PasswordInput = ({ label, id, register, error }) => {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div className="flex flex-col mt-3">
+    <div className="flex flex-col mt-3 w-full">
       <label htmlFor={id}>{label}</label>
       <div className="relative">
         <input

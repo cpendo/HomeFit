@@ -3,6 +3,7 @@ import { FaDumbbell } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
 
 import { Link, NavLink } from "react-router";
+import { useGetProfileQuery } from "../features/users/usersApi";
 
 const menuItems = [
   {
@@ -20,7 +21,14 @@ const menuItems = [
 ];
 
 const Navbar = () => {
+  const { data, isFetching, error } = useGetProfileQuery();
+  const user = data?.user;
+
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  if (isFetching) {
+    return null; // Optionally, show a loading spinner or placeholder
+  }
 
   return (
     <header className="w-full font-primary h-14 sm:h-17 py-3 px-4 bg-black text-[#F5F3F4]">
@@ -41,7 +49,7 @@ const Navbar = () => {
                 key={index}
                 to={route}
                 className={({ isActive }) =>
-                  isActive ? "text-red-secondary" : "text-[#F5F3F4]" 
+                  isActive ? "text-red-secondary" : "text-[#F5F3F4]"
                 }
               >
                 {text}
@@ -51,11 +59,19 @@ const Navbar = () => {
         </div>
 
         <div className="sm:flex hidden items-center gap-2">
-          <Link to="/auth/register">
-            <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
-              Register
-            </button>
-          </Link>
+          {!error ? (
+            <Link to="/dashboard">
+              <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
+                Dashboard
+              </button>
+            </Link>
+          ) : (
+            <Link to="/auth/register">
+              <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
+                Register
+              </button>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Nav */}
@@ -80,11 +96,19 @@ const Navbar = () => {
               ))}
 
               <li>
-                <Link to="/auth/register">
-                  <button className="bg-black py-1 px-4 rounded-xs">
-                    Register
-                  </button>
-                </Link>
+                {user ? (
+                  <Link to="/dashboard">
+                    <button className="bg-black py-1 px-4 rounded-xs">
+                      Dashboard
+                    </button>
+                  </Link>
+                ) : (
+                  <Link to="/auth/register">
+                    <button className="bg-black py-1 px-4 rounded-xs">
+                      Register
+                    </button>
+                  </Link>
+                )}
               </li>
             </ul>
           </div>

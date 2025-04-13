@@ -167,10 +167,20 @@ const loginUser = async (req, res, next) => {
         if (err) {
           return next(err); // Handle login error
         }
-        return res
-          .status(200)
-          .json({ message: "Logged In", username: user.first_name });
+        // return res
+        //   .status(200)
+        //   .json({ message: "Logged In"});
+          req.session.save((err) => {
+            if (err) {
+              console.error("Error saving session:", err);
+              return res.status(500).json({ message: "Error saving session" }); // Or handle appropriately
+            }
+            return res
+              .status(200)
+              .json({ message: "Logged In"});
+          });
       });
+
     }
   )(req, res, next);
 };

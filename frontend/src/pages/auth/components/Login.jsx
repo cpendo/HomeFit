@@ -4,11 +4,16 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import FormInput from "./FormInput";
 import PasswordInput from "./PasswordInput";
-import { useLoginMutation } from "../../../features/users/usersApi";
+import {
+  useLoginMutation,
+  useLazyGetProfileQuery,
+} from "../../../features/users/usersApi";
 import Swal from "sweetalert2";
 
 const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
+  const [getProfile] = useLazyGetProfileQuery();
+
   const navigate = useNavigate();
 
   const schema = yup.object({
@@ -26,13 +31,14 @@ const Login = () => {
   const onSubmit = async (data, e) => {
     e.preventDefault();
     try {
-       await login(data).unwrap();
+      await login(data).unwrap();
 
-      // const { username } = response;
-      // sessionStorage.setItem("user", username);
+      const { user } = await getProfile().unwrap();
 
-      reset();
-      navigate("/dashboard");
+      if (user) {
+        reset();
+        navigate("/dashboard");
+      }
     } catch (error) {
       const { message, token, redirect } = error?.data || {};
 

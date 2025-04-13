@@ -15,7 +15,10 @@ import { FaUser } from "react-icons/fa";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useLogoutMutation, useGetProfileQuery } from "../features/users/usersApi";
+import {
+  useLogoutMutation,
+  useGetProfileQuery,
+} from "../features/users/usersApi";
 import LoadingPage from "./LoadingPage";
 
 const mainMenuItems = [
@@ -58,25 +61,17 @@ const DashboardNavbar = () => {
 
   const handleLogout = async () => {
     try {
-      const result = await logout().unwrap(); // Trigger the query and wait for the result
-      if (result) {
-        navigate("/");
-      }
+      await logout().unwrap(); // Trigger the query and wait for the result
+      navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
       navigate("/");
     }
   };
 
-  if (isLoading) return <LoadingPage />
+  if (isLoading) return <LoadingPage />;
   if (error) {
     console.error("Profile fetch error:", error);
-  
-    // Optional: redirect to login if user is not authenticated
-    if (error.status === 401) {
-      navigate("/login"); // or wherever your login is
-    }
-  
     return <div>Error loading profile.</div>;
   }
 
@@ -154,14 +149,12 @@ const DashboardNavbar = () => {
             <div className="absolute right-5 top-18 w-30 p-3 bg-white shadow-xl rounded-lg z-40">
               <ul className="flex flex-col justify-center  gap-1">
                 <li className="flex flex-row items-center gap-2 capitalize">
-                  <LuUserCog className="inline text-xl" /> {user?.first_name || "John"}
+                  <LuUserCog className="inline text-xl" />{" "}
+                  {user?.first_name || "John"}
                 </li>
                 <hr className="w-full text-gray-200" />
-                <li
-                  className="flex flex-row items-center gap-2 hover:cursor-pointer"
-                
-                >
-                  <button   onClick={handleLogout}>
+                <li className="flex flex-row items-center gap-2 hover:cursor-pointer">
+                  <button onClick={handleLogout}>
                     {" "}
                     <FaPowerOff className="inline" /> Logout{" "}
                   </button>

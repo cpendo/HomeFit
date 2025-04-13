@@ -18,12 +18,13 @@ app.use(
 );
 app.use(
   session({
-    secret: "Dev Test",
-    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
     resave: false,
     cookie: {
-      maxAge: 60000 * 60, //1h,
+      httpOnly: true,
       secure: false,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     },
   })
 );
@@ -36,7 +37,7 @@ app.use("/api/users", userRoutes);
 //Start Server and Connect to DB
 const startServer = async () => {
   await connectDB();
-  await sequelize.sync({ force: true }); // Ensures models match database schema
+  await sequelize.sync({ alter: true }); // Ensures models match database schema
   console.log("All models synced with database.");
 
   app.listen(process.env.PORT, () =>
