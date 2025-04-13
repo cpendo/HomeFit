@@ -1,6 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/sequelize");
-const Workout = require("./workoutModel")
 
 const Category = sequelize.define(
   "Category",
@@ -12,7 +11,7 @@ const Category = sequelize.define(
       autoIncrement: true,
     },
     name: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
@@ -25,6 +24,5 @@ const Category = sequelize.define(
   }
 );
 
-Category.hasMany(Workout, { foreignKey: 'category_id', as: 'workouts' });
 
 module.exports = Category;

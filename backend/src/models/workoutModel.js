@@ -1,7 +1,5 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/sequelize");
-const Category = require("./categoryModel");
-const User = require("./userModel");
 
 const Workout = sequelize.define(
   "Workout",
@@ -19,23 +17,11 @@ const Workout = sequelize.define(
     },
     category_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Category,
-        key: "id",
-      },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
+      allowNull: false,     
     },
     creator_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: User,
-        key: "id",
-      },
-      onDelete: "CASCADE",
-      onUpdate: "CASCADE",
     },
     difficulty_level: {
       type: DataTypes.ENUM("beginner", "intermediate", "advanced"),
@@ -71,9 +57,5 @@ const Workout = sequelize.define(
     ],
   }
 );
-
-Workout.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
-Workout.belongsTo(User, { foreignKey: 'creator_id', as: 'creator' });
-
 
 module.exports = Workout;

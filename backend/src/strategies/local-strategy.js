@@ -1,9 +1,8 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const User = require("../models/userModel");
+const { User } = require("../models/index");
 const generateVerifyToken = require("../utils/generateVerifyToken");
-
 
 passport.use(
   new LocalStrategy(
@@ -24,7 +23,7 @@ passport.use(
             token: jwtToken,
           });
         }
-       
+
         done(null, user);
       } catch (error) {
         done(error, null);

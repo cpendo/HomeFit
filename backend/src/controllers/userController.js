@@ -1,4 +1,4 @@
-const User = require("../models/userModel");
+const { User } = require("../models/index");
 const { matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -159,7 +159,6 @@ const loginUser = async (req, res, next) => {
           });
         }
 
-
         return res.status(401).json({ message }); // Send failure message to client
       }
 
@@ -170,17 +169,14 @@ const loginUser = async (req, res, next) => {
         // return res
         //   .status(200)
         //   .json({ message: "Logged In"});
-          req.session.save((err) => {
-            if (err) {
-              console.error("Error saving session:", err);
-              return res.status(500).json({ message: "Error saving session" }); // Or handle appropriately
-            }
-            return res
-              .status(200)
-              .json({ message: "Logged In"});
-          });
+        req.session.save((err) => {
+          if (err) {
+            console.error("Error saving session:", err);
+            return res.status(500).json({ message: "Error saving session" }); // Or handle appropriately
+          }
+          return res.status(200).json({ message: "Logged In" });
+        });
       });
-
     }
   )(req, res, next);
 };
