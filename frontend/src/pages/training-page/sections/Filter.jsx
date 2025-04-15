@@ -1,24 +1,13 @@
 import { IoSearchOutline } from "react-icons/io5";
 import Select from "react-select";
-import { useState } from "react";
+import PropTypes from "prop-types";
 
-const intensityOptions = [
-  { value: "beginner", label: "Beginner" },
-  { value: "intermediate", label: "Intermediate" },
-  { value: "Advanced", label: "Advanced" },
-];
-
-const categoryOptions = [
-  { value: "cardio", label: "Cardio" },
-  { value: "strength", label: "Strength" },
-  { value: "pilates", label: "Pilates" },
-  { value: "stretches", label: "Stretches" },
-  { value: "Core", label: "Core" },
-];
-
-const Filter = () => {
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
+const Filter = ({
+  categoryOptions,
+  selectedOptions,
+  setSelectedOptions,
+  intensityOptions,
+}) => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
       <div className="flex flex-row items-center">
@@ -47,18 +36,38 @@ const Filter = () => {
         classNamePrefix="select"
         value={selectedOptions}
         onChange={(e) => setSelectedOptions(e)}
-        //options={categoryOptions}
         options={categoryOptions.map((option) => ({
           ...option,
           isDisabled: selectedOptions.length >= 2,
         }))}
         isClearable={true}
         isSearchable={true}
-        //isDisabled={selectedOptions.length >= 2}
         isMulti
       />
     </div>
   );
+};
+
+Filter.propTypes = {
+  categoryOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  selectedOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+  setSelectedOptions: PropTypes.func.isRequired,
+  intensityOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
 
 export default Filter;

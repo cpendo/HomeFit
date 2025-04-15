@@ -31,6 +31,16 @@ module.exports = {
         type: Sequelize.ENUM("public", "private"),
         allowNull: false,
       },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('now'),
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.fn('now'),
+      },
     });
 
     // Add named foreign key constraint for category_id
