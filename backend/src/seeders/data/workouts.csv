@@ -1,0 +1,44 @@
+name,category_id,creator_id,difficulty_level,visibility
+Wall Sit,1,1,beginner,public
+Push-Ups,1,1,beginner,public
+Squats,1,1,advanced,public
+Lunges,1,1,beginner,public
+Plank,1,1,beginner,public
+Crunches,1,1,beginner,public
+Leg Raises,1,1,intermediate,public
+Russian Twists,1,1,intermediate,public
+Bicycle Crunches,1,1,intermediate,public
+Tricep Dips,1,1,beginner,public
+Jumping Jacks,2,1,beginner,public
+High Knees,2,1,beginner,public
+Butt Kicks,2,1,beginner,public
+Mountain Climbers,2,1,intermediate,public
+Burpees,2,1,intermediate,public
+Plank Jacks,2,1,intermediate,public
+Burpee Broad Jumps,2,1,intermediate,public
+High Knees with Arm Raises,2,1,beginner,public
+Jumping Lunges,2,1,intermediate,public
+Jumping Rope,2,1,beginner,public
+Cat-Cow Stretch,3,1,beginner,public
+Hamstring Stretch,3,1,beginner,public
+Quadriceps Stretch,3,1,advanced,public
+Calf Stretch,3,1,beginner,public
+Piriformis Stretch,3,1,intermediate,public
+Hip Flexor Stretch,3,1,intermediate,public
+Spinal Twist,3,1,intermediate,public
+Straddle Stretch,3,1,intermediate,public
+Pigeon Pose,3,1,advanced,public
+Shoulder Rolls,3,1,beginner,public
+Single-Leg Stand,4,1,beginner,public
+Heel-to-Toe Walk,4,1,beginner,public
+Standing March,4,1,advanced,public
+The Hundred,5,1,beginner,public
+Pelvic Curl,5,1,beginner,public
+Leg Circles,5,1,advanced,public
+Single Leg Stretch,5,1,beginner,public
+Rolling Like a Ball,5,1,beginner,public
+Double Leg Stretch,5,1,intermediate,public
+Saw,5,1,intermediate,public
+Teaser,5,1,advanced,public
+Spine Stretch Forward,5,1,intermediate,public
+Corkscrew,5,1,intermediate,public

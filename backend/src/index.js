@@ -6,6 +6,7 @@ const passport = require("./strategies/local-strategy");
 const { sequelize, connectDB } = require("./config/sequelize");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const workoutRoutes = require("./routes/workoutRoutes");
 
 const app = express();
 
@@ -34,7 +35,8 @@ app.use(passport.session());
 
 //Routes
 app.use("/api/users", userRoutes);
-app.use("/api/categories", categoryRoutes)
+app.use("/api/categories", categoryRoutes);
+app.use("/api/workouts", workoutRoutes)
 
 //Start Server and Connect to DB
 const startServer = async () => {

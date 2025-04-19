@@ -23,7 +23,6 @@ const WorkoutDetailsPage = () => {
 
   if (!workout) return (<div>
     <img src={spinner} alt="Loading..." className="size-30" />;
-    <p>Geting workout details!</p>
   </div>);
 
   return (

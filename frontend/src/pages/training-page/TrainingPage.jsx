@@ -1,8 +1,10 @@
 import WorkoutCard from "./components/WorkoutCard";
 import Filter from "./sections/Filter";
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import LoadingPage from "../../components/LoadingPage";
+import Pagination from "./components/Pagination";
 import { useGetCategoriesQuery } from "../../features/categories/categoriesApi";
+import { useGetWorkoutsQuery } from "../../features/workouts/workoutsApi";
 
 const intensityOptions = [
   { value: "beginner", label: "Beginner" },
@@ -11,27 +13,25 @@ const intensityOptions = [
 ];
 
 const TrainingPage = () => {
-  const {
-    data: categoryOptions = [],
-    isLoading,
-  } = useGetCategoriesQuery();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [workouts, setWorkouts] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
+  const selectedCategories = searchParams.getAll("category");
+  const selectedIntensity = searchParams.get("difficulty") || "";
+  const searchTerm = searchParams.get("search") || "";
+  const currentPage = parseInt(searchParams.get("page")) || 1;
 
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      const response = await fetch("workout.json");
-      const data = await response.json();
-      setWorkouts(data);
-    };
+  const { data: categoryOptions = [], isLoading } = useGetCategoriesQuery();
+  const { data, isLoading: isFetchingWorkouts } = useGetWorkoutsQuery({
+    page: currentPage,
+    category: selectedCategories,
+    difficulty: selectedIntensity,
+    search: searchTerm,
+  });
 
-    fetchWorkouts();
-  }, []);
-  console.log(categoryOptions);
-  console.log(selectedOptions);
+  const workouts = data?.data ?? [];
+  const totalWorkouts = data?.total ?? 1;
 
-  if (isLoading) return <LoadingPage />;
+  if (isLoading || isFetchingWorkouts) return <LoadingPage />;
 
   return (
     <section className="w-full min-h-screen">
@@ -43,19 +43,29 @@ const TrainingPage = () => {
 
           <Filter
             categoryOptions={categoryOptions}
-            selectedOptions={selectedOptions}
-            setSelectedOptions={setSelectedOptions}
+            selectedOptions={selectedCategories}
             intensityOptions={intensityOptions}
+            selectedIntensity={selectedIntensity}
+            searchTerm={searchTerm}
+            setSearchParams={setSearchParams}
           />
         </div>
 
         <div className=" flex flex-row flex-wrap justify-center items-center gap-8 pt-8">
-          {workouts
-            .filter((workout) => workout.id < 9)
-            .map((workout) => (
-              <WorkoutCard key={workout.id} workout={workout} />
-            ))}
+          {workouts.map((workout) => (
+            <WorkoutCard key={workout.id} workout={workout} />
+          ))}
         </div>
+
+        {totalWorkouts > 8 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalWorkouts / 8)}
+            onPageChange={(page) => setSearchParams({ ...searchParams, page })}
+          />
+        )}
+
+        {totalWorkouts === 0 && <p>No workouts found</p>}
       </div>
     </section>
   );
