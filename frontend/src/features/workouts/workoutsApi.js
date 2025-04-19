@@ -14,16 +14,29 @@ export const workoutsApi = createApi({
         Object.entries(filters).forEach(([key, value]) => {
           if (Array.isArray(value)) {
             value.forEach((v) => params.append(key, v));
-          } else if (value !== undefined && value !== null &&  value !== "") {
+          } else if (value !== undefined && value !== null && value !== "") {
             params.append(key, value);
           }
         });
 
         return `/?${params.toString()}`;
       },
-      providesTags: ["Workouts"],
+      providesTags: (result) =>
+        result?.data
+          ? [
+              { type: "Workouts", id: "LIST" },
+              ...result.data.map((workout) => ({
+                type: "Workouts",
+                id: workout.id,
+              })),
+            ]
+          : [{ type: "Workouts", id: "LIST" }],
+    }),
+    getWorkoutById: build.query({
+      query: (id) => `/${id}`,
+      providesTags: (result, error, id) => [{ type: "Workouts", id }],
     }),
   }),
 });
 
-export const { useGetWorkoutsQuery } = workoutsApi;
+export const { useGetWorkoutsQuery, useGetWorkoutByIdQuery } = workoutsApi;

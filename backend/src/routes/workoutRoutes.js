@@ -3,6 +3,6 @@ const { getWorkouts, getWorkoutById } = require("../controllers/workoutControlle
 const router = express.Router();
 
 router.get("/", getWorkouts);
-router.post("/:id", getWorkoutById);
+router.get("/:id", getWorkoutById);
 
 module.exports = router;

@@ -14,7 +14,16 @@ export const categoriesApi = createApi({
           value: name.toLowerCase(),
           label: name,
         })),
-      providesTags: ["Categories"],
+      providesTags: (result) =>
+        result?.data
+          ? [
+              { type: "Categories", id: "LIST" },
+              ...result.data.map((workout) => ({
+                type: "Categories",
+                id: workout.id,
+              })),
+            ]
+          : [{ type: "Categories", id: "LIST" }],
     }),
   }),
 });

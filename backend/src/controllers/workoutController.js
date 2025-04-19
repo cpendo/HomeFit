@@ -1,6 +1,5 @@
 const { Workout, Category } = require("../models/index");
-const { Op } = require('sequelize');
-
+const { Op } = require("sequelize");
 
 const getWorkouts = async (req, res) => {
   const { page = 1, difficulty, category, search } = req.query;
@@ -38,9 +37,9 @@ const getWorkouts = async (req, res) => {
 };
 
 const getWorkoutById = async (req, res) => {
-  const { id } = req.body;
+  const { id } = req.params;
   try {
-    const workout = await Workout.findByPk(id, {
+    const workout = await Workout.findByPk(parseInt(id), {
       include: [
         {
           model: Category,
@@ -52,8 +51,8 @@ const getWorkoutById = async (req, res) => {
     });
     if (!workout) return res.status(404).json({ message: "Workout not found" });
 
-    return res.status(200).json({ message: workout });
-  } catch (error) {
+    return res.status(200).json(workout);
+  } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
   }
 };
