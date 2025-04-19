@@ -5,7 +5,7 @@ const baseUrl = "http://localhost:5000/api/users";
 export const usersApi = createApi({
   reducerPath: "usersApi",
   baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
-  tagTypes: ["Profile"] ,
+  tagTypes: ["Profile"],
   endpoints: (build) => ({
     register: build.mutation({
       query: (newUser) => ({
@@ -44,7 +44,7 @@ export const usersApi = createApi({
     }),
     getProfile: build.query({
       query: () => "/me",
-      providesTags: ["Profile"]
+      providesTags: ["Profile"],
     }),
     logout: build.mutation({
       query: () => ({
@@ -53,6 +53,20 @@ export const usersApi = createApi({
       }),
       invalidatesTags: ["Profile"],
     }),
+    forgotPassword: build.mutation({
+      query: (email) => ({
+        url: "/forgot-password",
+        method: "POST",
+        body: email,
+      }),
+    }),
+    resetPassword: build.mutation({
+      query: (body) => ({
+        url: "/reset-password",
+        method: "POST",
+        body,
+      })
+    })
   }),
 });
 
@@ -65,4 +79,6 @@ export const {
   useGetProfileQuery,
   useLazyGetProfileQuery,
   useLogoutMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation
 } = usersApi;

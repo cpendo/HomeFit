@@ -6,7 +6,9 @@ const AuthLayout = () => {
   const location = useLocation();
 
   const isAuthPage =
-    location.pathname === "/auth" || location.pathname === "/auth/register";
+    location.pathname === "/auth" ||
+    location.pathname === "/auth/register" ||
+    location.pathname === "/auth/forgot-password";
 
   return (
     <div className="h-dvh flex">

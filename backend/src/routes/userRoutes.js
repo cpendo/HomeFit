@@ -5,10 +5,14 @@ const {
   checkUserToken,
   verifyUser,
   resendPin,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 const {
   createUserValidation,
   loginUserValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation,
 } = require("../middleware/validationSchemas");
 
 const router = express.Router();
@@ -39,5 +43,8 @@ router.post("/logout", (req, res) => {
     res.status(200).json({ message: "Logout Successful" });
   });
 });
+
+router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
+router.post("/reset-password", resetPasswordValidation, resetPassword);
 
 module.exports = router;

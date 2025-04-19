@@ -7,6 +7,7 @@ const passport = require("passport");
 const generatePin = require("../utils/generatePin");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
 const generateVerifyToken = require("../utils/generateVerifyToken");
+const forgotPasswordEmail = require("../utils/forgotPasswordEmail");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -166,9 +167,7 @@ const loginUser = async (req, res, next) => {
         if (err) {
           return next(err); // Handle login error
         }
-        // return res
-        //   .status(200)
-        //   .json({ message: "Logged In"});
+
         req.session.save((err) => {
           if (err) {
             console.error("Error saving session:", err);
@@ -181,8 +180,44 @@ const loginUser = async (req, res, next) => {
   )(req, res, next);
 };
 
-module.exports = {
-  loginUser,
+const forgotPassword = async (req, res) => {
+  const { email } = matchedData(req);
+
+  try {
+    const existingUser = await User.findOne({ where: { email } });
+
+    if (existingUser) {
+      await forgotPasswordEmail(existingUser.id, existingUser.email);
+    }
+
+    return res.status(200).json({
+      message:
+        "If an account with that email exists, a reset link has been sent.",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = matchedData(req);
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findByPk(decoded.id);
+
+    if (!user) return res.status(404).json({ message: "User not found." });
+
+    await user.update({ password: newPassword });
+
+    return res.status(200).json({ message: "Password reset successful." });
+  } catch (error) {
+    if (error.name === "TokenExpiredError") {
+      return res.status(400).json({ message: "Reset link has expired." });
+    }
+
+    return res.status(400).json({ message: "Invalid or expired token." });
+  }
 };
 
 module.exports = {
@@ -191,4 +226,7 @@ module.exports = {
   verifyUser,
   loginUser,
   resendPin,
+  loginUser,
+  forgotPassword,
+  resetPassword,
 };

@@ -87,7 +87,7 @@ const Login = () => {
         />
 
         <div className="w-full text-nowrap flex lg:flex-row flex-col justify-between items-center">
-          <Link className="ml-auto">
+          <Link className="ml-auto" to="/auth/forgot-password">
             <p className="text-right mt-1 text-sm hover:underline">
               forgot password?
             </p>
