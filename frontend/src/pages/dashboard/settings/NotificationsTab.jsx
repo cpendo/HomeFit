@@ -1,6 +1,6 @@
 const NotificationsTab = () => {
   return (
-    <div>NotificationsTab</div>
+    <div>NotificationsTab in progress..</div>
   )
 }
 
