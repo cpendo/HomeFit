@@ -6,7 +6,8 @@ import {
   FaGear,
   FaPowerOff,
 } from "react-icons/fa6";
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdMenu } from "react-icons/md";
+import { IoClose } from "react-icons/io5";
 import { AiFillHome } from "react-icons/ai";
 import ActiveWorkoutImg from "../assets/biceps.png";
 import DefaultWorkoutImg from "../assets/biceps-1.png";
@@ -58,6 +59,7 @@ const DashboardNavbar = () => {
 
   const [showNotifications, setShowNotifications] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -76,17 +78,18 @@ const DashboardNavbar = () => {
   }
 
   return (
-    <header>
-      <nav className="flex items-center justify-between">
-        <div className="dashboard-menu-div px-2">
+    <header className="w-full">
+      <nav className="max-w-full w-full flex items-center justify-between">
+        <div className="flex dashboard-menu-div px-2">
           {/* wrap with link to dashboard home */}
-          <FaDumbbell className="size-8 text-red-secondary rotate-90" />
-          <h1 className="font-secondary sm:text-3xl text-2xl font-medium">
+          <FaDumbbell className="md:size-8 size-5 text-red-secondary rotate-90" />
+          <h1 className="font-secondary sm:text-3xl text-xl font-medium">
             HomeFit
           </h1>
         </div>
 
-        <div className="dashboard-menu-div px-2">
+        {/* full screen menu items */}
+        <div className="hidden md:flex dashboard-menu-div px-2">
           <ul className="flex flex-row gap-2 font-medium ">
             {mainMenuItems.map(({ text, route, icon: Icon, image }) => (
               <NavLink
@@ -120,11 +123,49 @@ const DashboardNavbar = () => {
           </ul>
         </div>
 
+        {/* Mobile Hamburger Menu Items */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 bg-white z-50 flex flex-col items-start p-6 gap-6 shadow-lg">
+            <button
+              className="self-end mb-4"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <IoClose className="text-2xl" />
+            </button>
+
+            {mainMenuItems.map(({ text, route, icon: Icon, image }) => (
+              <NavLink
+                key={text}
+                to={route}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 text-lg text-black"
+              >
+                {Icon ? (
+                  <Icon />
+                ) : image ? (
+                  <img src={image} alt={`${text} icon`} className="size-5" />
+                ) : null}
+                {text}
+              </NavLink>
+            ))}
+
+            <li
+              className={"flex gap-2 text-black list-none"}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setShowNotifications(!showNotifications);
+              }}
+            >
+              <FaBell className="text-xl" /> Notifications
+            </li>
+          </div>
+        )}
+
         <div className="flex flex-row gap-2">
-          <div className="dashboard-menu-div px-2">
+          <div className="flex dashboard-menu-div px-2">
             <ul className="flex flex-row gap-2">
               <li
-                className={`dashboard-menu-item w-9 ${
+                className={`hidden md:flex justify-center items-center gap-1 rounded-md p-2 w-9 ${
                   showNotifications
                     ? "text-white bg-black"
                     : "text-black bg-gray-200"
@@ -133,20 +174,27 @@ const DashboardNavbar = () => {
               >
                 <FaBell className="text-xl" />
               </li>
-              <NavLink to="/" className="dashboard-menu-item w-9 bg-[#EEEEEE]">
+              <NavLink to="/" className="dashboard-menu-item w-9 bg-gray-200">
                 <AiFillHome className="text-2xl" />
               </NavLink>
             </ul>
           </div>
 
+          <button
+            className="md:hidden px-3 dashboard-menu-div "
+            onClick={() => setMobileMenuOpen(true)}
+          >
+            <MdMenu className="text-2xl" />
+          </button>
+
           <div
-            className="dashboard-menu-div px-3"
+            className="flex dashboard-menu-div px-3"
             onClick={() => setShowDropDown(!showDropDown)}
           >
             <FaUser className="text-2xl" />
           </div>
           {showDropDown && (
-            <div className="absolute right-5 top-18 w-30 p-3 bg-white shadow-xl rounded-lg z-40">
+            <div className="absolute right-5 top-18 w-28 p-3 bg-white shadow-xl rounded-lg z-40">
               <ul className="flex flex-col justify-center  gap-1">
                 <li className="flex flex-row items-center gap-2 capitalize">
                   <LuUserCog className="inline text-xl" />{" "}

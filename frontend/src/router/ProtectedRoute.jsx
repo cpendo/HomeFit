@@ -9,9 +9,9 @@ const ProtectedRoute = ({ children }) => {
     return <LoadingPage />;
   }
 
-  console.log("ProtectedRoute - data:", data);
-console.log("ProtectedRoute - error:", error);
-console.log("ProtectedRoute - isLoading:", isLoading);
+//   console.log("ProtectedRoute - data:", data);
+// console.log("ProtectedRoute - error:", error);
+// console.log("ProtectedRoute - isLoading:", isLoading);
   if (error?.status === 401 || !data?.user ) {
     console.log(error);
     return <Navigate to="/auth" />;
