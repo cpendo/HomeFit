@@ -45,7 +45,7 @@ const Filter = ({
 
       <Select
         name="intensity"
-        className="basic-single w-full md:w-60 outline-none"
+        className="basic-single w-full md:w-80 outline-none"
         placeholder="Choose intensity"
         options={intensityOptions}
         value={intensityOptions.find((option) => option.value === localIntensity)}
