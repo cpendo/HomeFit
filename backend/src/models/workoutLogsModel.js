@@ -32,7 +32,7 @@ const WorkoutLogs = sequelize.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    rep: {
+    reps: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

@@ -3,12 +3,13 @@ import DataTable from "react-data-table-component";
 import { useState } from "react";
 import ModalWrapper from "./components/ModalWrapper";
 import AddLog from "./logs-page/AddLog";
+import { useGetWorkoutLogsQuery } from "../../features/logs/logsApi";
+import LoadingPage from "../../components/LoadingPage";
 
 const customStyles = {
   headCells: {
     style: {
       fontSize: "18px",
-      letterSpacing: "1px",
       fontFamily: "Anton, serif",
     },
   },
@@ -20,57 +21,49 @@ const customStyles = {
 };
 
 const columns = [
-  {
-    name: "#",
-    selector: (row) => row.id,
-  },
+ 
   {
     name: "Name",
-    selector: (row) => row.title,
+    selector: (row) => row.workouts.name    ,
   },
   {
     name: "Category",
     sortable: true,
-    selector: (row) => row.year,
+    selector: (row) => row.workouts.category.name,
   },
   {
     name: "Intensity",
     sortable: true,
-    selector: (row) => row.year,
+    selector: (row) => row.workouts.difficulty_level,
   },
 
   {
     name: "Reps",
-    sortable: true,
-    selector: (row) => row.year,
+    selector: (row) => row.reps,
   },
   {
     name: "Duration",
     sortable: true,
-    selector: (row) => row.year,
+    selector: (row) => {
+      const minutes = Math.floor(row.duration / 60);
+      const seconds = row.duration % 60;
+      return `${minutes}m ${seconds}s`;
+    },
   },
   {
     name: "Time",
     sortable: true,
-    selector: (row) => row.year,
-  },
-];
-
-const data = [
-  {
-    id: 1,
-    title: "Beetlejuice",
-    year: "1988",
-  },
-  {
-    id: 2,
-    title: "Ghostbusters",
-    year: "1984",
+    selector: (row) => {
+      return new Date(row.performed_at).toLocaleString();
+    },
   },
 ];
 
 const LogsPage = () => {
   const [showAddLog, setShowAddLog] = useState(false);
+  const { data: workoutLogs, isLoading } = useGetWorkoutLogsQuery();
+
+  if (isLoading) return <LoadingPage />;
   return (
     <div className="w-full max-w-7xl min-h-129  mx-auto bg-white rounded-lg my-4 pb-6">
       <div className="flex flex-row justify-between items-center p-3">
@@ -83,11 +76,11 @@ const LogsPage = () => {
         </button>
       </div>
 
-      <div className="px-10 py-6">
+      <div className="px-5 py-6">
         <DataTable
           customStyles={customStyles}
           columns={columns}
-          data={data}
+          data={workoutLogs}
           striped
           highlightOnHover
           fixedHeader

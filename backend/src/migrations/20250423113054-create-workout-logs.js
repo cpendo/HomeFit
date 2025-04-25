@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      rep: {
+      reps: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

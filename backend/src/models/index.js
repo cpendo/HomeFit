@@ -8,6 +8,6 @@ User.hasMany(Workout, { foreignKey: "creator_id", as: "workouts" });
 Workout.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
 Workout.belongsTo(User, { foreignKey: 'creator_id', as: 'creator' });
 WorkoutLogs.belongsTo(User, {foreignKey: "user_id", as: 'user'});
-WorkoutLogs.belongsTo(Category, {foreignKey: "workout_id", as: "workouts"});
+WorkoutLogs.belongsTo(Workout, {foreignKey: "workout_id", as: "workouts"});
 
-module.exports = {User, Category, Workout, WorkoutLogs} 
+module.exports = {User, Category, Workout, WorkoutLogs}
