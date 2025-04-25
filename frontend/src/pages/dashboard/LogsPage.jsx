@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import { useState } from "react";
 import ModalWrapper from "./components/ModalWrapper";
-import AddLog from "./logs/AddLog";
+import AddLog from "./logs-page/AddLog";
 
 const customStyles = {
   headCells: {
