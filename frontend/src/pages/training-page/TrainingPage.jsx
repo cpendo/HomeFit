@@ -21,7 +21,7 @@ const TrainingPage = () => {
   const currentPage = parseInt(searchParams.get("page")) || 1;
 
   const { data: categoryOptions = [], isLoading } = useGetCategoriesQuery();
-  const { data, isLoading: isFetchingWorkouts } = useGetWorkoutsQuery({
+  const { data, isLoading: isFetchingWorkouts, isError } = useGetWorkoutsQuery({
     page: currentPage,
     category: selectedCategories,
     difficulty: selectedIntensity,
@@ -65,7 +65,7 @@ const TrainingPage = () => {
           />
         )}
 
-        {totalWorkouts === 0 && <p>No workouts found</p>}
+        {isError && <p className="font-secondary text-4xl text-center">No workouts found</p>}
       </div>
     </section>
   );

@@ -196,10 +196,18 @@ const DashboardNavbar = () => {
           {showDropDown && (
             <div className="absolute right-5 top-18 w-28 p-3 bg-white shadow-xl rounded-lg z-40">
               <ul className="flex flex-col justify-center  gap-1">
-                <li className="flex flex-row items-center gap-2 capitalize">
+                {/* <li className="flex flex-row items-center gap-2 capitalize">
                   <LuUserCog className="inline text-xl" />{" "}
                   {user?.first_name || "John"}
-                </li>
+                </li> */}
+                <NavLink
+                  to="/dashboard/settings"
+                  onClick={() => setShowDropDown(!showDropDown)}
+                  className="flex flex-row items-center gap-2 capitalize"
+                >
+                  <LuUserCog className="inline text-xl" />{" "}
+                  {user?.first_name || "John"}
+                </NavLink>
                 <hr className="w-full text-gray-200" />
                 <li className="flex flex-row items-center gap-2 hover:cursor-pointer">
                   <button onClick={handleLogout}>

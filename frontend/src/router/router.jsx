@@ -12,7 +12,12 @@ import {
   ResetPassword,
 } from "../pages/auth";
 import { TrainingPage, WorkoutDetailsPage } from "../pages/training-page";
-import { DashboardLayout, SettingsPage } from "../pages/dashboard";
+import {
+  DashboardLayout,
+  LogsPage,
+  SetsPage,
+  SettingsPage,
+} from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
 
 const router = createBrowserRouter([
@@ -78,11 +83,8 @@ const router = createBrowserRouter([
         path: "workouts",
         element: <p>Workouts</p>,
       },
-      {
-        path: "sets",
-        element: <p>sets</p>,
-      },
-      { path: "logs", element: <p>logs</p> },
+      { path: "sets", element: <SetsPage /> },
+      { path: "logs", element: <LogsPage /> },
       { path: "settings", element: <SettingsPage /> },
     ],
   },

@@ -29,7 +29,7 @@ const SecurityTab = () => {
     <div className="w-full flex flex-col gap-5 border-2 border-dash-secondary rounded-sm p-5">
       <h4 className="font-secondary text-2xl">Change Password</h4>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="sm:w-3/4 w-full">
+      <form onSubmit={handleSubmit(onSubmit)} className="sm:w-3/4 w-full pb-3">
         <PasswordInput
           label="Current Password"
           id="currentPassword"
@@ -51,7 +51,7 @@ const SecurityTab = () => {
           error={errors.confirmPassword}
         />
 
-        <button className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline">
+        <button className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-xs cursor-pointer hover:bg-black focus:outline">
           {/* {isLoading ? "Reseting..." : " Reset Password"} */}
           Change Password
         </button>

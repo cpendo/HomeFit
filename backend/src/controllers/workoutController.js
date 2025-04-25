@@ -36,6 +36,18 @@ const getWorkouts = async (req, res) => {
   }
 };
 
+const getAllWorkouts = async (req, res) => {
+  try {
+    const workouts = await Workout.findAll({
+      attributes: ["id", "name"],
+      order: [["name", "ASC"]],
+    });
+    res.status(200).json(workouts);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 const getWorkoutById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -57,4 +69,4 @@ const getWorkoutById = async (req, res) => {
   }
 };
 
-module.exports = { getWorkouts, getWorkoutById };
+module.exports = { getWorkouts, getWorkoutById, getAllWorkouts };
