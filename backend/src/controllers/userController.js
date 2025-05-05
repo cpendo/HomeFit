@@ -173,6 +173,7 @@ const loginUser = async (req, res, next) => {
             console.error("Error saving session:", err);
             return res.status(500).json({ message: "Error saving session" }); // Or handle appropriately
           }
+
           return res.status(200).json({ message: "Logged In" });
         });
       });

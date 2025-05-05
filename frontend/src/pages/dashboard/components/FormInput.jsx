@@ -3,14 +3,15 @@ import PropTypes from "prop-types";
 const FormInput = ({ label, id, type = "text", register, error }) => {
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-xl font-secondary">
+      {/* <label htmlFor={id} className="text-xl font-secondary"> */}
+      <label htmlFor={id} >
         {label}
       </label>
       <input
-        {...register(id, { required: true })}
+        {...register}
         id={id}
         type={type}
-        className="text-base p-1 border-black border outline-none"
+        className="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
       />
       {error && <span className="text-red-600 text-sm">{error.message}</span>}
     </div>

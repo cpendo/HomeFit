@@ -14,7 +14,7 @@ const {
   forgotPasswordValidation,
   resetPasswordValidation,
 } = require("../middleware/validationSchemas");
-
+const { UserProfile } = require("../models/index");
 const router = express.Router();
 
 router.post("/register", createUserValidation, createUser);
@@ -22,7 +22,7 @@ router.post("/verify-user/check", checkUserToken);
 router.post("/verify-user", verifyUser);
 router.post("/resend-pin", resendPin);
 router.post("/login", loginUserValidation, loginUser);
-router.get("/me", (req, res) => {
+router.get("/me", async (req, res) => {
   if (req.user) {
     const userData = {
       first_name: req.user.first_name,
@@ -30,7 +30,18 @@ router.get("/me", (req, res) => {
       email: req.user.email,
     };
 
-    return res.status(200).json({ status: "OK", user: userData });
+    try {
+      const profile = await UserProfile.findOne({
+        where: { user_id: req.user.id },
+      });
+
+      const hasProfile = !!profile;
+
+      return res.status(200).json({ status: "OK", user: userData, hasProfile });
+    } catch (dbError) {
+      console.error("Error checking user profile:", dbError);
+      return res.status(500).json({ message: "Database error" });
+    }
   }
 
   return res.status(401).json({ status: "Unauthorized" });

@@ -17,6 +17,8 @@ import {
   LogsPage,
   SetsPage,
   SettingsPage,
+  HomePage,
+  UserProfile,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
 
@@ -77,7 +79,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <p>Dash Home</p>,
+        element: <HomePage />,
+      },
+      {
+        path: "complete-profile",
+        element: <UserProfile />,
       },
       {
         path: "workouts",

@@ -9,6 +9,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
 const workoutLogsRoutes = require("./routes/workoutLogsRoutes");
 const setRoutes = require("./routes/setRoutes"); 
+const userProfileRoutes = require("./routes/userProfileRoutes");
 
 const app = express();
 
@@ -40,7 +41,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/workout-logs", workoutLogsRoutes);
-app.use("/api/sets", setRoutes)
+app.use("/api/sets", setRoutes);
+app.use("/api/user-profiles", userProfileRoutes);
 
 //Start Server and Connect to DB
 const startServer = async () => {
