@@ -8,7 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const workoutRoutes = require("./routes/workoutRoutes");
 const workoutLogsRoutes = require("./routes/workoutLogsRoutes");
-
+const setRoutes = require("./routes/setRoutes"); 
 
 const app = express();
 
@@ -39,7 +39,8 @@ app.use(passport.session());
 app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/workouts", workoutRoutes);
-app.use("/api/workout-logs", workoutLogsRoutes)
+app.use("/api/workout-logs", workoutLogsRoutes);
+app.use("/api/sets", setRoutes)
 
 //Start Server and Connect to DB
 const startServer = async () => {

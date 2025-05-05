@@ -2,7 +2,7 @@ import { FaPlus } from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import { useState } from "react";
 import ModalWrapper from "./components/ModalWrapper";
-import AddLog from "./logs-page/AddLog";
+import AddLog from "./forms/AddLog";
 import { useGetWorkoutLogsQuery } from "../../features/logs/logsApi";
 import LoadingPage from "../../components/LoadingPage";
 
@@ -21,10 +21,9 @@ const customStyles = {
 };
 
 const columns = [
- 
   {
     name: "Name",
-    selector: (row) => row.workouts.name    ,
+    selector: (row) => row.workouts.name,
   },
   {
     name: "Category",
@@ -82,7 +81,7 @@ const LogsPage = () => {
           columns={columns}
           data={workoutLogs}
           striped
-          highlightOnHover
+         // highlightOnHover
           fixedHeader
           pagination
         />

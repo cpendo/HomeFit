@@ -19,6 +19,8 @@ import {
   SettingsPage,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
+import DashLayout from "../pages/dash/DashLayout";
+import HomePage from "../pages/dash/HomePage";
 
 const router = createBrowserRouter([
   {

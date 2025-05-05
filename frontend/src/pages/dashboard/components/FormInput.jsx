@@ -10,7 +10,7 @@ const FormInput = ({ label, id, type = "text", register, error }) => {
         {...register(id, { required: true })}
         id={id}
         type={type}
-        className="text-lg p-1 border-black border outline-none"
+        className="text-base p-1 border-black border outline-none"
       />
       {error && <span className="text-red-600 text-sm">{error.message}</span>}
     </div>
