@@ -2,15 +2,13 @@ import {
   FaDumbbell,
   FaShapes,
   FaNoteSticky,
-  FaBell,
   FaGear,
   FaPowerOff,
 } from "react-icons/fa6";
 import { MdDashboard, MdMenu } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
-import { AiFillHome } from "react-icons/ai";
-import ActiveWorkoutImg from "../assets/biceps.png";
-import DefaultWorkoutImg from "../assets/biceps-1.png";
+import WorkoutImg from "../assets/biceps.png";
+import BlackWorkoutImg from "../assets/biceps-1.png";
 import { LuUserCog } from "react-icons/lu";
 import { FaUser } from "react-icons/fa";
 
@@ -31,7 +29,7 @@ const mainMenuItems = [
   {
     text: "Workouts",
     route: "workouts",
-    image: DefaultWorkoutImg,
+    image: WorkoutImg,
   },
   {
     text: "Sets",
@@ -55,15 +53,14 @@ const DashboardNavbar = () => {
   const user = data?.user;
 
   const navigate = useNavigate();
-  const [logout] = useLogoutMutation(); // Call the hook in the component body
+  const [logout] = useLogoutMutation();
 
-  const [showNotifications, setShowNotifications] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     try {
-      await logout().unwrap(); // Trigger the query and wait for the result
+      await logout().unwrap();
       navigate("/");
     } catch (err) {
       console.error("Logout failed:", err);
@@ -80,16 +77,13 @@ const DashboardNavbar = () => {
   return (
     <header className="w-full">
       <nav className="max-w-full w-full flex items-center justify-between">
-        <div className="flex dashboard-menu-div px-2">
-          {/* wrap with link to dashboard home */}
-          <FaDumbbell className="md:size-8 size-5 text-red-secondary rotate-90" />
-          <h1 className="font-secondary sm:text-3xl text-xl font-medium">
-            HomeFit
-          </h1>
+        <div className="flex dashboard-menu-div bg-gray-200 px-2 py-1">
+          <FaDumbbell className="md:size-7 size-6 text-red-secondary rotate-90" />
+          <h1 className="font-secondary text-2xl font-medium">HomeFit</h1>
         </div>
 
         {/* full screen menu items */}
-        <div className="hidden md:flex dashboard-menu-div px-2">
+        <div className="hidden md:flex text-white dashboard-menu-div px-2">
           <ul className="flex flex-row gap-2 font-medium ">
             {mainMenuItems.map(({ text, route, icon: Icon, image }) => (
               <NavLink
@@ -98,26 +92,20 @@ const DashboardNavbar = () => {
                 to={route}
                 className={({ isActive }) =>
                   `dashboard-menu-item ${
-                    isActive
-                      ? "text-white bg-red-secondary"
-                      : "text-black bg-gray-200"
+                    isActive ? " bg-red-secondary" : "text-white bg-black"
                   }`
                 }
               >
-                {({ isActive }) => (
-                  <>
-                    {Icon ? (
-                      <Icon />
-                    ) : image ? (
-                      <img
-                        src={isActive ? ActiveWorkoutImg : image}
-                        alt={`${text} icon`}
-                        className="size-4"
-                      />
-                    ) : null}{" "}
-                    {text}
-                  </>
-                )}
+                {Icon ? (
+                  <Icon />
+                ) : image ? (
+                  <img
+                    src={WorkoutImg}
+                    alt={`${text} icon`}
+                    className="size-4"
+                  />
+                ) : null}{" "}
+                {text}
               </NavLink>
             ))}
           </ul>
@@ -143,76 +131,49 @@ const DashboardNavbar = () => {
                 {Icon ? (
                   <Icon />
                 ) : image ? (
-                  <img src={image} alt={`${text} icon`} className="size-5" />
+                  <img
+                    src={BlackWorkoutImg}
+                    alt={`${text} icon`}
+                    className="size-5"
+                  />
                 ) : null}
                 {text}
               </NavLink>
             ))}
-
-            <li
-              className={"flex gap-2 text-black list-none"}
-              onClick={() => {
-                setMobileMenuOpen(false);
-                setShowNotifications(!showNotifications);
-              }}
-            >
-              <FaBell className="text-xl" /> Notifications
-            </li>
           </div>
         )}
 
         <div className="flex flex-row gap-2">
-          <div className="flex dashboard-menu-div px-2">
-            <ul className="flex flex-row gap-2">
-              <li
-                className={`hidden md:flex justify-center items-center gap-1 rounded-md p-2 w-9 ${
-                  showNotifications
-                    ? "text-white bg-black"
-                    : "text-black bg-gray-200"
-                }`}
-                onClick={() => setShowNotifications(!showNotifications)}
-              >
-                <FaBell className="text-xl" />
-              </li>
-              <NavLink to="/" className="dashboard-menu-item w-9 bg-gray-200">
-                <AiFillHome className="text-2xl" />
-              </NavLink>
-            </ul>
-          </div>
-
           <button
-            className="md:hidden px-3 dashboard-menu-div "
+            className="md:hidden px-2 dashboard-menu-div "
             onClick={() => setMobileMenuOpen(true)}
           >
             <MdMenu className="text-2xl" />
           </button>
 
           <div
-            className="flex dashboard-menu-div px-3"
+            className="flex dashboard-menu-div h-10 px-2"
             onClick={() => setShowDropDown(!showDropDown)}
           >
             <FaUser className="text-2xl" />
           </div>
+
           {showDropDown && (
-            <div className="absolute right-5 top-18 w-28 p-3 bg-white shadow-xl rounded-lg z-40">
+            <div className="absolute right-4 top-14 w-28 p-3 bg-gray-200 shadow-xl rounded-sm z-40">
               <ul className="flex flex-col justify-center  gap-1">
-                {/* <li className="flex flex-row items-center gap-2 capitalize">
-                  <LuUserCog className="inline text-xl" />{" "}
-                  {user?.first_name || "John"}
-                </li> */}
                 <NavLink
                   to="/dashboard/settings"
                   onClick={() => setShowDropDown(!showDropDown)}
-                  className="flex flex-row items-center gap-2 capitalize"
+                  className="flex flex-row items-center gap-2 capitalize hover:cursor-pointer hover:text-red-secondary"
                 >
                   <LuUserCog className="inline text-xl" />{" "}
                   {user?.first_name || "John"}
                 </NavLink>
-                <hr className="w-full text-gray-200" />
-                <li className="flex flex-row items-center gap-2 hover:cursor-pointer">
+                <hr className="w-full text-black" />
+                <li className="flex flex-row items-center gap-2 hover:cursor-pointer hover:text-red-secondary">
                   <button onClick={handleLogout}>
                     {" "}
-                    <FaPowerOff className="inline" /> Logout{" "}
+                    <FaPowerOff className="inline text-base" /> Logout{" "}
                   </button>
                 </li>
               </ul>

@@ -60,11 +60,12 @@ body {
   /* display: flex; */
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: black;
+  color: white;
   max-width: max-content; /* Fallback for older browsers */
   max-width: fit-content;
-  height: 48px;
-  border-radius: 12px;
+  padding-block: 4px;
+  border-radius: 5px;
 }
 
 .dashboard-menu-item {
@@ -73,8 +74,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 4px;
-  /* height: 38px; */
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 6px;
 }
 
