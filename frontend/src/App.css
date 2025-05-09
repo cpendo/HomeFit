@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
@@ -78,9 +78,21 @@ body {
   padding: 6px;
 }
 
-.settings-tab li{
+/* react date picker */
+.rdp-root {
+  --rdp-accent-color: var(--color-red-secondary);
+  --rdp-today-color: #000;
+  /* --rdp-accent-background-color: #000; Change the accent background color. */
+  /* Add more CSS variables here. */
+  --rdp-day-height: 36px;
+  --rdp-day-width: 36px;
+  --rdp-disabled-opacity: 90%;
+  --rdp-day_button-height: 30px;
+  --rdp-day_button-width: 30px;
+}
+
+.settings-tab li {
   border-radius: 4px;
   padding: 8px;
   cursor: pointer;
 }
-

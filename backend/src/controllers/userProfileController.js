@@ -37,11 +37,14 @@ const getProfile = async (req, res) => {
   try {
     const profile = await UserProfile.findOne({
       where: { user_id: req.user?.id },
-      attributes: [age, weight, height, goal_id]
+      include: [{ model: Goal, as: "goal", attributes: ["label"] }],
+      attributes: ["weight", "height", "age"],
     });
     return res.status(200).json(profile);
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Server error - getProfile", error: error.message });
   }
 };
 
