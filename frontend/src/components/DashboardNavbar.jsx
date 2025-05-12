@@ -12,7 +12,7 @@ import BlackWorkoutImg from "../assets/biceps-1.png";
 import { LuUserCog } from "react-icons/lu";
 import { FaUser } from "react-icons/fa";
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { useMatch, NavLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   useLogoutMutation,
@@ -49,6 +49,7 @@ const mainMenuItems = [
 ];
 
 const DashboardNavbar = () => {
+  const matchWorkouts = useMatch("/dashboard/workouts/*");
   const { data, error, isLoading } = useGetProfileQuery();
   const user = data?.user;
 
@@ -85,29 +86,35 @@ const DashboardNavbar = () => {
         {/* full screen menu items */}
         <div className="hidden md:flex text-white dashboard-menu-div px-2">
           <ul className="flex flex-row gap-2 font-medium ">
-            {mainMenuItems.map(({ text, route, icon: Icon, image }) => (
-              <NavLink
-                end
-                key={text}
-                to={route}
-                className={({ isActive }) =>
-                  `dashboard-menu-item ${
-                    isActive ? " bg-red-secondary" : "text-white bg-black"
-                  }`
-                }
-              >
-                {Icon ? (
-                  <Icon />
-                ) : image ? (
-                  <img
-                    src={WorkoutImg}
-                    alt={`${text} icon`}
-                    className="size-4"
-                  />
-                ) : null}{" "}
-                {text}
-              </NavLink>
-            ))}
+            {mainMenuItems.map(({ text, route, icon: Icon, image }) => {
+              const isWorkouts = route === "workouts";
+
+              const isActiveCustom = ({ isActive }) =>
+                `dashboard-menu-item ${
+                  isWorkouts
+                    ? matchWorkouts
+                      ? "bg-red-secondary"
+                      : "text-white bg-black"
+                    : isActive
+                    ? "bg-red-secondary"
+                    : "text-white bg-black"
+                }`;
+
+              return (
+                <NavLink end key={text} to={route} className={isActiveCustom}>
+                  {Icon ? (
+                    <Icon />
+                  ) : image ? (
+                    <img
+                      src={WorkoutImg}
+                      alt={`${text} icon`}
+                      className="size-4"
+                    />
+                  ) : null}{" "}
+                  {text}
+                </NavLink>
+              );
+            })}
           </ul>
         </div>
 

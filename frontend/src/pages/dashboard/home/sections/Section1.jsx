@@ -29,22 +29,37 @@ const Section1 = () => {
 
       {/* top 3 categories chart */}
       <div className="flex flex-col gap-4 bg-gray-200 p-3 rounded-sm">
-        <h4 className="font-secondary text-2xl flex flex-row items-center gap-2">
-          Categories
-        </h4>
+        <div className="flex justify-between">
+          <h4 className="font-secondary text-2xl flex flex-row items-center gap-2">
+            Categories
+          </h4>
+
+          {/* add a calender to pick any month for chart since the user started */}
+          <div>
+            <Select
+              className="basic-single"
+              classNamePrefix="select"
+              name="color"
+              // options={["This week", "Last week"]}
+              // styles={selectStyles}
+            />
+          </div>
+        </div>
 
         <div className="w-full flex flex-row justify-around">
-          <div className="size-70">
+          <div className="size-65">
             <DoughnutChart />
           </div>
 
-          <div>
+          <div className="flex flex-col gap-4">
             <div className="flex flex-col">
               <div className="flex flex-row items-center justify-start gap-2">
                 <div className="size-4 bg-red-secondary"></div>
                 <h5 className="font-secondary">Cardio Training</h5>
               </div>
-              <p className="text-sm">20 cardio workouts performed</p>
+              <p className="text-sm text-gray-500">
+                20 cardio workouts performed
+              </p>
             </div>
 
             <div className="flex flex-col">
@@ -52,7 +67,9 @@ const Section1 = () => {
                 <div className="size-4 bg-white"></div>
                 <h5 className="font-secondary">Strength Training</h5>
               </div>
-              <p className="text-sm">10 strength workouts performed</p>
+              <p className="text-sm text-gray-500">
+                10 strength workouts performed
+              </p>
             </div>
 
             <div className="flex flex-col">
@@ -60,7 +77,9 @@ const Section1 = () => {
                 <div className="size-4 bg-black"></div>
                 <h5 className="font-secondary">Core Training</h5>
               </div>
-              <p className="text-sm">10 core workouts performed</p>
+              <p className="text-sm text-gray-500">
+                10 core workouts performed
+              </p>
             </div>
           </div>
         </div>

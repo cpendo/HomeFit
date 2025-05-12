@@ -1,6 +1,6 @@
-import Section1 from "./home/sections/Section1";
-import Section2 from "./home/sections/Section2";
-import Section3 from "./home/sections/Section3";
+import Section1 from "./sections/Section1";
+import Section2 from "./sections/Section2";
+import Section3 from "./sections/Section3";
 
 const HomePage = () => {
   return (

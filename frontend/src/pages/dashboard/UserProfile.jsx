@@ -72,6 +72,7 @@ const UserProfile = () => {
               min: { value: 10, message: "Must be at least 10" },
             })}
             error={errors.age}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <FormInput
@@ -83,6 +84,7 @@ const UserProfile = () => {
               min: 20,
             })}
             error={errors.weight}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <FormInput
@@ -94,6 +96,7 @@ const UserProfile = () => {
               min: 50,
             })}
             error={errors.height}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <div className="flex flex-col gap-1">

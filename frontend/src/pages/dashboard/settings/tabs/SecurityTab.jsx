@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import PasswordInput from "../../auth/components/PasswordInput";
+import PasswordInput from "../../../auth/components/PasswordInput";
 import * as yup from "yup";
 
 const SecurityTab = () => {

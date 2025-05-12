@@ -17,7 +17,7 @@ const Section3 = () => {
   if (isLoading || isLoadingProfile) return "loading...";
 
   return (
-    <div className="bg-gray-200 flex flex-col h-fit items-center gap-4 rounded-sm p-3">
+    <div className="bg-gray-200 flex flex-col h-fit items-center gap-3 rounded-sm p-3">
       <h3 className="capitalize font-secondary font-normal text-nowrap lg:text-2xl text-xl">
         <h3 className="capitalize font-secondary font-normal text-nowrap lg:text-2xl text-xl">
           Welcome, {userData?.first_name}!
@@ -50,20 +50,6 @@ const Section3 = () => {
         </p>
       </div>
 
-      <div className="w-full bg-white flex flex-col gap-2 py-2 rounded-sm">
-        <h4 className="font-secondary text-xl text-center">Streak Tracking</h4>
-        <div className="flex flex-row justify-around">
-          <div className="flex flex-col items-center">
-            <span className="text-lg">current</span>
-            <h5 className="font-bold text-5xl">0</h5>
-          </div>
-          <div className="flex flex-col items-center">
-            <span>longest</span>
-            <h5 className="font-bold text-5xl">20</h5>
-          </div>
-        </div>
-      </div>
-
       {/* Streak Calender -- Add the selected days from logs. Add red bg and white color for them*/}
       <div className="w-full flex justify-center py-2 bg-white rounded-sm ">
         <DayPicker
@@ -72,6 +58,37 @@ const Section3 = () => {
           disabled //use this to disable days in the past and future
           className="text-base"
         />
+      </div>
+
+      {/* Total workouts logged */}
+      <div className="w-full bg-white flex flex-col gap-2 py-2 rounded-sm">
+        <h4 className="font-secondary text-xl text-center">Workouts</h4>
+        <div className="flex flex-row justify-around">
+          <div className="flex flex-col items-center">
+            <span className="text-lg">total</span>
+            <h5 className="font-bold text-5xl">0</h5>
+          </div>
+          <div className="flex flex-col items-center">
+            <span>logged</span>
+            <h5 className="font-bold text-5xl">20</h5>
+          </div>
+        </div>
+      </div>
+
+      {/* Total setts logged */}
+
+      <div className="w-full bg-white flex flex-col gap-2 py-2 rounded-sm">
+        <h4 className="font-secondary text-xl text-center">Sets</h4>
+        <div className="flex flex-row justify-around">
+          <div className="flex flex-col items-center">
+            <span className="text-lg">total</span>
+            <h5 className="font-bold text-5xl">0</h5>
+          </div>
+          <div className="flex flex-col items-center">
+            <span>logged</span>
+            <h5 className="font-bold text-5xl">20</h5>
+          </div>
+        </div>
       </div>
     </div>
   );

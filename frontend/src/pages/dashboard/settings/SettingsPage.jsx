@@ -1,10 +1,10 @@
 import { useState } from "react";
-import ProfileTab from "./settings/ProfileTab";
-import NotificationsTab from "./settings/NotificationsTab";
-import SecurityTab from "./settings/SecurityTab";
-import DataTab from "./settings/DataTab";
-import { useGetProfileQuery } from "../../features/users/usersApi";
-import LoadingPage from "../../components/LoadingPage";
+import ProfileTab from "./tabs/ProfileTab";
+import NotificationsTab from "./tabs/NotificationsTab";
+import SecurityTab from "./tabs/SecurityTab";
+import DataTab from "./tabs/DataTab";
+import { useGetProfileQuery } from "../../../features/users/usersApi";
+import LoadingPage from "../../../components/LoadingPage";
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState("profile");
@@ -34,9 +34,7 @@ const SettingsPage = () => {
     <div className="w-full max-w-7xl min-h-129 mx-auto bg-white rounded-lg my-4 pb-6">
       <div className="min-h-max pt-3  flex md:flex-row flex-col md:gap-0 gap-5 text-base settings-tab-wrapper">
         <div className="md:flex-[1] flex flex-col font-primary ps-4  rounded-l-lg ">
-          <h2 className="text-4xl font-secondary pb-6 ">
-            Settings
-          </h2>
+          <h2 className="text-4xl font-secondary pb-6 ">Settings</h2>
 
           <ul className="flex md:flex-col flex-row md:gap-3 gap-1 font-medium settings-tab md:overflow-x-hidden overflow-x-scroll whitespace-nowrap">
             <li

@@ -21,21 +21,21 @@ const Section2 = () => {
           <div className="flex flex-row gap-3">
             <FaRegCheckCircle className="text-xl text-red-secondary" />
             <div className="flex flex-col">
-              <p className="text-sm/2 text-gray-400">5/5/2025</p>
+              <p className="text-sm/2 text-gray-500">5/5/2025</p>
               <h5 className="text-base font-medium">20 Jumping Jacks</h5>
             </div>
           </div>
           <div className="flex flex-row gap-3">
             <FaRegCheckCircle className="text-xl text-red-secondary" />
             <div className="flex flex-col">
-              <p className="text-sm/2 text-gray-400">5/5/2025</p>
+              <p className="text-sm/2 text-gray-500">5/5/2025</p>
               <h5 className="text-base font-medium">10 Situps</h5>
             </div>
           </div>
           <div className="flex flex-row gap-3">
             <FaRegCheckCircle className="text-xl text-red-secondary" />
             <div className="flex flex-col">
-              <p className="text-sm/2 text-gray-400">5/5/2025</p>
+              <p className="text-sm/2 text-gray-500">5/5/2025</p>
               <h5 className="text-base font-medium">5 Burpees</h5>
             </div>
           </div>

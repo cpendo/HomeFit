@@ -19,6 +19,8 @@ import {
   SettingsPage,
   HomePage,
   UserProfile,
+  WorkoutPage,
+  AddWorkoutPage,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
 
@@ -87,7 +89,11 @@ const router = createBrowserRouter([
       },
       {
         path: "workouts",
-        element: <p>Workouts</p>,
+        element: <WorkoutPage />,
+      },
+      {
+        path: "workouts/add",
+        element: <AddWorkoutPage/>,
       },
       { path: "sets", element: <SetsPage /> },
       { path: "logs", element: <LogsPage /> },
