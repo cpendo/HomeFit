@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import PasswordInput from "../../../auth/components/PasswordInput";
 import * as yup from "yup";
+import FormInput from "../../components/FormInput";
 
 const SecurityTab = () => {
   const schema = yup.object({
@@ -30,28 +30,40 @@ const SecurityTab = () => {
       <h4 className="font-secondary text-2xl">Change Password</h4>
 
       <form onSubmit={handleSubmit(onSubmit)} className="sm:w-3/4 w-full pb-3">
-        <PasswordInput
+        <FormInput
           label="Current Password"
-          id="currentPassword"
-          register={register}
-          error={errors.currentPassword}
+          id="current_password"
+          type="text"
+          register={register("current_password", {
+            required: "Current Password is required",
+          })}
+          error={errors.current_password}
+          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
         />
 
-        <PasswordInput
+        <FormInput
           label="New Password"
-          id="newPassword"
-          register={register}
-          error={errors.newPassword}
+          id="new_password"
+          type="text"
+          register={register("new_password", {
+            required: "New Password is required",
+          })}
+          error={errors.new_password}
+          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
         />
 
-        <PasswordInput
-          label="Confirm Password"
-          id="confirmPassword"
-          register={register}
-          error={errors.confirmPassword}
+        <FormInput
+          label="ConfirmPassword"
+          id="confirm_password"
+          type="text"
+          register={register("confirm_password", {
+            required: "Confirm Password is required",
+          })}
+          error={errors.confirm_password}
+          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
         />
 
-        <button className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-xs cursor-pointer hover:bg-black focus:outline">
+        <button className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-sm cursor-pointer hover:bg-black focus:outline">
           {/* {isLoading ? "Reseting..." : " Reset Password"} */}
           Change Password
         </button>

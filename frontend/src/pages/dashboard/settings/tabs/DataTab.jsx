@@ -13,12 +13,12 @@ const DataTab = () => {
 
   return (
     <div className="w-full flex flex-col gap-4">
-      <div className="flex flex-col gap-5 border-2 border-dash-secondary rounded-sm p-5">
+      <div className="flex flex-col gap-5 bg-gray-200 rounded-sm p-5">
         <div className="flex flex-row flex-wrap justify-between items-center">
           <h4 className="font-secondary capitalize text-2xl">
             Export workout data
           </h4>
-          <button className="bg-gray-200 text-black flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-red-secondary hover:text-white">
+          <button className="bg-black text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-red-secondary">
             <FaFileExport className="inline text-sm" /> Export
           </button>
         </div>
@@ -39,7 +39,7 @@ const DataTab = () => {
         />
       </div>
 
-      <div className="flex flex-row flex-wrap justify-between items-center md:gap-0 gap-4  border-2 border-dash-secondary rounded-sm p-5">
+      <div className="flex flex-row flex-wrap justify-between items-center md:gap-0 gap-4  bg-gray-200 rounded-sm p-5">
         <div className="flex flex-col gap-2">
           <h4 className="font-secondary text-2xl">Delete Workout Data</h4>
           <p>
@@ -47,7 +47,7 @@ const DataTab = () => {
             will be lost forever
           </p>
         </div>
-        <button className="bg-gray-200 text-red-secondary flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black hover:text-white">
+        <button className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black">
           <FaRegTrashAlt className="inline text-sm" /> Delete Data
         </button>
       </div>
