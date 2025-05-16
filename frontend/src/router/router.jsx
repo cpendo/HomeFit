@@ -11,16 +11,16 @@ import {
   ForgotPassword,
   ResetPassword,
 } from "../pages/auth";
-import { TrainingPage, WorkoutDetailsPage } from "../pages/training-page";
+import { TrainingPage, WorkoutDetailsPage1 } from "../pages/training-page";
 import {
   DashboardLayout,
   LogsPage,
-  SetsPage,
   SettingsPage,
   HomePage,
   UserProfile,
   WorkoutPage,
   AddWorkoutPage,
+  WorkoutDetailsPage,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
 
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
       },
       {
         path: "training/workout/:id",
-        element: <WorkoutDetailsPage />,
+        element: <WorkoutDetailsPage1 />,
       },
     ],
   },
@@ -93,9 +93,12 @@ const router = createBrowserRouter([
       },
       {
         path: "workouts/add",
-        element: <AddWorkoutPage/>,
+        element: <AddWorkoutPage />,
       },
-      { path: "sets", element: <SetsPage /> },
+      {
+        path: "workouts/:id",
+        element: <WorkoutDetailsPage />,
+      },
       { path: "logs", element: <LogsPage /> },
       { path: "settings", element: <SettingsPage /> },
     ],

@@ -1,26 +1,59 @@
-import { FaPlus } from "react-icons/fa6";
 import DataTable from "react-data-table-component";
 import { useState } from "react";
 import ModalWrapper from "./components/ModalWrapper";
 import AddLog from "./forms/AddLog";
 import { useGetWorkoutLogsQuery } from "../../features/logs/logsApi";
 import LoadingPage from "../../components/LoadingPage";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 
 const customStyles = {
+  headRow: {
+    style: {
+      backgroundColor: "black",
+      color: "white",
+      borderRadius: "4px",
+      marginBottom: "6px",
+    },
+  },
   headCells: {
     style: {
       fontSize: "18px",
       fontFamily: "Anton, serif",
     },
   },
+  rows: {
+    style: {
+      fontSize: "13px",
+      fontWeight: 400,
+      color: "black",
+      backgroundColor: "#e5e7eb",
+      borderRadius: "4px",
+      marginBottom: "4px",
+
+      minHeight: "48px",
+      "&:not(:last-of-type)": {
+        borderBottomStyle: "solid",
+        borderBottomWidth: "0px",
+        borderBottomColor: "white",
+      },
+    },
+  },
   cells: {
     style: {
-      fontSize: "15px",
+      fontSize: "16px",
+      textTransform: "capitalize",
     },
   },
 };
 
 const columns = [
+  {
+    name: "ID",
+    maxWidth: "10px",
+    selector: (row) => {
+      return `#${row.id}`;
+    },
+  },
   {
     name: "Name",
     selector: (row) => row.workouts.name,
@@ -64,27 +97,46 @@ const LogsPage = () => {
 
   if (isLoading) return <LoadingPage />;
   return (
-    <div className="w-full max-w-7xl min-h-129  mx-auto bg-white rounded-lg my-4 pb-6">
-      <div className="flex flex-row justify-between items-center p-3">
-        <h2 className="text-4xl font-secondary ">Logs</h2>
+    <div className="w-full h-fit mt-4 flex flex-col gap-3">
+      <div className="flex flex-row justify-between items-center">
+        <div>
+          <h4 className="text-3xl font-secondary">Logs</h4>
+          <p className="text-sm text-gray-500">13 sets</p>
+        </div>
         <button
           onClick={() => setShowAddLog(true)}
           className="bg-red-secondary text-white font-secondary p-2 rounded-sm hover:bg-black"
         >
-          <FaPlus className="inline" /> Add Log
+          Add New Log
         </button>
       </div>
 
-      <div className="px-5 py-6">
+      <div>
         <DataTable
           customStyles={customStyles}
           columns={columns}
           data={workoutLogs}
-          striped
-         // highlightOnHover
           fixedHeader
-          pagination
         />
+      </div>
+
+      {/* pagination */}
+      <div className="flex flex-row items-center justify-center gap-2">
+        <button className="flex justify-center items-center bg-gray-300 text-black rounded-sm size-10">
+          <IoIosArrowBack className="text-2xl" />{" "}
+        </button>
+        <button className="flex justify-center items-center font-secondary text-lg bg-gray-300 text-black rounded-sm size-10 ">
+          01
+        </button>
+        <button className="flex justify-center items-center font-secondary text-lg bg-gray-300 text-black rounded-sm size-10">
+          02
+        </button>
+        <button className="flex justify-center items-center font-secondary text-lg bg-gray-300 text-black rounded-sm size-10">
+          03
+        </button>
+        <button className="flex justify-center items-center bg-gray-300 text-black rounded-sm size-10">
+          <IoIosArrowForward className="text-2xl" />{" "}
+        </button>
       </div>
 
       {showAddLog && (

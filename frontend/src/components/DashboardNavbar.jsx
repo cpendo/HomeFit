@@ -1,6 +1,5 @@
 import {
   FaDumbbell,
-  FaShapes,
   FaNoteSticky,
   FaGear,
   FaPowerOff,
@@ -30,11 +29,6 @@ const mainMenuItems = [
     text: "Workouts",
     route: "workouts",
     image: WorkoutImg,
-  },
-  {
-    text: "Sets",
-    route: "sets",
-    icon: FaShapes,
   },
   {
     text: "Logs",

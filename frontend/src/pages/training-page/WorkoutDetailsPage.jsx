@@ -5,7 +5,7 @@ import LoadingPage from "../../components/LoadingPage";
 import spinner from "../../assets/fade-stagger-squares.svg";
 import { useGetWorkoutByIdQuery } from "../../features/workouts/workoutsApi";
 
-const WorkoutDetailsPage = () => {
+const WorkoutDetailsPage1 = () => {
   const { id } = useParams();
   const {
     data: workout,
@@ -67,4 +67,4 @@ const WorkoutDetailsPage = () => {
   );
 };
 
-export default WorkoutDetailsPage;
+export default WorkoutDetailsPage1;

@@ -9,11 +9,6 @@ export const categoriesApi = createApi({
   endpoints: (build) => ({
     getCategories: build.query({
       query: () => "/",
-      transformResponse: (response) =>
-        response.data.map((name) => ({
-          value: name.toLowerCase(),
-          label: name,
-        })),
       providesTags: (result) =>
         result?.data
           ? [

@@ -19,9 +19,7 @@ const Section3 = () => {
   return (
     <div className="bg-gray-200 flex flex-col h-fit items-center gap-3 rounded-sm p-3">
       <h3 className="capitalize font-secondary font-normal text-nowrap lg:text-2xl text-xl">
-        <h3 className="capitalize font-secondary font-normal text-nowrap lg:text-2xl text-xl">
-          Welcome, {userData?.first_name}!
-        </h3>
+        Welcome, {userData?.first_name}!
       </h3>
 
       {/* user goal */}
@@ -62,15 +60,15 @@ const Section3 = () => {
 
       {/* Total workouts logged */}
       <div className="w-full bg-white flex flex-col gap-2 py-2 rounded-sm">
-        <h4 className="font-secondary text-xl text-center">Workouts</h4>
+        <h4 className="font-secondary text-2xl text-center">Workouts</h4>
         <div className="flex flex-row justify-around">
           <div className="flex flex-col items-center">
-            <span className="text-lg">total</span>
-            <h5 className="font-bold text-5xl">0</h5>
+            <span className="text-base capitalize">saved</span>
+            <h5 className="font-bold text-3xl">30</h5>
           </div>
           <div className="flex flex-col items-center">
-            <span>logged</span>
-            <h5 className="font-bold text-5xl">20</h5>
+            <span className="text-base capitalize">logged</span>
+            <h5 className="font-bold text-3xl">10</h5>
           </div>
         </div>
       </div>
@@ -78,15 +76,15 @@ const Section3 = () => {
       {/* Total setts logged */}
 
       <div className="w-full bg-white flex flex-col gap-2 py-2 rounded-sm">
-        <h4 className="font-secondary text-xl text-center">Sets</h4>
+        <h4 className="font-secondary text-2xl text-center">Sets</h4>
         <div className="flex flex-row justify-around">
           <div className="flex flex-col items-center">
-            <span className="text-lg">total</span>
-            <h5 className="font-bold text-5xl">0</h5>
+            <span className="text-base capitalize">saved</span>
+            <h5 className="font-bold text-3xl">10</h5>
           </div>
-          <div className="flex flex-col items-center">
-            <span>logged</span>
-            <h5 className="font-bold text-5xl">20</h5>
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-base capitalize">logged</span>
+            <h5 className="font-bold text-3xl">05</h5>
           </div>
         </div>
       </div>

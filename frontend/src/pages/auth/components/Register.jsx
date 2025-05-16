@@ -37,8 +37,7 @@ const Register = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 
-  const onSubmit = async (data, e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     // eslint-disable-next-line no-unused-vars
     const { checkbox, confirmPassword, ...filteredData } = data;
 

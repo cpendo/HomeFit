@@ -26,7 +26,7 @@ const SecurityTab = () => {
   const onSubmit = () => {};
 
   return (
-    <div className="w-full flex flex-col gap-5 border-2 border-dash-secondary rounded-sm p-5">
+    <div className="w-full flex flex-col gap-5 bg-gray-200 rounded-sm p-5">
       <h4 className="font-secondary text-2xl">Change Password</h4>
 
       <form onSubmit={handleSubmit(onSubmit)} className="sm:w-3/4 w-full pb-3">

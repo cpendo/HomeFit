@@ -15,6 +15,10 @@ const Workout = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
     category_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -25,6 +29,14 @@ const Workout = sequelize.define(
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
+    },
+    difficulty: {
+      type: DataTypes.ENUM("easy", "medium", "hard"),
+      allowNull: false,
+    },
+    suggested_reps: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     creator_id: {
       type: DataTypes.INTEGER,
@@ -37,13 +49,14 @@ const Workout = sequelize.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    difficulty_level: {
-      type: DataTypes.ENUM("beginner", "intermediate", "advanced"),
-      allowNull: false,
+    youtube_video_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    visibility: {
-      type: DataTypes.ENUM("public", "private"),
+    is_ai_generated: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
+      defaultValue: false,
     },
   },
   {
@@ -61,8 +74,8 @@ const Workout = sequelize.define(
         name: "creator_id_index",
       },
       {
-        fields: ["difficulty_level"],
-        name: "difficulty_level_index",
+        fields: ["difficulty"],
+        name: "difficulty_index",
       },
     ],
   }

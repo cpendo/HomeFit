@@ -31,7 +31,7 @@ const SettingsPage = () => {
   if (isLoading) return <LoadingPage />;
 
   return (
-    <div className="w-full max-w-7xl min-h-129 mx-auto bg-white rounded-lg my-4 pb-6">
+    <div className="w-full min-h-129 mx-auto bg-white rounded-sm mt-4">
       <div className="min-h-max pt-3  flex md:flex-row flex-col md:gap-0 gap-5 text-base settings-tab-wrapper">
         <div className="md:flex-[1] flex flex-col font-primary ps-4  rounded-l-lg ">
           <h2 className="text-4xl font-secondary pb-6 ">Settings</h2>
@@ -45,16 +45,7 @@ const SettingsPage = () => {
             >
               Profile
             </li>
-            <li
-              onClick={() => setActiveTab("notifications")}
-              className={
-                activeTab === "notifications"
-                  ? "bg-red-secondary text-white"
-                  : ""
-              }
-            >
-              Notifications
-            </li>
+           
             <li
               onClick={() => setActiveTab("security")}
               className={

@@ -10,7 +10,6 @@ const DoughnutChart = () => {
         data: [5, 5, 20],
         backgroundColor: ["#fff", "#000", "#a4161a"],
         borderWidth: 0,
-        hoverOffset: 4,
       },
     ],
   };

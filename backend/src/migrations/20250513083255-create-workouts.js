@@ -1,6 +1,5 @@
 "use strict";
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("workouts", {
@@ -15,31 +14,44 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      description: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       category_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+      },
+      difficulty: {
+        type: Sequelize.ENUM("easy", "medium", "hard"),
+        allowNull: false,
+      },
+      suggested_reps: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       creator_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      difficulty_level: {
-        type: Sequelize.ENUM("beginner", "intermediate", "advanced"),
-        allowNull: false,
+      youtube_video_id: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
-      visibility: {
-        type: Sequelize.ENUM("public", "private"),
+      is_ai_generated: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
+        defaultValue: false,
       },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('now'),
+        defaultValue: Sequelize.fn("now"),
       },
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.fn('now'),
+        defaultValue: Sequelize.fn("now"),
       },
     });
 
@@ -76,8 +88,8 @@ module.exports = {
     await queryInterface.addIndex("workouts", ["creator_id"], {
       name: "creator_id_index",
     });
-    await queryInterface.addIndex("workouts", ["difficulty_level"], {
-      name: "difficulty_level_index",
+    await queryInterface.addIndex("workouts", ["difficulty"], {
+      name: "difficulty_index",
     });
   },
 
