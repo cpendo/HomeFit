@@ -20,7 +20,7 @@ HomeFit is a personal workout tracker built to help users stay consistent with t
 
 ## Screenshots
 
-Coming soon – or you can drop in local screenshots later using:![Screenshot](./screenshot.png)
+![Screenshot](./public/screenshot.png)
 
 ## Tech Stack
 
