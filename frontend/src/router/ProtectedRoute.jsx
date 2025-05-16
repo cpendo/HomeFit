@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children }) => {
   }
 
   if (error?.status === 401 || !data?.user ) {
-    console.log(error);
+    // console.log(error);
     return <Navigate to="/auth" />;
   }
 

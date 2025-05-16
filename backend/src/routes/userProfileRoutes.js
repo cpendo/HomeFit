@@ -1,14 +1,16 @@
 const express = require("express");
 const {
   getAllGoals,
-  updateProfile,
+  createProfile,
   getProfile,
+  updateProfile
 } = require("../controllers/userProfileController");
 
 const router = express.Router();
 
 router.get("/goals", getAllGoals);
-router.post("/me", updateProfile);
+router.post("/me", createProfile);
 router.get("/me", getProfile);
+router.patch("/me/:id", updateProfile);
 
 module.exports = router;

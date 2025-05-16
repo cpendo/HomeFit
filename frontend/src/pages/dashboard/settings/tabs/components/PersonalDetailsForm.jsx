@@ -1,12 +1,17 @@
 import { MdEdit } from "react-icons/md";
 import { useEffect, useState } from "react";
-import { useGetProfileQuery } from "../../../../../features/users/usersApi";
+import {
+  useGetProfileQuery,
+  useUpdateMutation,
+} from "../../../../../features/users/usersApi";
+import Swal from "sweetalert2";
 
 const PersonalDetailsForm = () => {
   const {
     data: { user },
     isLoading,
   } = useGetProfileQuery();
+  const [update, { isLoading: isUpdatingUser }] = useUpdateMutation();
   const [editPersonalDetails, setEditPersonalDetails] = useState(false);
   const [personalData, setPersonalData] = useState({
     first_name: "",
@@ -26,10 +31,22 @@ const PersonalDetailsForm = () => {
     setEditPersonalDetails(false);
   };
 
-  const handleSave = () => {
-    // TODO: send `formData` to backend
-    console.log(personalData);
-    // setEditPersonalDetails(false);
+  const handleSave = async () => {
+    const data = { ...personalData, id: user.id };
+    console.log(data);
+
+    try {
+      const response = await update(data).unwrap();
+      await Swal.fire("Update Success!", response?.message, "success");
+      setEditPersonalDetails(false);
+
+    } catch (error) {
+      Swal.fire(
+        "Update Failed!",
+        error?.data?.message || "Something went wrong",
+        "error"
+      );
+    }
   };
 
   useEffect(() => {
@@ -49,12 +66,14 @@ const PersonalDetailsForm = () => {
           <div className="flex gap-2">
             <button
               onClick={handleSave}
+              disabled={isUpdatingUser}
               className="bg-red-secondary text-white px-2 py-1 rounded-sm"
             >
-              Save
+              {isUpdatingUser ? "Saving" : "Save"}
             </button>
             <button
               onClick={handleCancel}
+              disabled={isUpdatingUser}
               className="bg-gray-400 text-black px-2 py-1 rounded-sm"
             >
               Cancel
@@ -88,7 +107,7 @@ const PersonalDetailsForm = () => {
                     : "border border-white cursor-not-allowed"
                 }`}
                 name={field.name}
-                disabled={!editPersonalDetails}
+                disabled={!editPersonalDetails || isUpdatingUser}
                 value={personalData[field.name]}
                 onChange={handleChange}
               />

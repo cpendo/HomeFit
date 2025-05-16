@@ -65,8 +65,16 @@ export const usersApi = createApi({
         url: "/reset-password",
         method: "POST",
         body,
-      })
-    })
+      }),
+    }),
+    update: build.mutation({
+      query: ({id, ...user}) => ({
+        url: `/${id}`,
+        method: "PATCH",
+        body: user,
+      }),
+      invalidatesTags: ["Profile"],
+    }),
   }),
 });
 
@@ -80,5 +88,6 @@ export const {
   useLazyGetProfileQuery,
   useLogoutMutation,
   useForgotPasswordMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useUpdateMutation
 } = usersApi;

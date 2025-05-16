@@ -110,7 +110,7 @@ const UserProfile = () => {
               isClearable
               isSearchable
               name="color"
-              options={goalOptions}
+              options={goalOptions ?? {}}
               value={selectedGoal}
               onChange={setSelectedGoal}
               styles={selectStyles}

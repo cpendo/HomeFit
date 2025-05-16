@@ -3,18 +3,27 @@ import { MdEdit } from "react-icons/md";
 import {
   useGetAllGoalsQuery,
   useGetProfileDataQuery,
+  useUpdateProfileMutation,
 } from "../../../../../features/profiles/profilesApi";
+import { useGetProfileQuery } from "../../../../../features/users/usersApi";
+import Swal from "sweetalert2";
 
 const ProfileDetailsForm = () => {
+  const {
+    data: { user },
+  } = useGetProfileQuery();
   const { data: profileData, isLoading } = useGetProfileDataQuery();
   const { data: goalOptions, isLoading: isLoadingGoals } =
     useGetAllGoalsQuery();
+  const [updateProfile, { isLoading: isUpdatingProfile }] =
+    useUpdateProfileMutation();
+
   const [editProfileDetails, setEditProfileDetails] = useState(false);
   const [profileFormData, setProfileFormData] = useState({
     weight: profileData?.weight || "",
     height: profileData?.height || "",
     age: profileData?.age || "",
-    goal: profileData?.goal?.id || "",
+    goal_id: profileData?.goal?.id || "",
   });
 
   const handleChange = (e) => {
@@ -27,15 +36,25 @@ const ProfileDetailsForm = () => {
       weight: profileData?.weight || "",
       height: profileData?.height || "",
       age: profileData?.age || "",
-      goal: profileData?.goal?.id || "",
+      goal_id: profileData?.goal?.id || "",
     });
     setEditProfileDetails(false);
   };
 
-  const handleSave = () => {
-    console.log(profileFormData);
-    // TODO: Send updated profileFormData to backend
-    // setEditProfileDetails(false);
+  const handleSave = async () => {
+    const data = { ...profileFormData, id: user?.id };
+
+    try {
+      const response = await updateProfile(data).unwrap();
+      await Swal.fire("Update Success!", response?.message, "success");
+      setEditProfileDetails(false);
+    } catch (error) {
+      Swal.fire(
+        "Update Failed!",
+        error?.data?.message || "Something went wrong",
+        "error"
+      );
+    }
   };
 
   useEffect(() => {
@@ -44,10 +63,11 @@ const ProfileDetailsForm = () => {
         weight: profileData.weight || "",
         height: profileData.height || "",
         age: profileData.age || "",
-        goal: profileData.goal || { id: "", label: "" },
+        goal_id: profileData.goal?.id || "",
       });
     }
   }, [profileData]);
+
   return (
     <div className="flex flex-col gap-5 bg-gray-200 rounded-sm p-5">
       <div className="flex flex-row justify-between items-center">
@@ -56,12 +76,14 @@ const ProfileDetailsForm = () => {
           <div className="flex gap-2">
             <button
               onClick={handleSave}
+              disabled={isUpdatingProfile}
               className="bg-red-secondary text-white px-2 py-1 rounded-sm"
             >
-              Save
+              {isUpdatingProfile ? "Saving" : "Save"}
             </button>
             <button
               onClick={handleCancel}
+              disabled={isUpdatingProfile}
               className="bg-gray-400 text-black px-2 py-1 rounded-sm"
             >
               Cancel
@@ -95,8 +117,9 @@ const ProfileDetailsForm = () => {
                    ? "border border-black"
                    : "border border-white cursor-not-allowed"
                }`}
+                type="number"
                 name={field.name}
-                disabled={!editProfileDetails}
+                disabled={!editProfileDetails || isUpdatingProfile}
                 value={profileFormData[field.name] ?? ""}
                 onChange={handleChange}
               />
@@ -109,16 +132,10 @@ const ProfileDetailsForm = () => {
           {editProfileDetails ? (
             <select
               className="p-1 rounded-sm border border-black outline-none bg-white"
-              name="goal"
-              value={profileFormData.goal.id ?? ""}
-              onChange={(e) =>
-                setProfileFormData((prev) => ({
-                  ...prev,
-                  goal: goalOptions.find(
-                    (goal) => goal.id === Number(e.target.value)
-                  ),
-                }))
-              }
+              name="goal_id"
+              disabled={isUpdatingProfile}
+              value={profileFormData.goal_id ?? ""}
+              onChange={handleChange}
             >
               {!isLoadingGoals &&
                 goalOptions.map((goal) => (
@@ -131,7 +148,13 @@ const ProfileDetailsForm = () => {
             <input
               className="bg-white p-1 rounded-sm cursor-not-allowed"
               disabled
-              value={profileFormData?.goal?.label ?? ""}
+              value={
+                goalOptions?.length
+                  ? goalOptions.find(
+                      (goal) => goal.id === Number(profileFormData.goal_id)
+                    )?.label ?? ""
+                  : "Loading..."
+              }
             />
           )}
         </div>

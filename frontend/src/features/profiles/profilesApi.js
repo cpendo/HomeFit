@@ -4,7 +4,7 @@ const baseUrl = "http://localhost:5000/api/user-profiles";
 
 export const profilesApi = createApi({
   reducerPath: "profilesApi",
-  baseQuery: fetchBaseQuery({ baseUrl, credentials: 'include' }),
+  baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   tagTypes: ["Profile-Data", "Goals"],
   endpoints: (build) => ({
     getAllGoals: build.query({
@@ -23,7 +23,20 @@ export const profilesApi = createApi({
       }),
       providesTags: ["Profile-Data"],
     }),
+    updateProfile: build.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/me/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Profile-Data"]
+    }),
   }),
 });
 
-export const { useGetAllGoalsQuery, useGetProfileDataQuery, useCreateProfileMutation } = profilesApi;
+export const {
+  useGetAllGoalsQuery,
+  useGetProfileDataQuery,
+  useCreateProfileMutation,
+  useUpdateProfileMutation
+} = profilesApi;

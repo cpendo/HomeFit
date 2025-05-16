@@ -7,6 +7,7 @@ const {
   resendPin,
   forgotPassword,
   resetPassword,
+  updateUser,
 } = require("../controllers/userController");
 const {
   createUserValidation,
@@ -25,6 +26,7 @@ router.post("/login", loginUserValidation, loginUser);
 router.get("/me", async (req, res) => {
   if (req.user) {
     const userData = {
+      id: req.user.id,
       first_name: req.user.first_name,
       last_name: req.user.last_name,
       email: req.user.email,
@@ -57,5 +59,6 @@ router.post("/logout", (req, res) => {
 
 router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
 router.post("/reset-password", resetPasswordValidation, resetPassword);
+router.patch("/:id", updateUser);
 
 module.exports = router;
