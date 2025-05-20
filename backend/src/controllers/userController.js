@@ -255,6 +255,39 @@ const updateUser = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const { id } = req.params;
+  const { current_password, new_password } = matchedData(req, {
+    locations: ["body"],
+  });
+
+  if (!req.user || req.user.id !== parseInt(id))
+    return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const user = await User.findByPk(parseInt(id));
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(current_password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        message:
+          "If you've forgotten your password, log out and use 'Forgot Password'.",
+      });
+    }
+
+    await user.update({ password: new_password });
+
+    res.status(200).json({
+      message: "User password changed. Please log in again to continue",
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   checkUserToken,
@@ -265,4 +298,5 @@ module.exports = {
   forgotPassword,
   resetPassword,
   updateUser,
+  changePassword,
 };

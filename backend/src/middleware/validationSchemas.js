@@ -119,9 +119,44 @@ const resetPasswordValidation = [
   },
 ];
 
+const changePasswordValidation = [
+  body("current_password")
+    .notEmpty()
+    .withMessage("Password cannot be empty")
+    .isLength({ min: 8, max: 32 })
+    .withMessage(
+      "Password must be at least 8 characters with a max of 32 characters"
+    ),
+
+  body("new_password")
+    .notEmpty()
+    .withMessage("Password cannot be empty")
+    .isLength({ min: 8, max: 32 })
+    .withMessage(
+      "Password must be at least 8 characters with a max of 32 characters"
+    ),
+
+  body("confirm_password")
+    .notEmpty()
+    .withMessage("Password cannot be empty")
+    .custom((value, { req }) => value === req.body.new_password)
+    .withMessage("Confirm password must match"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .json({ message: "Validation error", errors: errors.array() });
+    }
+    next();
+  },
+];
+
 module.exports = {
   createUserValidation,
   loginUserValidation,
   forgotPasswordValidation,
   resetPasswordValidation,
+  changePasswordValidation,
 };

@@ -112,10 +112,10 @@ const WorkoutPage = () => {
       name: "Tags",
       minwidth: "100px",
       selector: (row) =>
-        row.is_ai_generated === true ? (
+        row.id === 2 ? (
           <p className="bg-red-secondary text-white text-xs rounded-sm p-2 ">Default</p>
         ) : (
-          <p className="bg-gray-400 text-black text-xs rounded-sm p-2 ">Default</p>
+          <p className="bg-gray-400 text-black text-xs rounded-sm p-2 ">Personal</p>
         ),
     },
     {

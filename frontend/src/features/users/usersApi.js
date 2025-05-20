@@ -68,12 +68,19 @@ export const usersApi = createApi({
       }),
     }),
     update: build.mutation({
-      query: ({id, ...user}) => ({
+      query: ({ id, ...user }) => ({
         url: `/${id}`,
         method: "PATCH",
         body: user,
       }),
       invalidatesTags: ["Profile"],
+    }),
+    changePassword: build.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/change-password/${id}`,
+        method: "PATCH",
+        body,
+      }),
     }),
   }),
 });
@@ -89,5 +96,6 @@ export const {
   useLogoutMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
-  useUpdateMutation
+  useUpdateMutation,
+  useChangePasswordMutation
 } = usersApi;
