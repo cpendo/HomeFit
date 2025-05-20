@@ -23,8 +23,8 @@ const WorkoutDetailsPage = () => {
     workout?.youtube_video_id ? null : workout?.name
   );
 
-  console.log(workout)
-  console.log("error", error)
+  console.log(workout);
+  console.log("error", error);
 
   if (isLoading) return <SkeletonDetailsPage />;
   if (workoutError) return <WorkoutError />;
@@ -85,7 +85,9 @@ const WorkoutDetailsPage = () => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
               ></iframe>
-            ) : null}
+            ) : (
+              <p>what the hell bitch</p>
+            )}
 
             {error && (
               <div className="h-full flex flex-col justify-center items-center gap-4">
@@ -112,7 +114,7 @@ const WorkoutDetailsPage = () => {
             </div>
             <div className="flex flex-row gap-4">
               {workout.creator_id !== 2 ||
-                (workout?.youtube_video_id && (
+                (!workout?.youtube_video_id && (
                   <button className="flex flex-row items-center gap-1 bg-red-secondary text-white text-sm rounded-sm p-2">
                     <MdBookmark className="inline text-base" />
                     Bookmark Video
