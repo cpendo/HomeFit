@@ -32,8 +32,8 @@ const WorkoutLogs = sequelize.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    reps: {
-      type: DataTypes.INTEGER,
+    performed_reps: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     duration: {
@@ -43,6 +43,26 @@ const WorkoutLogs = sequelize.define(
     performed_at: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    equipment_used: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    mood_before: {
+      type: DataTypes.ENUM("low", "okay", "good", "great"),
+      allowNull: true,
+    },
+    mood_after: {
+      type: DataTypes.ENUM("low", "okay", "good", "great"),
+      allowNull: true,
+    },
+    effort_rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   },
   {

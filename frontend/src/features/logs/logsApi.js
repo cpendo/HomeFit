@@ -4,11 +4,12 @@ const baseUrl = "http://localhost:5000/api/workout-logs";
 
 export const logsApi = createApi({
   reducerPath: "logsApi",
-  baseQuery: fetchBaseQuery({ baseUrl, credentials: 'include' }),
+  baseQuery: fetchBaseQuery({ baseUrl, credentials: "include" }),
   tagTypes: ["Logs"],
   endpoints: (build) => ({
     getWorkoutLogs: build.query({
-      query: () => "/",
+      query: ({ page = 1 }) => `/?page=${page}`,
+
       providesTags: (result) =>
         result?.data
           ? [
@@ -27,7 +28,7 @@ export const logsApi = createApi({
         body,
       }),
       invalidatesTags: [{ type: "Logs", id: "ALL" }],
-    })
+    }),
   }),
 });
 

@@ -34,16 +34,7 @@ export const workoutsApi = createApi({
     }),
     getAllWorkouts: build.query({
       query: () => `/all`,
-      providesTags: (result) =>
-        result?.data
-          ? [
-              { type: "Workouts", id: "ALL" },
-              ...result.data.map((workout) => ({
-                type: "Workouts",
-                id: workout.id,
-              })),
-            ]
-          : [{ type: "Workouts", id: "ALL" }],
+      providesTags: [{ type: "Workouts", id: "ALL" }],
     }),
     getWorkoutById: build.query({
       query: (id) => `/${id}`,
@@ -79,5 +70,5 @@ export const {
   useGetAllWorkoutsQuery,
   useGetWorkoutByIdQuery,
   useGetSimilarWorkoutsQuery,
-  useAddWorkoutMutation
+  useAddWorkoutMutation,
 } = workoutsApi;

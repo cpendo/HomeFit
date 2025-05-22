@@ -44,6 +44,7 @@ const mainMenuItems = [
 
 const DashboardNavbar = () => {
   const matchWorkouts = useMatch("/dashboard/workouts/*");
+  const matchLogs = useMatch("/dashboard/logs/*");
   const { data, error, isLoading } = useGetProfileQuery();
   const user = data?.user;
 
@@ -81,14 +82,13 @@ const DashboardNavbar = () => {
         <div className="hidden md:flex text-white dashboard-menu-div px-2">
           <ul className="flex flex-row gap-2 font-medium ">
             {mainMenuItems.map(({ text, route, icon: Icon, image }) => {
-              const isWorkouts = route === "workouts";
+              const isWorkouts = route === "workouts" ;
+              const isLogs = route === "logs";
 
               const isActiveCustom = ({ isActive }) =>
                 `dashboard-menu-item ${
-                  isWorkouts
-                    ? matchWorkouts
-                      ? "bg-red-secondary"
-                      : "text-white bg-black"
+                  (isWorkouts && matchWorkouts) || (isLogs && matchLogs)
+                    ? "bg-red-secondary"
                     : isActive
                     ? "bg-red-secondary"
                     : "text-white bg-black"
