@@ -16,7 +16,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(current - 1)}
         disabled={current <= 1}
         className={`flex justify-center items-center rounded-sm size-10 ${
-          current <= 1 ? "bg-gray-200 text-gray-400" : "bg-gray-300 text-black"
+          current <= 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-gray-300 text-black cursor-pointer"
         }`}
       >
         <IoIosArrowBack className="text-2xl" />
@@ -26,7 +26,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`flex justify-center items-center font-secondary text-lg bg-gray-300 rounded-sm size-10 ${
+          className={`flex justify-center items-center font-secondary text-lg bg-gray-300 rounded-sm size-10 cursor-pointer ${
             current === page ? "text-red-secondary" : "text-black"
           }`}
         >
@@ -39,8 +39,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         disabled={current >= total}
         className={`flex justify-center items-center rounded-sm size-10 ${
           current >= total
-            ? "bg-gray-200 text-gray-400"
-            : "bg-gray-300 text-black"
+            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+            : "bg-gray-300 text-black cursor-pointer"
         }`}
       >
         <IoIosArrowForward className="text-2xl" />
