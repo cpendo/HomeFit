@@ -8,8 +8,16 @@ export const logsApi = createApi({
   tagTypes: ["Logs"],
   endpoints: (build) => ({
     getWorkoutLogs: build.query({
-      query: ({ page = 1 }) => `/?page=${page}`,
+      query: ({ page = 1, filters = {} }) => {
+        const params = new URLSearchParams({ page });
 
+        if (filters.dateFrom) params.append("dateFrom", filters.dateFrom);
+        if (filters.dateTo) params.append("dateTo", filters.dateTo);
+        if (filters.category) params.append("category", filters.category);
+        if (filters.difficulty) params.append("difficulty", filters.difficulty);
+
+        return `/?${params.toString()}`;
+      },
       providesTags: (result) =>
         result?.data
           ? [
@@ -29,7 +37,19 @@ export const logsApi = createApi({
       }),
       invalidatesTags: [{ type: "Logs", id: "ALL" }],
     }),
+    deleteWorkoutLog: build.mutation({
+      query: (id) => ({
+        url: `${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "Logs", id: "ALL" }],
+    }),
   }),
 });
 
-export const { useGetWorkoutLogsQuery, useAddWorkoutLogMutation } = logsApi;
+export const {
+  useGetWorkoutLogsQuery,
+  useLazyGetWorkoutLogsQuery,
+  useAddWorkoutLogMutation,
+  useDeleteWorkoutLogMutation,
+} = logsApi;
