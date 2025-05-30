@@ -6,7 +6,12 @@ import PropTypes from "prop-types";
 import boxImage from "../../../../assets/paper.png";
 import { useGetProfileQuery } from "../../../../features/users/usersApi";
 
-const WorkoutTable = ({ data, currentPage, handleDeleteWorkout }) => {
+const WorkoutTable = ({
+  data,
+  currentPage,
+  handleDeleteWorkout,
+  isDeletingWorkout,
+}) => {
   const {
     data: { user },
   } = useGetProfileQuery();
@@ -68,8 +73,13 @@ const WorkoutTable = ({ data, currentPage, handleDeleteWorkout }) => {
               </button>
             </Link>
             <button
+              disabled={isDeletingWorkout}
               onClick={() => handleDeleteWorkout(row.id)}
-              className="bg-red-secondary text-white p-2 rounded-sm cursor-pointer"
+              className={` p-2 rounded-sm  ${
+                isDeletingWorkout
+                  ? "cursor-not-allowed bg-gray-400 text-gray-600"
+                  : "cursor-pointer bg-red-secondary text-white"
+              }`}
             >
               <MdDelete />
             </button>
@@ -123,12 +133,13 @@ WorkoutTable.propTypes = {
       creator_id: PropTypes.number,
       category: PropTypes.shape({
         name: PropTypes.string,
-        id: PropTypes.number
+        id: PropTypes.number,
       }),
     })
   ),
   currentPage: PropTypes.string,
   handleDeleteWorkout: PropTypes.func,
+  isDeletingWorkout: PropTypes.bool,
 };
 
 export default WorkoutTable;

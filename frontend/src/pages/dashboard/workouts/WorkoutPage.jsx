@@ -66,6 +66,7 @@ const WorkoutPage = () => {
     }
 
     const cleanedFilters = Object.fromEntries(
+      // eslint-disable-next-line no-unused-vars
       Object.entries(filters).filter(([_, v]) => v !== "")
     );
 
@@ -126,6 +127,7 @@ const WorkoutPage = () => {
         <WorkoutTable
           data={workouts}
           currentPage={currentPage}
+          isDeletingWorkout={isDeletingWorkout}
           handleDeleteWorkout={handleDeleteWorkout}
         />
       )}
