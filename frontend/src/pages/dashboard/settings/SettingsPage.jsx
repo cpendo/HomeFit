@@ -1,20 +1,16 @@
 import { useState } from "react";
 import ProfileTab from "./tabs/ProfileTab";
 import SecurityTab from "./tabs/SecurityTab";
-import DataTab from "./tabs/DataTab";
 
 const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState("profile");
  
-
   const renderTabContent = () => {
     switch (activeTab) {
       case "profile":
         return <ProfileTab />;
       case "security":
         return <SecurityTab />;
-      case "data":
-        return <DataTab />;
       default:
         return null;
     }
@@ -28,7 +24,7 @@ const SettingsPage = () => {
           <h2 className="text-3xl font-secondary pb-6">Settings</h2>
 
           <ul className="flex flex-col gap-2 font-medium">
-            {["profile", "security", "data"].map((tab) => (
+            {["profile", "security"].map((tab) => (
               <li
                 key={tab}
                 onClick={() => setActiveTab(tab)}

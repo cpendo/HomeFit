@@ -9,6 +9,7 @@ import {
 } from "../../../../features/users/usersApi";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 const SecurityTab = () => {
   const {
@@ -60,53 +61,71 @@ const SecurityTab = () => {
   };
 
   return (
-    <div className="w-full flex flex-col bg-gray-200 rounded-sm p-5">
-      <h4 className="font-secondary text-2xl">Change Password</h4>
-      <p className="text-sm text-gray-600 mb-5">
-        If password is successfully updated, you&apos;ll need to login again.
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)} className="sm:w-3/4 w-full pb-3">
-        <FormInput
-          label="Current Password"
-          id="current_password"
-          type="text"
-          register={register("current_password", {
-            required: "Current Password is required",
-          })}
-          error={errors.current_password}
-          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
-        />
-
-        <FormInput
-          label="New Password"
-          id="new_password"
-          type="text"
-          register={register("new_password", {
-            required: "New Password is required",
-          })}
-          error={errors.new_password}
-          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
-        />
-
-        <FormInput
-          label="Confirm Password"
-          id="confirm_password"
-          type="text"
-          register={register("confirm_password", {
-            required: "Confirm Password is required",
-          })}
-          error={errors.confirm_password}
-          styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
-        />
-
-        <button
-          disabled={isLoading || isUpdatingPassword}
-          className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-sm cursor-pointer hover:bg-black focus:outline"
+    <div className="w-full flex flex-col gap-4 ">
+      <div className="flex flex-col bg-gray-200 rounded-sm p-5">
+        <h4 className="font-secondary text-2xl">Change Password</h4>
+        <p className="text-sm text-gray-600 mb-5">
+          If password is successfully updated, you&apos;ll need to login again.
+        </p>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="sm:w-3/4 w-full pb-3"
         >
-          {/* {isLoading ? "Reseting..." : " Reset Password"} */}
-          {isUpdatingPassword ? "Updating Password" : "Change Password"}
+          <FormInput
+            label="Current Password"
+            id="current_password"
+            type="text"
+            register={register("current_password", {
+              required: "Current Password is required",
+            })}
+            error={errors.current_password}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
+          />
+
+          <FormInput
+            label="New Password"
+            id="new_password"
+            type="text"
+            register={register("new_password", {
+              required: "New Password is required",
+            })}
+            error={errors.new_password}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
+          />
+
+          <FormInput
+            label="Confirm Password"
+            id="confirm_password"
+            type="text"
+            register={register("confirm_password", {
+              required: "Confirm Password is required",
+            })}
+            error={errors.confirm_password}
+            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
+          />
+
+          <button
+            disabled={isLoading || isUpdatingPassword}
+            className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-sm cursor-pointer hover:bg-black focus:outline"
+          >
+            {/* {isLoading ? "Reseting..." : " Reset Password"} */}
+            {isUpdatingPassword ? "Updating Password" : "Change Password"}
+          </button>
+        </form>
+      </div>
+
+      <div className="flex flex-row flex-wrap justify-between items-center md:gap-0 gap-4  bg-gray-200 rounded-sm p-5">
+        <div className="flex flex-col gap-2">
+          <h4 className="font-secondary text-2xl">Delete Workout Data</h4>
+          <p>
+            Deleting your workouts is irreversible. All your workout progress
+            will be lost forever
+          </p>
+        </div>
+        <button className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black">
+          <FaRegTrashAlt className="inline text-sm" /> Delete Data
         </button>
-      </form>
+      </div>
     </div>
   );
 };
