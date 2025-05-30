@@ -5,11 +5,12 @@ import { IoMdRefresh } from "react-icons/io";
 
 //import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import SkeletonDetailsPage from "./SkeletonDetailsSection";
+import SkeletonDetailsPage from "./components/SkeletonDetailsSection";
 import { useGetWorkoutByIdQuery } from "../../../features/workouts/workoutsApi";
 import useYoutubeSearch from "../../../hooks/useYoutubeSearch";
 import WorkoutError from "./WorkoutError";
 import OtherWorkoutsSection from "./OtherWorkoutsSection";
+import { useGetProfileQuery } from "../../../features/users/usersApi";
 
 const WorkoutDetailsPage = () => {
   const { id } = useParams();
@@ -18,6 +19,11 @@ const WorkoutDetailsPage = () => {
     isLoading,
     error: workoutError,
   } = useGetWorkoutByIdQuery(id);
+
+  const {
+    data: { user },
+  } = useGetProfileQuery();
+
 
   const { loading, error, videoId } = useYoutubeSearch(
     workout?.youtube_video_id ? null : workout?.name
@@ -56,7 +62,7 @@ const WorkoutDetailsPage = () => {
               </p>
               <p className=" flex flex-row gap-1 text-lg text-black font-secondary capitalize">
                 Difficulty:{" "}
-                <span className="text-red-secondary">{workout.difficulty}</span>
+                <span className="text-red-secondary">{workout.difficulty.name}</span>
               </p>
             </div>
           </div>
@@ -113,7 +119,7 @@ const WorkoutDetailsPage = () => {
               <p className="text-base"> {workout.suggested_reps}</p>
             </div>
             <div className="flex flex-row gap-4">
-              {workout.creator_id !== 2 ||
+              {workout.creator_id === user?.id ||
                 (!workout?.youtube_video_id && (
                   <button className="flex flex-row items-center gap-1 bg-red-secondary text-white text-sm rounded-sm p-2">
                     <MdBookmark className="inline text-base" />

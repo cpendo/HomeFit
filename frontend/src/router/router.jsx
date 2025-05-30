@@ -11,7 +11,6 @@ import {
   ForgotPassword,
   ResetPassword,
 } from "../pages/auth";
-import { TrainingPage, WorkoutDetailsPage1 } from "../pages/training-page";
 import {
   DashboardLayout,
   LogsPage,
@@ -22,6 +21,7 @@ import {
   AddWorkoutPage,
   WorkoutDetailsPage,
   AddLogPage,
+  UpdateWorkoutPage,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
 
@@ -37,14 +37,6 @@ const router = createBrowserRouter([
       {
         path: "get-help",
         element: <HelpPage />,
-      },
-      {
-        path: "training",
-        element: <TrainingPage />,
-      },
-      {
-        path: "training/workout/:id",
-        element: <WorkoutDetailsPage1 />,
       },
     ],
   },
@@ -95,6 +87,10 @@ const router = createBrowserRouter([
       {
         path: "workouts/add",
         element: <AddWorkoutPage />,
+      },
+      {
+        path: "workouts/update/:id",
+        element: <UpdateWorkoutPage />,
       },
       {
         path: "workouts/:id",

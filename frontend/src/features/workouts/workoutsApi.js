@@ -8,16 +8,12 @@ export const workoutsApi = createApi({
   tagTypes: ["Workouts"],
   endpoints: (build) => ({
     getWorkouts: build.query({
-      query: (filters) => {
-        const params = new URLSearchParams();
+      query: ({ page = 1, filters = {} }) => {
+        const params = new URLSearchParams({ page });
 
-        Object.entries(filters).forEach(([key, value]) => {
-          if (Array.isArray(value)) {
-            value.forEach((v) => params.append(key, v));
-          } else if (value !== undefined && value !== null && value !== "") {
-            params.append(key, value);
-          }
-        });
+        if (filters.search) params.append("search", filters.search);
+        if (filters.category) params.append("category", filters.category);
+        if (filters.difficulty) params.append("difficulty", filters.difficulty);
 
         return `/?${params.toString()}`;
       },
@@ -38,7 +34,7 @@ export const workoutsApi = createApi({
     }),
     getWorkoutById: build.query({
       query: (id) => `/${id}`,
-      providesTags: (result, error, id) => [{ type: "Workouts", id }],
+      providesTags: (result, error,  id) => [{ type: "Workouts", id }],
     }),
     getSimilarWorkouts: build.query({
       query: ({ id, difficulty }) =>
@@ -62,13 +58,33 @@ export const workoutsApi = createApi({
       }),
       invalidatesTags: [{ type: "Workouts", id: "ALL" }],
     }),
+    updateWorkout: build.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/${id}`,
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: "Workouts", id }],
+    }),
+    deleteWorkout: build.mutation({
+      query: (id) => ({
+        url: `${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, id) => [
+        { type: "Workouts", id },
+        { type: "Workouts", id: "LIST" },
+      ],
+    }),
   }),
 });
 
 export const {
-  useGetWorkoutsQuery,
+  useLazyGetWorkoutsQuery,
   useGetAllWorkoutsQuery,
   useGetWorkoutByIdQuery,
   useGetSimilarWorkoutsQuery,
   useAddWorkoutMutation,
+  useUpdateWorkoutMutation,
+  useDeleteWorkoutMutation,
 } = workoutsApi;

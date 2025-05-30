@@ -1,5 +1,5 @@
 import { IoMdRefreshCircle, IoIosSpeedometer } from "react-icons/io";
-import SkeletonWorkoutsSection from "./SkeletonWorkoutsSection";
+import SkeletonWorkoutsSection from "./components/SkeletonWorkoutsSection";
 import { useGetSimilarWorkoutsQuery } from "../../../features/workouts/workoutsApi";
 //import { IoMdRefreshCircle } from "react-icons/io";
 import PropTypes from "prop-types";

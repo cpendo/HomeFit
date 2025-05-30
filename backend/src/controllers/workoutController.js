@@ -12,16 +12,9 @@ const getWorkouts = async (req, res) => {
     [Op.or]: [{ creator_id: req.user.id }, { creator_id: 2 }],
   };
 
-  if (difficulty) where.difficulty_level = difficulty;
+  if (difficulty) where.difficulty = difficulty;
   if (search) where.name = { [Op.like]: `%${search}%` };
-  if (category) {
-    const categoryArray = Array.isArray(category)
-      ? category
-      : category.split(",");
-
-    where["$category.name$"] = { [Op.in]: categoryArray };
-  }
-
+  
   try {
     const workouts = await Workout.findAndCountAll({
       where,
@@ -32,6 +25,7 @@ const getWorkouts = async (req, res) => {
           model: Category,
           as: "category",
           attributes: ["name"],
+          ...(category && { where: { id: category } }),
         },
       ],
       attributes: [
@@ -42,7 +36,7 @@ const getWorkouts = async (req, res) => {
         "is_ai_generated",
         "creator_id",
       ],
-      order: [["name", "ASC"]],
+      order: [["created_at", "ASC"]],
     });
     res.status(200).json({
       data: workouts.rows,
@@ -65,7 +59,7 @@ const getWorkoutById = async (req, res) => {
         {
           model: Category,
           as: "category",
-          attributes: ["name"],
+          attributes: ["id","name"],
         },
       ],
       attributes: [
@@ -131,6 +125,7 @@ const addWorkout = async (req, res) => {
       .status(201)
       .json({ message: `${workout.name} added to your workouts!` });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
@@ -147,11 +142,67 @@ const getAllWorkouts = async (req, res) => {
   }
 };
 
+const updateWorkout = async (req, res) => {
+  if (!req.user) return res.status(401).json({ message: "Unauthorized" });
+
+  const { id } = req.params;
+  const updates = req.body;
+
+  if (!id) return res.status(400).json({ message: "Workout ID is required" });
+
+  try {
+    const workout = await Workout.findByPk(id);
+
+    if (!workout) {
+      return res.status(404).json({ message: "Workout not found" });
+    }
+
+    if (workout.creator_id !== req.user.id) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    await workout.update(updates);
+
+    return res.status(200).json({
+      message: `${workout.name} has been updated`,
+      workout,
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+const deleteWorkout = async (req, res) => {
+  const logId = parseInt(req.params.id);
+  const userId = req.user?.id;
+
+  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const workout = await Workout.findByPk(parseInt(logId));
+    if (!workout) return res.status(404).json({ message: "Workout not Found" });
+
+    if (workout.creator_id !== userId) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
+    await workout.destroy();
+
+    return res.status(200).json({ message: "Workout deleted!" });
+  } catch (error) {
+    console.error("Error deleting workout:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 
 module.exports = {
   getWorkouts,
   getWorkoutById,
   getSimilarWorkouts,
   addWorkout,
-  getAllWorkouts
+  getAllWorkouts,
+  updateWorkout,
+  deleteWorkout
 };
