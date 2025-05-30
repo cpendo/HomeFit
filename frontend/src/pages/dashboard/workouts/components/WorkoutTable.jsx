@@ -20,7 +20,7 @@ const WorkoutTable = ({
     {
       name: "Id",
       selector: (row, index) => `#${(currentPage - 1) * 7 + index + 1}`,
-      maxWidth: "10px",
+      width: "60px",
     },
     {
       name: "Workout Name",
@@ -32,22 +32,22 @@ const WorkoutTable = ({
           {row.name}
         </Link>
       ),
-      minWidth: "250px",
+      grow: 2,
     },
     {
       name: "Category",
       selector: (row) => row.category.name,
-      minWidth: "200px",
+      grow: 1,
     },
     {
-      name: "Level",
+      name: "Intensity",
       selector: (row) => row.difficulty,
-      width: "150px",
+      width: "120px",
     },
     {
       name: "Suggested Reps",
       selector: (row) => row.suggested_reps,
-      minWidth: "250px",
+      grow: 1,
     },
     {
       name: "Tags",
@@ -61,9 +61,12 @@ const WorkoutTable = ({
             Default
           </p>
         ),
+      width: "120px",
     },
     {
       name: "Action",
+      width: "150px",
+      ignoreRowClick: true,
       selector: (row) =>
         row.creator_id === user?.id ? (
           <div className="flex gap-2">
