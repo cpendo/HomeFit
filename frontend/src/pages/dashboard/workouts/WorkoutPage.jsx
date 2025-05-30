@@ -78,7 +78,9 @@ const WorkoutPage = () => {
 
   const handleDeleteWorkout = async (id) => {
     const result = await Swal.fire({
-      title: "Do you want to delete this workout?",
+      title: "Are you sure?",
+      text: "You are about to delete this workout and ALL related logs? This action is irreversible!",
+      icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes",
     });

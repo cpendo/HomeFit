@@ -68,7 +68,7 @@ export const workoutsApi = createApi({
     }),
     deleteWorkout: build.mutation({
       query: (id) => ({
-        url: `${id}`,
+        url: `/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, id) => [

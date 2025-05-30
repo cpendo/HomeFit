@@ -4,6 +4,7 @@ import * as yup from "yup";
 import FormInput from "../../components/FormInput";
 import {
   useChangePasswordMutation,
+  useDeleteUserWorkoutsMutation,
   useGetProfileQuery,
   useLogoutMutation,
 } from "../../../../features/users/usersApi";
@@ -20,6 +21,8 @@ const SecurityTab = () => {
   const [changePassword, { isLoading: isUpdatingPassword }] =
     useChangePasswordMutation();
   const [logout] = useLogoutMutation();
+  const [deleteUserWorkouts, { isLoading: isDeletingWorkouts }] =
+    useDeleteUserWorkoutsMutation();
 
   const navigate = useNavigate();
 
@@ -47,13 +50,41 @@ const SecurityTab = () => {
 
     try {
       const response = await changePassword(data).unwrap();
-      await Swal.fire("Update Success!", response?.message, "success");
+      await Swal.fire("Update Successful!", response?.message, "success");
       await logout().unwrap();
       await new Promise((r) => setTimeout(r, 1000));
       navigate("/auth");
     } catch (error) {
       Swal.fire(
         "Update Failed!",
+        error?.data?.message || "Something went wrong",
+        "error"
+      );
+    }
+  };
+
+  const handleDeleteUserWorkouts = async () => {
+    if (!user) return;
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You are about to delete ALL your workouts and related logs. This action is irreversible!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes",
+    });
+
+    if (!result.isConfirmed) {
+      Swal.fire("Workouts not deleted", "", "info");
+      return;
+    }
+
+    try {
+      const response = await deleteUserWorkouts(user?.id).unwrap();
+      await Swal.fire("Delete Successful!", response?.message, "success");
+    } catch (error) {
+      Swal.fire(
+        "Delete Failed!",
         error?.data?.message || "Something went wrong",
         "error"
       );
@@ -118,11 +149,15 @@ const SecurityTab = () => {
         <div className="flex flex-col gap-2">
           <h4 className="font-secondary text-2xl">Delete Workout Data</h4>
           <p>
-            Deleting your workouts is irreversible. All your workout progress
-            will be lost forever
+            Deleting your workouts is irreversible. All your workouts and
+            related workout logs will be lost forever
           </p>
         </div>
-        <button className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black">
+        <button
+          disabled={isDeletingWorkouts}
+          onClick={handleDeleteUserWorkouts}
+          className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black"
+        >
           <FaRegTrashAlt className="inline text-sm" /> Delete Data
         </button>
       </div>

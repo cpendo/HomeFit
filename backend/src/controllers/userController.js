@@ -1,4 +1,4 @@
-const { User } = require("../models/index");
+const { User, Workout } = require("../models/index");
 const { matchedData } = require("express-validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -288,15 +288,32 @@ const changePassword = async (req, res) => {
   }
 };
 
+const deleteUserWorkouts = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.user || req.user.id !== parseInt(id))
+    return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    await Workout.destroy({ where: { creator_id: parseInt(id) } });
+
+    res.status(200).json({
+      message: "Successfully deleted all your workouts",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   checkUserToken,
   verifyUser,
   loginUser,
   resendPin,
-  loginUser,
   forgotPassword,
   resetPassword,
   updateUser,
   changePassword,
+  deleteUserWorkouts
 };

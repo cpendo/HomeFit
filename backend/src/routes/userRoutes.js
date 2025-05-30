@@ -9,12 +9,14 @@ const {
   resetPassword,
   updateUser,
   changePassword,
+  deleteUserWorkouts,
 } = require("../controllers/userController");
 const {
   createUserValidation,
   loginUserValidation,
   forgotPasswordValidation,
-  resetPasswordValidation,changePasswordValidation
+  resetPasswordValidation,
+  changePasswordValidation,
 } = require("../middleware/validationSchemas");
 const { UserProfile } = require("../models/index");
 const router = express.Router();
@@ -62,5 +64,6 @@ router.post("/forgot-password", forgotPasswordValidation, forgotPassword);
 router.post("/reset-password", resetPasswordValidation, resetPassword);
 router.patch("/change-password/:id", changePasswordValidation, changePassword);
 router.patch("/:id", updateUser);
+router.delete("/:id/workouts", deleteUserWorkouts);
 
 module.exports = router;
