@@ -6,7 +6,12 @@ const getWorkoutLogs = async (req, res) => {
   const limit = 7; // default to 7 logs per page
   const offset = (parseInt(page) - 1) * limit;
 
-  const whereClause = {};
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = req.user.id;
+
+  const whereClause = { user_id: userId };
 
   // Date filter
   if (dateFrom && dateTo) {
