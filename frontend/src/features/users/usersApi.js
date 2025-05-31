@@ -86,8 +86,15 @@ export const usersApi = createApi({
     deleteUserWorkouts: build.mutation({
       query: (id) => ({
         url: `/${id}/workouts`,
-        method: "DELETE"
+        method: "DELETE",
       }),
+    }),
+    deleteUser: build.mutation({
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Profile"],
     }),
   }),
 });
@@ -105,5 +112,6 @@ export const {
   useResetPasswordMutation,
   useUpdateMutation,
   useChangePasswordMutation,
-  useDeleteUserWorkoutsMutation
+  useDeleteUserWorkoutsMutation,
+  useDeleteUserMutation
 } = usersApi;

@@ -305,6 +305,26 @@ const deleteUserWorkouts = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  if (!req.user || req.user.id !== parseInt(id))
+    return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const user = await User.findByPk(parseInt(id));
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    await user.destroy();
+
+    res.status(200).json({
+      message: "User account and details deleted",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   checkUserToken,
@@ -315,5 +335,6 @@ module.exports = {
   resetPassword,
   updateUser,
   changePassword,
-  deleteUserWorkouts
+  deleteUserWorkouts,
+  deleteUser
 };

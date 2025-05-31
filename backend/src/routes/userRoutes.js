@@ -10,6 +10,7 @@ const {
   updateUser,
   changePassword,
   deleteUserWorkouts,
+  deleteUser,
 } = require("../controllers/userController");
 const {
   createUserValidation,
@@ -65,5 +66,6 @@ router.post("/reset-password", resetPasswordValidation, resetPassword);
 router.patch("/change-password/:id", changePasswordValidation, changePassword);
 router.patch("/:id", updateUser);
 router.delete("/:id/workouts", deleteUserWorkouts);
+router.delete("/:id",   deleteUser)
 
 module.exports = router;
