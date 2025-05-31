@@ -4,11 +4,11 @@ Chart.register(...registerables);
 
 const DoughnutChart = () => {
   const data = {
-    labels: ["Cardio", "Strength", "Core"],
+    labels: ["Cardio", "Strength", "Core", "HIIT"],
     datasets: [
       {
-        data: [5, 5, 20],
-        backgroundColor: ["#fff", "#000", "#a4161a"],
+        data: [5, 5, 20, 10],
+        backgroundColor: ["#fff", "#000", "#a4161a", "#6b7383"],
         borderWidth: 0,
       },
     ],
