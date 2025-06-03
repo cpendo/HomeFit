@@ -10,7 +10,11 @@ const UserProfile = () => {
   const { data: profileData, isLoading: isLoadingProfile } =
     useGetProfileDataQuery();
 
-  if (isLoading || isLoadingProfile) return "loading...";
+
+  if (isLoading || isLoadingProfile)
+    return (
+      <div className="bg-gray-50 h-40 w-full rounded-sm animate-pulse"></div>
+    );
 
   return (
     <div className="w-full flex flex-col items-center gap-3">

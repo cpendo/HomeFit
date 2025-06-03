@@ -1,14 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 
 @theme {
-  /* --font-primary: "Roboto Flex", serif; */
-  /* --font-secondary: "Oswald", serif; */
   --font-secondary: "Anton", serif;
   --font-primary: "Lexend Deca", serif;
-  /* --font-primary: "Montserrat", sans-serif; */
 
   --color-red-primary: #e5383b;
   --color-red-secondary: #a4161a;
@@ -79,18 +75,23 @@ body {
 }
 
 /* react date picker */
+/* --rdp-accent-background-color: #000; Change the accent background color. */
+/* Add more CSS variables here. */
 .rdp-root {
   --rdp-accent-color: var(--color-red-secondary);
   --rdp-today-color: #000;
-  /* --rdp-accent-background-color: #000; Change the accent background color. */
-  /* Add more CSS variables here. */
   --rdp-day-height: 36px;
   --rdp-day-width: 36px;
-  --rdp-disabled-opacity: 90%;
-  --rdp-day_button-height: 30px;
-  --rdp-day_button-width: 30px;
-}
+  --rdp-day_button-height: 36px;
+  --rdp-day_button-width: 36px;
+  }
 
+  .logged-day {
+    background-color: var(--color-red-secondary); 
+    color: #fff;
+    border-radius: 50%
+  }
+  
 .settings-tab li {
   border-radius: 4px;
   padding: 8px;

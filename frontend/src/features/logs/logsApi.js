@@ -44,6 +44,9 @@ export const logsApi = createApi({
       }),
       invalidatesTags: [{ type: "Logs", id: "ALL" }],
     }),
+    getStreakDates: build.query({
+      query: () => "/streak-dates"
+    })
   }),
 });
 
@@ -52,4 +55,5 @@ export const {
   useLazyGetWorkoutLogsQuery,
   useAddWorkoutLogMutation,
   useDeleteWorkoutLogMutation,
+  useGetStreakDatesQuery,
 } = logsApi;

@@ -109,4 +109,45 @@ const deleteWorkoutLog = async (req, res) => {
   }
 };
 
-module.exports = { getWorkoutLogs, addWorkoutLog, deleteWorkoutLog };
+const getStreakDates = async (req, res) => {
+  if (!req.user || !req.user.id) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const userId = req.user.id;
+
+  try {
+    const workoutLogs = await WorkoutLogs.findAll({
+      attributes: ["performed_at"],
+      where: { user_id: userId },
+      order: [["performed_at", "ASC"]],
+    });
+
+    const uniqueDates = new Set();
+    let firstLogDate = null;
+
+    workoutLogs.forEach((log) => {
+      const date = new Date(log.performed_at);
+      const yyyyMmDd = date.toISOString().split("T")[0]; // Gets 'YYYY-MM-DD'
+
+      uniqueDates.add(yyyyMmDd);
+
+      if (!firstLogDate) {
+        firstLogDate = yyyyMmDd; // Set the first encountered date as the earliest
+      }
+    });
+
+    res.status(200).json({ dates: Array.from(uniqueDates), firstLogDate });
+  } catch (error) {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const userId = req.user.id;
+  }
+};
+
+module.exports = {
+  getWorkoutLogs,
+  addWorkoutLog,
+  deleteWorkoutLog,
+  getStreakDates,
+};
