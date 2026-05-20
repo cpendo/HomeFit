@@ -73,11 +73,11 @@ const WorkoutLogs = sequelize.define(
     indexes: [
       {
         fields: ["user_id"],
-        name: "user_id_index",
+        name: "workout_logs_user_id_index",
       },
       {
         fields: ["workout_id"],
-        name: "workout_id_index",
+        name: "workout_logs_workout_id_index",
       },
     ],
   }

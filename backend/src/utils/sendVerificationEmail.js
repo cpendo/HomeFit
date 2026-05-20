@@ -1,15 +1,20 @@
 const nodemailer = require("nodemailer");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_ACCOUNT,
-    pass: process.env.GMAIL_PASSWORD,
-  },
-});
+const sendVerificationEmail = async (userEmail, PIN) => {
+  // In demo mode, skip the email entirely — accounts are auto-verified on signup.
+  if (process.env.DEMO_MODE === "true") {
+    console.log(`[demo] Skipping verification email to ${userEmail}`);
+    return;
+  }
 
-const sendVerificationEmail = async ( userEmail,PIN) => {
- 
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GMAIL_ACCOUNT,
+      pass: process.env.GMAIL_PASSWORD,
+    },
+  });
+
   const emailTemplate = `
     <!DOCTYPE html>
     <html lang="en">

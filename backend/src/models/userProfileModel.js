@@ -52,7 +52,7 @@ const UserProfile = sequelize.define(
     indexes: [
       {
         fields: ["user_id"],
-        name: "user_id_index",
+        name: "user_profiles_user_id_index",
       },
     ],
   }

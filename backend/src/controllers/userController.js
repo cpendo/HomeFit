@@ -14,6 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const createUser = async (req, res) => {
   const { first_name, last_name, email, password } = matchedData(req);
   const { pin, pinExpiry } = generatePin();
+  const demoMode = process.env.DEMO_MODE === "true";
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -25,16 +26,21 @@ const createUser = async (req, res) => {
       last_name,
       email,
       password,
-      email_pin: pin,
-      pin_expires_at: pinExpiry,
-      is_verified: false,
+      // In demo mode, skip PIN + auto-verify so recruiters don't need an inbox
+      email_pin: demoMode ? null : pin,
+      pin_expires_at: demoMode ? null : pinExpiry,
+      is_verified: demoMode,
     });
 
     const jwtToken = generateVerifyToken(newUser.id);
 
-    await sendVerificationEmail(newUser.email, pin);
+    if (!demoMode) {
+      await sendVerificationEmail(newUser.email, pin);
+    }
 
-    return res.status(201).json({ token: jwtToken });
+    return res
+      .status(201)
+      .json({ token: jwtToken, demoMode, autoVerified: demoMode });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

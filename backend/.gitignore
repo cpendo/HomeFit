@@ -1,2 +1,7 @@
 node_modules
 .env
+
+# SQLite database files (generated at runtime via seedDemo)
+*.sqlite
+*.sqlite-journal
+data.sqlite
