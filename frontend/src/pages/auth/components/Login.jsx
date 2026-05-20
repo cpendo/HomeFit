@@ -10,6 +10,10 @@ import {
 } from "../../../features/users/usersApi";
 import Swal from "sweetalert2";
 
+const DEMO_MODE = import.meta.env.VITE_DEMO_MODE === "true";
+const DEMO_EMAIL = "demo@homefit.app";
+const DEMO_PASSWORD = "demo1234";
+
 const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const [getProfile] = useLazyGetProfileQuery();
@@ -26,7 +30,12 @@ const Login = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: DEMO_MODE
+      ? { email: DEMO_EMAIL, password: DEMO_PASSWORD }
+      : { email: "", password: "" },
+  });
 
   const onSubmit = async (data, e) => {
     e.preventDefault();
@@ -66,6 +75,19 @@ const Login = () => {
           Enter your account details{" "}
         </p>
       </div>
+
+      {DEMO_MODE && (
+        <div className="w-full mb-4 px-4 py-3 rounded-sm border border-red-primary/30 bg-red-primary/5 text-sm">
+          <p className="font-medium text-red-primary mb-0.5">
+            Demo mode — prefilled credentials
+          </p>
+          <p className="text-gray-700 leading-snug">
+            The form is preloaded with{" "}
+            <code className="font-mono text-xs">{DEMO_EMAIL}</code>. Click Sign
+            In to explore, or sign up to create your own account.
+          </p>
+        </div>
+      )}
 
       <form
         onSubmit={handleSubmit(onSubmit)}

@@ -14,8 +14,10 @@ const useYoutubeSearch = (workoutName) => {
       setError(null);
 
       try {
+        const apiBase =
+          import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
         const response = await fetch(
-          `http://localhost:5000/api/youtube?q=${workoutName}`
+          `${apiBase}/api/youtube?q=${workoutName}`
         );
         const data = await response.json();
 
