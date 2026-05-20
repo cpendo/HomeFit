@@ -1,66 +1,59 @@
 import DoughnutChart from "../charts/DoughnutChart";
-import Select from "react-select";
+
+const categories = [
+  { name: "Cardio", count: 20, color: "#bc2c3e" },
+  { name: "Strength", count: 10, color: "#0d0d0e" },
+  { name: "Core", count: 10, color: "#6f6f73" },
+  { name: "HIIT", count: 5, color: "#d4d1ca" },
+];
 
 const CategoryBreakdown = () => {
+  const total = categories.reduce((sum, c) => sum + c.count, 0);
+
   return (
-    <div className="bg-gray-200 h-full flex flex-col gap-5  p-3 rounded-sm">
-      <div className="flex justify-between">
-        <h4 className="font-secondary text-2xl flex flex-row items-center gap-2">
+    <section className="dash-card flex flex-col gap-5">
+      <div className="flex flex-col">
+        <h2 className="font-secondary text-2xl sm:text-3xl tracking-tight uppercase">
           Categories
-        </h4>
-
-        {/* add a calender to pick any month for chart since the user started */}
-        <div>
-          <Select
-            className="basic-single"
-            classNamePrefix="select"
-            name="color"
-            // options={["This week", "Last week"]}
-            // styles={selectStyles}
-          />
-        </div>
+        </h2>
+        <p className="text-sm text-mute mt-0.5">
+          Breakdown of {total} logged workouts
+        </p>
       </div>
 
-      <div className="size-65">
-        <DoughnutChart />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+        <div className="relative h-52 sm:h-60 mx-auto w-full max-w-[260px]">
+          <DoughnutChart />
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <span className="font-secondary text-4xl">{total}</span>
+            <span className="text-xs uppercase tracking-[0.18em] text-mute">
+              Total
+            </span>
+          </div>
+        </div>
+
+        <ul className="flex flex-col gap-3">
+          {categories.map((cat) => {
+            const pct = Math.round((cat.count / total) * 100);
+            return (
+              <li key={cat.name} className="flex items-center gap-3">
+                <span
+                  className="size-2.5 rounded-full shrink-0"
+                  style={{ backgroundColor: cat.color }}
+                />
+                <div className="flex-1 flex items-baseline justify-between gap-2 border-b border-line pb-2">
+                  <span className="text-sm font-medium">{cat.name}</span>
+                  <span className="text-sm text-mute">
+                    {cat.count}{" "}
+                    <span className="text-mute/70">· {pct}%</span>
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-
-      <div className="flex flex-col gap-4">
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center justify-start gap-2">
-            <div className="size-4 bg-red-secondary"></div>
-            <h5 className="font-secondary">Cardio Training</h5>
-          </div>
-          <p className="text-sm text-gray-500">20 cardio workouts performed</p>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center justify-start gap-2">
-            <div className="size-4 bg-white"></div>
-            <h5 className="font-secondary">Strength Training</h5>
-          </div>
-          <p className="text-sm text-gray-500">
-            10 strength workouts performed
-          </p>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center justify-start gap-2">
-            <div className="size-4 bg-black"></div>
-            <h5 className="font-secondary">Core Training</h5>
-          </div>
-          <p className="text-sm text-gray-500">10 core workouts performed</p>
-        </div>
-
-        <div className="flex flex-col">
-          <div className="flex flex-row items-center justify-start gap-2">
-            <div className="size-4 bg-gray-500"></div>
-            <h5 className="font-secondary">HIIT</h5>
-          </div>
-          <p className="text-sm text-gray-500">5 HIIT workouts performed</p>
-        </div>
-      </div>
-    </div>
+    </section>
   );
 };
 

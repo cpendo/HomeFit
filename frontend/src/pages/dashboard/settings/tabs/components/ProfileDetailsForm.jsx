@@ -8,46 +8,46 @@ import {
 import { useGetProfileQuery } from "../../../../../features/users/usersApi";
 import Swal from "sweetalert2";
 
+const fieldLabel = "text-xs uppercase tracking-[0.14em] text-mute";
+
 const ProfileDetailsForm = () => {
-  const {
-    data: { user },
-  } = useGetProfileQuery();
+  const { data: userData } = useGetProfileQuery();
+  const user = userData?.user;
   const { data: profileData, isLoading } = useGetProfileDataQuery();
   const { data: goalOptions, isLoading: isLoadingGoals } =
     useGetAllGoalsQuery();
   const [updateProfile, { isLoading: isUpdatingProfile }] =
     useUpdateProfileMutation();
 
-  const [editProfileDetails, setEditProfileDetails] = useState(false);
-  const [profileFormData, setProfileFormData] = useState({
-    weight: profileData?.weight || "",
-    height: profileData?.height || "",
-    age: profileData?.age || "",
-    goal_id: profileData?.goal?.id || "",
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({
+    weight: "",
+    height: "",
+    age: "",
+    goal_id: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProfileFormData((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleCancel = () => {
-    setProfileFormData({
+    setForm({
       weight: profileData?.weight || "",
       height: profileData?.height || "",
       age: profileData?.age || "",
       goal_id: profileData?.goal?.id || "",
     });
-    setEditProfileDetails(false);
+    setEditing(false);
   };
 
   const handleSave = async () => {
-    const data = { ...profileFormData, id: user?.id };
-
+    const payload = { ...form, id: user?.id };
     try {
-      const response = await updateProfile(data).unwrap();
+      const response = await updateProfile(payload).unwrap();
       await Swal.fire("Update Success!", response?.message, "success");
-      setEditProfileDetails(false);
+      setEditing(false);
     } catch (error) {
       Swal.fire(
         "Update Failed!",
@@ -59,7 +59,7 @@ const ProfileDetailsForm = () => {
 
   useEffect(() => {
     if (profileData) {
-      setProfileFormData({
+      setForm({
         weight: profileData.weight || "",
         height: profileData.height || "",
         age: profileData.age || "",
@@ -69,58 +69,59 @@ const ProfileDetailsForm = () => {
   }, [profileData]);
 
   return (
-    <div className="flex flex-col gap-5 bg-gray-200 rounded-sm p-5">
-      <div className="flex flex-row justify-between items-center">
-        <h4 className="font-secondary text-2xl">Profile information</h4>
-        {editProfileDetails ? (
+    <div className="bg-white border border-line rounded-2xl p-5 sm:p-6 flex flex-col gap-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-secondary text-2xl tracking-tight uppercase">
+          Profile information
+        </h3>
+        {editing ? (
           <div className="flex gap-2">
             <button
               onClick={handleSave}
               disabled={isUpdatingProfile}
-              className="bg-red-secondary text-white px-2 py-1 rounded-sm"
+              className="px-4 py-1.5 rounded-full text-sm font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-50"
             >
               {isUpdatingProfile ? "Saving" : "Save"}
             </button>
             <button
               onClick={handleCancel}
               disabled={isUpdatingProfile}
-              className="bg-gray-400 text-black px-2 py-1 rounded-sm"
+              className="px-4 py-1.5 rounded-full text-sm font-medium border border-line text-ink hover:bg-ink/5"
             >
               Cancel
             </button>
           </div>
         ) : (
           <button
-            onClick={() => setEditProfileDetails(true)}
-            className="bg-gray-200 text-black flex flex-row items-center gap-1 py-1 px-2 rounded-sm hover:bg-red-secondary hover:text-white cursor-pointer"
+            onClick={() => setEditing(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm border border-line text-ink hover:bg-ink hover:text-paper transition-colors"
           >
-            <MdEdit className="inline text-sm" /> Edit
+            <MdEdit className="size-3.5" /> Edit
           </button>
         )}
       </div>
 
-      <div className="flex flex-row gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         {[
-          { label: "Weight (kgs)", name: "weight" },
-          { label: "Height (cms)", name: "height" },
+          { label: "Weight (kg)", name: "weight" },
+          { label: "Height (cm)", name: "height" },
           { label: "Age", name: "age" },
         ].map((field) => (
           <div className="flex flex-col gap-1" key={field.name}>
-            <label className="font-semibold">{field.label}</label>
+            <label className={fieldLabel}>{field.label}</label>
             {isLoading ? (
-              <p className="bg-gray-400 animate-pulse w-50 h-10 rounded-sm"></p>
+              <div className="h-10 bg-paper rounded-lg animate-pulse" />
             ) : (
               <input
-                className={`bg-white  p-1 rounded-sm outline-none 
-               ${
-                 editProfileDetails
-                   ? "border border-black"
-                   : "border border-white cursor-not-allowed"
-               }`}
+                className={`bg-white px-3 py-2 rounded-lg text-sm outline-none transition-colors ${
+                  editing
+                    ? "border border-line focus:border-ink focus:ring-2 focus:ring-brand/15"
+                    : "border border-transparent text-ink/70 cursor-not-allowed"
+                }`}
                 type="number"
                 name={field.name}
-                disabled={!editProfileDetails || isUpdatingProfile}
-                value={profileFormData[field.name] ?? ""}
+                disabled={!editing || isUpdatingProfile}
+                value={form[field.name] ?? ""}
                 onChange={handleChange}
               />
             )}
@@ -128,13 +129,13 @@ const ProfileDetailsForm = () => {
         ))}
 
         <div className="flex flex-col gap-1">
-          <h5 className="font-semibold">Goal</h5>
-          {editProfileDetails ? (
+          <label className={fieldLabel}>Goal</label>
+          {editing ? (
             <select
-              className="p-1 rounded-sm border border-black outline-none bg-white"
+              className="bg-white px-3 py-2 rounded-lg text-sm outline-none border border-line focus:border-ink focus:ring-2 focus:ring-brand/15 transition-colors"
               name="goal_id"
               disabled={isUpdatingProfile}
-              value={profileFormData.goal_id ?? ""}
+              value={form.goal_id ?? ""}
               onChange={handleChange}
             >
               {!isLoadingGoals &&
@@ -146,12 +147,12 @@ const ProfileDetailsForm = () => {
             </select>
           ) : (
             <input
-              className="bg-white p-1 rounded-sm cursor-not-allowed"
+              className="bg-white border border-transparent px-3 py-2 rounded-lg text-sm text-ink/70 cursor-not-allowed"
               disabled
               value={
                 goalOptions?.length
                   ? goalOptions.find(
-                      (goal) => goal.id === Number(profileFormData.goal_id)
+                      (goal) => goal.id === Number(form.goal_id)
                     )?.label ?? ""
                   : "Loading..."
               }

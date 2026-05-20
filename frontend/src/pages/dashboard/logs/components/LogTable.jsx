@@ -1,27 +1,22 @@
 import DataTable from "react-data-table-component";
 import { MdDelete } from "react-icons/md";
+import { FaNoteSticky } from "react-icons/fa6";
 import { customStyles } from "../../styles";
 import PropTypes from "prop-types";
-import boxImage from "../../../../assets/paper.png";
 
-const LogTable = ({
-  data,
-  currentPage,
-  handleDeleteLog,
-  isDeletingLog,
-}) => {
+const LogTable = ({ data, currentPage, handleDeleteLog, isDeletingLog }) => {
   const columns = [
     {
       name: "#",
       width: "60px",
-      selector: (row, index) => {
-        return `#${(currentPage - 1) * 7 + index + 1}`;
-      },
+      selector: (row, index) => `#${(currentPage - 1) * 7 + index + 1}`,
     },
     {
-      name: "Name",
+      name: "Workout",
       grow: 2,
-      selector: (row) => row.workouts.name,
+      selector: (row) => (
+        <span className="font-medium text-ink">{row.workouts.name}</span>
+      ),
     },
     {
       name: "Category",
@@ -33,7 +28,6 @@ const LogTable = ({
       width: "120px",
       selector: (row) => row.workouts.difficulty,
     },
-
     {
       name: "Reps",
       width: "160px",
@@ -49,52 +43,54 @@ const LogTable = ({
       },
     },
     {
-      name: "Logged At",
+      name: "Logged at",
       grow: 2,
-      selector: (row) => {
-        return new Date(row.performed_at).toLocaleString();
-      },
+      selector: (row) => new Date(row.performed_at).toLocaleString(),
     },
     {
-      name: "Action",
+      name: "Actions",
+      width: "90px",
+      ignoreRowClick: true,
       selector: (row) => (
         <button
           onClick={() => handleDeleteLog(row.id)}
           disabled={isDeletingLog}
-          className={` p-2 rounded-sm  ${
+          className={`inline-flex items-center justify-center size-8 rounded-full transition-colors ${
             isDeletingLog
-              ? "cursor-not-allowed bg-gray-400 text-gray-600"
-              : "cursor-pointer bg-red-secondary text-white"
+              ? "bg-line text-mute cursor-not-allowed"
+              : "bg-brand/10 text-brand hover:bg-brand hover:text-paper"
           }`}
+          aria-label="Delete log"
         >
-          <MdDelete />
+          <MdDelete className="size-4" />
         </button>
       ),
-      width: "100px",
-      ignoreRowClick: true,
-      //button: true,
     },
   ];
 
   return (
-    <div className="h-105 flex justify-center items-start">
+    <div className="min-h-[420px] -mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto">
       <DataTable
         customStyles={customStyles}
         columns={columns}
         data={data}
+        responsive
         noDataComponent={
-          <div className="bg-gray-100 h-90  w-full flex flex-col justify-center items-center gap-5 rounded-sm">
-            <img
-              src={boxImage}
-              alt="Illustration of an empty box"
-              className="w-25 h-auto object-contain"
-            />
-            <h1 className="font-secondary text-3xl">
-              No logs found. Add your first workout log!
-            </h1>
+          <div className="w-full py-16 flex flex-col items-center gap-4 bg-white border border-line border-dashed rounded-xl">
+            <span className="inline-flex items-center justify-center size-14 rounded-full bg-brand/10 text-brand">
+              <FaNoteSticky className="size-6" />
+            </span>
+            <div className="text-center">
+              <h3 className="font-secondary text-2xl tracking-tight uppercase">
+                No logs yet
+              </h3>
+              <p className="text-sm text-mute mt-1">
+                Track your first workout to start building a streak.
+              </p>
+            </div>
           </div>
         }
-        persistTableHead={true}
+        persistTableHead
         fixedHeader
       />
     </div>
@@ -102,25 +98,10 @@ const LogTable = ({
 };
 
 LogTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      performed_reps: PropTypes.string,
-      duration: PropTypes.number,
-      performed_at: PropTypes.string,
-      workouts: PropTypes.shape({
-        name: PropTypes.string,
-        idifficulty: PropTypes.string,
-        category: PropTypes.shape({
-          name: PropTypes.string,
-          id: PropTypes.number,
-        }),
-      }),
-    })
-  ),
+  data: PropTypes.array,
   currentPage: PropTypes.string,
   handleDeleteLog: PropTypes.func,
-  isDeletingLog: PropTypes.bool 
+  isDeletingLog: PropTypes.bool,
 };
 
 export default LogTable;

@@ -20,10 +20,12 @@ const extractYouTubeId = (urlOrId) => {
   return null;
 };
 
+const fieldLabel = "text-xs uppercase tracking-[0.14em] text-mute";
+
 const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
   const { data: categoryOptions = [], isLoading: isLoadingCategories } =
     useGetCategoriesQuery();
-  
+
   const {
     control,
     register,
@@ -43,45 +45,39 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
         : null,
       suggested_reps: defaultValues.suggested_reps || "",
       description: defaultValues.description || "",
-      youtube_video_id:
-        defaultValues.youtube_video_id
-          ? `https://www.youtube.com/watch?v=${defaultValues.youtube_video_id}`
-          : "",
+      youtube_video_id: defaultValues.youtube_video_id
+        ? `https://www.youtube.com/watch?v=${defaultValues.youtube_video_id}`
+        : "",
     },
   });
 
   const submit = async (data) => {
     const demoId = extractYouTubeId(data.youtube_video_id);
-
     const payload = {
       ...data,
       difficulty: data.difficulty?.value,
       category_id: data.category_id?.value,
       youtube_video_id: demoId,
     };
-
     await onSubmit(payload, reset);
   };
 
   return (
     <form
       onSubmit={handleSubmit(submit)}
-      className="flex-1 flex flex-col gap-3 "
+      className="flex flex-col gap-4"
     >
       <FormInput
-        label="Workout Name"
+        label="Workout name"
         id="name"
         type="text"
-        register={register("name", {
-          required: "Name is required",
-        })}
+        register={register("name", { required: "Name is required" })}
         error={errors.name}
-        styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
       />
 
-      <div className="flex flex-col md:flex-row gap-3">
-        <div className="w-full flex flex-col gap-1">
-          <label htmlFor="">Workout Difficulty</label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex flex-col gap-1">
+          <label className={fieldLabel}>Difficulty</label>
           <Controller
             name="difficulty"
             control={control}
@@ -89,9 +85,8 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                className="basic-single"
                 classNamePrefix="select"
-                placeholder="Select difficulty level"
+                placeholder="Select difficulty"
                 isClearable
                 options={intensityOptions}
                 styles={selectStyles}
@@ -100,14 +95,14 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
             )}
           />
           {errors.difficulty && (
-            <span className="text-red-600 text-sm">
+            <span className="text-brand text-xs">
               {errors.difficulty.message}
             </span>
           )}
         </div>
 
-        <div className="w-full flex flex-col gap-1">
-          <label htmlFor="">Workout Category</label>
+        <div className="flex flex-col gap-1">
+          <label className={fieldLabel}>Category</label>
           <Controller
             name="category_id"
             control={control}
@@ -115,9 +110,8 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                className="basic-single"
                 classNamePrefix="select"
-                placeholder="Select workout category"
+                placeholder="Select category"
                 isLoading={isLoadingCategories}
                 isSearchable
                 isClearable
@@ -128,7 +122,7 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
             )}
           />
           {errors.category_id && (
-            <span className="text-red-500 text-sm">
+            <span className="text-brand text-xs">
               {errors.category_id.message}
             </span>
           )}
@@ -136,33 +130,31 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
       </div>
 
       <FormInput
-        label="Reps"
-        placeholder="3 sets of 45 secs, 2 sets of 10 , 1 full routine"
+        label="Suggested reps"
+        placeholder="3 sets of 45 secs, 2 sets of 10, 1 full routine"
         id="suggested_reps"
         register={register("suggested_reps", {
           required: "Reps is required",
         })}
         error={errors.suggested_reps}
-        styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
       />
 
-      <div className="flex flex-col">
-        <label htmlFor="">
-          Workout Description{" "}
-          <span className="text-gray-500 text-sm">(optional)</span>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="description" className={fieldLabel}>
+          Description <span className="normal-case ml-1">(optional)</span>
         </label>
         <textarea
           {...register("description")}
           id="description"
-          rows="2"
-          className="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
-        ></textarea>
+          rows="3"
+          className="bg-white border border-line rounded-lg px-3 py-2 text-sm outline-none focus:border-ink focus:ring-2 focus:ring-brand/15 transition-colors"
+        />
       </div>
 
       <FormInput
-        label="Youtube Video"
-        placeholder="https://www.youtube.com/watch?v=AVyRmOdNO0U"
-        optional={true}
+        label="YouTube video"
+        placeholder="https://www.youtube.com/watch?v=…"
+        optional
         id="youtube_video_id"
         type="url"
         register={register("youtube_video_id", {
@@ -173,14 +165,13 @@ const WorkoutForm = ({ onSubmit, defaultValues = {}, isSubmitting }) => {
           },
         })}
         error={errors.youtube_video_id}
-        styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
       />
 
       <button
         disabled={isSubmitting}
-        className="bg-red-secondary text-white font-secondary text-lg py-2 rounded-sm hover:cursor-pointer"
+        className="mt-2 inline-flex items-center justify-center px-6 py-3 rounded-full font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
       >
-        {isSubmitting ? "Saving..." : "Save Workout"}
+        {isSubmitting ? "Saving…" : "Save workout"}
       </button>
     </form>
   );

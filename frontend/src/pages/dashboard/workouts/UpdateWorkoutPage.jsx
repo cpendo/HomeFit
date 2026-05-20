@@ -6,6 +6,7 @@ import {
   useGetWorkoutByIdQuery,
   useUpdateWorkoutMutation,
 } from "../../../features/workouts/workoutsApi";
+import SkeletonDetailsPage from "./components/SkeletonDetailsSection";
 
 const UpdateWorkoutPage = () => {
   const { id } = useParams();
@@ -14,51 +15,45 @@ const UpdateWorkoutPage = () => {
 
   const handleUpdateWorkout = async (payload) => {
     const result = await Swal.fire({
-      title: "Do you want to update this workout?",
+      title: "Save changes to this workout?",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, save",
     });
-
     if (!result.isConfirmed) {
-      Swal.fire("Workout not updated", "", "info");
+      Swal.fire("Changes discarded", "", "info");
       return;
     }
-
     try {
       const response = await updateWorkout({ id, ...payload }).unwrap();
-      await Swal.fire("Workout Updated", response.message, "success");
+      await Swal.fire("Workout updated", response.message, "success");
     } catch (err) {
       Swal.fire("Update Failed", err?.data?.message, "error");
     }
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <SkeletonDetailsPage />;
 
   return (
-    <div className="w-full h-fit mt-4 flex flex-col gap-3">
-      {/* page header */}
-      <div className="flex flex-row items-center justify-between">
-        <div>
-          <Link
-            to="/dashboard/workouts"
-            className="flex flex-row items-center gap-1 text-base text-gray-500"
-          >
-            <IoIosArrowRoundBack className="inline text-2xl" />
-            Back to workouts
-          </Link>
-          <h4 className="text-2xl font-secondary">Update Workout</h4>
-        </div>
+    <div className="w-full pt-6 sm:pt-8 flex flex-col gap-5">
+      <div>
+        <Link
+          to="/dashboard/workouts"
+          className="inline-flex items-center gap-1 text-sm text-mute hover:text-ink transition-colors"
+        >
+          <IoIosArrowRoundBack className="size-5" />
+          Back to workouts
+        </Link>
+        <h1 className="mt-2 font-secondary text-3xl sm:text-4xl tracking-tight uppercase">
+          Update workout
+        </h1>
       </div>
 
-      {/* workout form */}
-      <div className="flex flex-row gap-4 ">
-        <div className="flex-1 flex flex-col gap-2  w-full bg-gray-200 p-3 rounded-sm">
-          <WorkoutForm
-            defaultValues={workout}
-            onSubmit={handleUpdateWorkout}
-            isLoading={isUpdating}
-          />
-        </div>
+      <div className="bg-white border border-line rounded-2xl p-5 sm:p-7">
+        <WorkoutForm
+          defaultValues={workout}
+          onSubmit={handleUpdateWorkout}
+          isSubmitting={isUpdating}
+        />
       </div>
     </div>
   );

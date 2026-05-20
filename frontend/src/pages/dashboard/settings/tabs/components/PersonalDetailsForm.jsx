@@ -6,13 +6,13 @@ import {
 } from "../../../../../features/users/usersApi";
 import Swal from "sweetalert2";
 
+const fieldLabel = "text-xs uppercase tracking-[0.14em] text-mute";
+
 const PersonalDetailsForm = () => {
-  const {
-    data: { user },
-    isLoading,
-  } = useGetProfileQuery();
+  const { data, isLoading } = useGetProfileQuery();
+  const user = data?.user;
   const [update, { isLoading: isUpdatingUser }] = useUpdateMutation();
-  const [editPersonalDetails, setEditPersonalDetails] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [personalData, setPersonalData] = useState({
     first_name: "",
     last_name: "",
@@ -28,18 +28,15 @@ const PersonalDetailsForm = () => {
       first_name: user.first_name,
       last_name: user.last_name,
     });
-    setEditPersonalDetails(false);
+    setEditing(false);
   };
 
   const handleSave = async () => {
-    const data = { ...personalData, id: user.id };
-    console.log(data);
-
+    const payload = { ...personalData, id: user.id };
     try {
-      const response = await update(data).unwrap();
+      const response = await update(payload).unwrap();
       await Swal.fire("Update Success!", response?.message, "success");
-      setEditPersonalDetails(false);
-
+      setEditing(false);
     } catch (error) {
       Swal.fire(
         "Update Failed!",
@@ -59,55 +56,56 @@ const PersonalDetailsForm = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col gap-5 bg-gray-200 rounded-sm p-5">
-      <div className="flex flex-row justify-between items-center">
-        <h4 className="font-secondary text-2xl">Personal information</h4>
-        {editPersonalDetails ? (
+    <div className="bg-white border border-line rounded-2xl p-5 sm:p-6 flex flex-col gap-5">
+      <div className="flex items-center justify-between gap-3">
+        <h3 className="font-secondary text-2xl tracking-tight uppercase">
+          Personal information
+        </h3>
+        {editing ? (
           <div className="flex gap-2">
             <button
               onClick={handleSave}
               disabled={isUpdatingUser}
-              className="bg-red-secondary text-white px-2 py-1 rounded-sm"
+              className="px-4 py-1.5 rounded-full text-sm font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-50"
             >
               {isUpdatingUser ? "Saving" : "Save"}
             </button>
             <button
               onClick={handleCancel}
               disabled={isUpdatingUser}
-              className="bg-gray-400 text-black px-2 py-1 rounded-sm"
+              className="px-4 py-1.5 rounded-full text-sm font-medium border border-line text-ink hover:bg-ink/5"
             >
               Cancel
             </button>
           </div>
         ) : (
           <button
-            onClick={() => setEditPersonalDetails(true)}
-            className="bg-gray-200 text-black flex flex-row items-center gap-1 py-1 px-2 rounded-sm hover:bg-red-secondary hover:text-white cursor-pointer"
+            onClick={() => setEditing(true)}
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm border border-line text-ink hover:bg-ink hover:text-paper transition-colors"
           >
-            <MdEdit className="inline text-sm" /> Edit
+            <MdEdit className="size-3.5" /> Edit
           </button>
         )}
       </div>
 
-      <div className="flex flex-row justify-start gap-20">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { label: "First Name", name: "first_name" },
-          { label: "Last Name", name: "last_name" },
+          { label: "First name", name: "first_name" },
+          { label: "Last name", name: "last_name" },
         ].map((field) => (
           <div className="flex flex-col gap-1" key={field.name}>
-            <label className="font-semibold">{field.label}</label>
-
+            <label className={fieldLabel}>{field.label}</label>
             {isLoading ? (
-              <p className="bg-gray-400 animate-pulse w-50 h-10 rounded-sm"></p>
+              <div className="h-10 bg-paper rounded-lg animate-pulse" />
             ) : (
               <input
-                className={`bg-white capitalize p-1 rounded-sm outline-none ${
-                  editPersonalDetails
-                    ? "border border-black"
-                    : "border border-white cursor-not-allowed"
+                className={`bg-white capitalize px-3 py-2 rounded-lg text-sm outline-none transition-colors ${
+                  editing
+                    ? "border border-line focus:border-ink focus:ring-2 focus:ring-brand/15"
+                    : "border border-transparent text-ink/70 cursor-not-allowed"
                 }`}
                 name={field.name}
-                disabled={!editPersonalDetails || isUpdatingUser}
+                disabled={!editing || isUpdatingUser}
                 value={personalData[field.name]}
                 onChange={handleChange}
               />
@@ -116,11 +114,11 @@ const PersonalDetailsForm = () => {
         ))}
 
         <div className="flex flex-col gap-1">
-          <h5 className="font-semibold">Email</h5>
+          <label className={fieldLabel}>Email</label>
           <input
-            className="w-70 lowercase bg-white p-1 rounded-sm cursor-not-allowed"
+            className="bg-white lowercase border border-transparent px-3 py-2 rounded-lg text-sm text-ink/70 cursor-not-allowed"
             disabled
-            value={user.email}
+            value={user?.email || ""}
           />
         </div>
       </div>

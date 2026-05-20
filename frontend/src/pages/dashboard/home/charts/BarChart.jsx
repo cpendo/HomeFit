@@ -7,56 +7,50 @@ const BarChart = () => {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
       {
-        data: [50, 70, 65, 80, 90, 40, 60], // Example data, replace with actual values
-        backgroundColor: "#a4161a", // Bar color
-        barThickness: 50,
-        borderRadius: 20,
+        data: [50, 70, 65, 80, 90, 40, 60],
+        backgroundColor: "#bc2c3e",
+        hoverBackgroundColor: "#8d1c2a",
+        borderRadius: 8,
+        borderSkipped: false,
+        barPercentage: 0.55,
+        categoryPercentage: 0.8,
       },
     ],
   };
   const options = {
     responsive: true,
-    // maintainAspectRatio: false,
+    maintainAspectRatio: false,
     scales: {
       y: {
         min: 0,
         max: 100,
-        border: {
-          display: false,
-          color: "transparent",
-        },
-        grid: { color: "#808080", drawTicks: false },
+        border: { display: false },
+        grid: { color: "#e6e3dc", drawTicks: false },
         ticks: {
-          stepSize: 20, // Set the interval between ticks to 25%
-          callback: function (value) {
-            return value + "%";
-          },
-          font: {
-            family: "Lexend Deca",
-            size: 14,
-            weight: "bold",
-          },
+          stepSize: 20,
+          color: "#6f6f73",
+          callback: (value) => `${value}%`,
+          font: { family: "DM Sans", size: 12 },
         },
       },
       x: {
+        border: { display: false },
         grid: { display: false },
         ticks: {
-          font: {
-            family: "Lexend Deca",
-            size: 14,
-            weight: "bold",
-          },
+          color: "#0d0d0e",
+          font: { family: "DM Sans", size: 13, weight: "500" },
         },
       },
     },
     plugins: {
-      legend: {
-        display: false,
-      },
+      legend: { display: false },
       tooltip: {
-        callbacks: {
-          label: (tooltipItem) => `${tooltipItem.raw}%`, // Show % in tooltips
-        },
+        backgroundColor: "#0d0d0e",
+        titleFont: { family: "DM Sans", weight: "600" },
+        bodyFont: { family: "DM Sans" },
+        padding: 10,
+        cornerRadius: 8,
+        callbacks: { label: (item) => `${item.raw}%` },
       },
     },
   };

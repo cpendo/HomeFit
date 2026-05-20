@@ -30,16 +30,11 @@ const WorkoutPage = () => {
     useDeleteWorkoutMutation();
 
   const workouts = data?.data ?? [];
-  const totalWorkouts = data?.total ?? 1;
+  const totalWorkouts = data?.total ?? 0;
   const totalPages = data?.totalPages ?? 1;
   const currentPage = data?.page;
 
-  const cleared = {
-    category: "",
-    difficulty: "",
-    search: "",
-  };
-
+  const cleared = { category: "", difficulty: "", search: "" };
   const clearFilters = () => setFilters(cleared);
 
   const handleShowFilters = () => {
@@ -54,9 +49,7 @@ const WorkoutPage = () => {
 
   const handleFilters = () => {
     if (isFetchingWorkouts) return;
-
     const hasFilter = filters.category || filters.difficulty || filters.search;
-
     if (!hasFilter) {
       return Swal.fire(
         "Validation Error",
@@ -64,29 +57,24 @@ const WorkoutPage = () => {
         "error"
       );
     }
-
     const cleanedFilters = Object.fromEntries(
       // eslint-disable-next-line no-unused-vars
       Object.entries(filters).filter(([_, v]) => v !== "")
     );
-
-    triggerSearch({
-      page: 1,
-      filters: cleanedFilters,
-    });
+    triggerSearch({ page: 1, filters: cleanedFilters });
   };
 
   const handleDeleteWorkout = async (id) => {
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to delete this workout and ALL related logs? This action is irreversible!",
+      title: "Delete this workout?",
+      text: "All related logs will also be removed. This cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete",
     });
 
     if (!result.isConfirmed) {
-      Swal.fire("Workout not deleted", "", "info");
+      Swal.fire("Workout kept", "", "info");
       return;
     }
 
@@ -94,7 +82,6 @@ const WorkoutPage = () => {
       const response = await deleteWorkout(id).unwrap();
       await Swal.fire(response.message, "", "success");
     } catch (error) {
-      //console.error("Delete failed:", error);
       Swal.fire(
         "Delete Workout Failed!",
         error?.data?.message || "An error occurred",
@@ -108,7 +95,7 @@ const WorkoutPage = () => {
   }, [page, triggerSearch]);
 
   return (
-    <div className="w-full mt-4 flex flex-col gap-2">
+    <div className="w-full pt-6 sm:pt-8 flex flex-col gap-4">
       <WorkoutHeader
         total={totalWorkouts}
         isLoading={isFetchingWorkouts}

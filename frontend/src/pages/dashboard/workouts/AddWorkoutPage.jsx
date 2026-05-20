@@ -10,36 +10,33 @@ const AddWorkoutPage = () => {
   const handleAddWorkout = async (payload, reset) => {
     try {
       const response = await addWorkout(payload).unwrap();
-
-      await Swal.fire("Add Workout Successful", response.message, "success");
+      await Swal.fire("Workout saved", response.message, "success");
       reset();
     } catch (error) {
       Swal.fire("Add Workout Failed", error?.data?.message, "error");
     }
-
   };
 
   return (
-    <div className="w-full h-fit mt-4 flex flex-col gap-3">
-      {/* page header */}
-      <div className="flex flex-row items-center justify-between">
-        <div>
-          <Link
-            to="/dashboard/workouts"
-            className="flex flex-row items-center gap-1 text-base text-gray-500"
-          >
-            <IoIosArrowRoundBack className="inline text-2xl" />
-            Back to workouts
-          </Link>
-          <h4 className="text-2xl font-secondary">Add New Workout</h4>
-        </div>
+    <div className="w-full pt-6 sm:pt-8 flex flex-col gap-5">
+      <div>
+        <Link
+          to="/dashboard/workouts"
+          className="inline-flex items-center gap-1 text-sm text-mute hover:text-ink transition-colors"
+        >
+          <IoIosArrowRoundBack className="size-5" />
+          Back to workouts
+        </Link>
+        <h1 className="mt-2 font-secondary text-3xl sm:text-4xl tracking-tight uppercase">
+          Add a new workout
+        </h1>
+        <p className="text-sm text-mute mt-1">
+          Save a custom workout to your library — you can log it later.
+        </p>
       </div>
 
-      {/* workout form */}
-      <div className="flex flex-row gap-4 ">
-        <div className="flex-1 flex flex-col gap-2  w-full bg-gray-200 p-3 rounded-sm">
-          <WorkoutForm onSubmit={handleAddWorkout} isLoading={isLoading} />
-        </div>
+      <div className="bg-white border border-line rounded-2xl p-5 sm:p-7">
+        <WorkoutForm onSubmit={handleAddWorkout} isSubmitting={isLoading} />
       </div>
     </div>
   );

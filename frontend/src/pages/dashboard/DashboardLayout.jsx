@@ -3,11 +3,11 @@ import DashboardNavbar from "../../components/DashboardNavbar";
 
 const DashboardLayout = () => {
   return (
-    <div className="max-w-screen w-full min-h-screen overflow-x-hidden bg-white">
-      <div className="w-full py-2 sm:px-3 px-2">
-        <DashboardNavbar />
+    <div className="min-h-screen bg-paper text-ink font-primary">
+      <DashboardNavbar />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
         <Outlet />
-      </div>
+      </main>
     </div>
   );
 };

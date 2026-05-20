@@ -5,29 +5,34 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const current = Number(currentPage);
   const total = Number(totalPages);
   const pages = [];
+  for (let i = 1; i <= totalPages; i++) pages.push(i);
 
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
-  }
+  const navBtn =
+    "inline-flex items-center justify-center size-10 rounded-full border border-line text-ink transition-colors";
 
   return (
-    <div className="flex flex-row items-center justify-center gap-2">
+    <div className="flex items-center justify-center gap-1.5 pt-2">
       <button
         onClick={() => onPageChange(current - 1)}
         disabled={current <= 1}
-        className={`flex justify-center items-center rounded-sm size-10 ${
-          current <= 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-gray-300 text-black cursor-pointer"
+        className={`${navBtn} ${
+          current <= 1
+            ? "text-mute opacity-50 cursor-not-allowed"
+            : "hover:bg-ink hover:text-paper cursor-pointer"
         }`}
+        aria-label="Previous page"
       >
-        <IoIosArrowBack className="text-2xl" />
+        <IoIosArrowBack className="size-5" />
       </button>
 
       {pages.map((page) => (
         <button
           key={page}
           onClick={() => onPageChange(page)}
-          className={`flex justify-center items-center font-secondary text-lg bg-gray-300 rounded-sm size-10 cursor-pointer ${
-            current === page ? "text-red-secondary" : "text-black"
+          className={`inline-flex items-center justify-center size-10 rounded-full text-sm font-medium transition-colors ${
+            current === page
+              ? "bg-ink text-paper"
+              : "text-ink hover:bg-ink/5 cursor-pointer"
           }`}
         >
           {page}
@@ -37,20 +42,22 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={() => onPageChange(current + 1)}
         disabled={current >= total}
-        className={`flex justify-center items-center rounded-sm size-10 ${
+        className={`${navBtn} ${
           current >= total
-            ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-            : "bg-gray-300 text-black cursor-pointer"
+            ? "text-mute opacity-50 cursor-not-allowed"
+            : "hover:bg-ink hover:text-paper cursor-pointer"
         }`}
+        aria-label="Next page"
       >
-        <IoIosArrowForward className="text-2xl" />
+        <IoIosArrowForward className="size-5" />
       </button>
     </div>
   );
 };
 
 Pagination.propTypes = {
-  currentPage: PropTypes.string.isRequired,
+  currentPage: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   totalPages: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
 };

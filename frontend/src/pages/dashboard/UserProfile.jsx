@@ -9,15 +9,8 @@ import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useLazyGetProfileQuery } from "../../features/users/usersApi";
-
-const selectStyles = {
-  control: (base, state) => ({
-    ...base,
-    border: "0px solid gray",
-    borderRadius: "0px",
-    outline: state.isFocused ? "1px solid black" : "1px solid gray",
-  }),
-};
+import { FaDumbbell } from "react-icons/fa6";
+import { selectStyles } from "./styles";
 
 const UserProfile = () => {
   const { data: goalOptions, isLoading: isLoadingGoals } =
@@ -31,17 +24,16 @@ const UserProfile = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     if (!selectedGoal) {
       await Swal.fire("Failed", "Please select a fitness goal", "error");
       return;
     }
-
     const payload = { ...data, goal_id: selectedGoal.id };
     try {
       const response = await createProfile(payload).unwrap();
       await Swal.fire(response.message, "", "success");
-
       await trigger();
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (error) {
@@ -50,18 +42,27 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen max-h-fit h-screen min-h-screen z-50 bg-white p-4">
-      <div className="w-full h-full flex flex-col justify-center items-center sm:gap-4 gap-2">
-        <h1 className="text-red-secondary sm:text-4xl text-3xl font-secondary capitalize">
-          One more Step
-        </h1>
-        <h3 className="text-center">
-          Please complete your profile to get personalized workouts.
-        </h3>
+    <div className="fixed inset-0 z-50 bg-paper p-4 overflow-y-auto">
+      <div className="min-h-full w-full flex flex-col items-center justify-center gap-6 py-8">
+        <div className="flex items-center gap-1">
+          <FaDumbbell className="size-7 text-brand rotate-90" />
+          <span className="font-secondary text-3xl tracking-tight">
+            HomeFit
+          </span>
+        </div>
+
+        <div className="text-center max-w-md">
+          <h1 className="font-secondary text-4xl sm:text-5xl tracking-tight uppercase">
+            One more <span className="text-brand">step</span>.
+          </h1>
+          <p className="text-base text-ink/70 mt-2">
+            Complete your profile to get personalized workouts.
+          </p>
+        </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="sm:w-1/3 w-full bg-gray-200 px-4 py-4 flex flex-col gap-3"
+          className="w-full max-w-md bg-white border border-line rounded-2xl p-5 sm:p-7 flex flex-col gap-4"
         >
           <FormInput
             label="Age"
@@ -72,7 +73,6 @@ const UserProfile = () => {
               min: { value: 10, message: "Must be at least 10" },
             })}
             error={errors.age}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <FormInput
@@ -84,7 +84,6 @@ const UserProfile = () => {
               min: 20,
             })}
             error={errors.weight}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <FormInput
@@ -96,21 +95,19 @@ const UserProfile = () => {
               min: 50,
             })}
             error={errors.height}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 focus:border-black"
           />
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="age" className="">
+            <label className="text-xs uppercase tracking-[0.14em] text-mute">
               Goal
             </label>
             <Select
-              className="basic-single"
               classNamePrefix="select"
               isLoading={isLoadingGoals}
               isClearable
               isSearchable
-              name="color"
-              options={goalOptions ?? {}}
+              placeholder="Pick your focus"
+              options={goalOptions ?? []}
               value={selectedGoal}
               onChange={setSelectedGoal}
               styles={selectStyles}
@@ -119,9 +116,9 @@ const UserProfile = () => {
 
           <button
             disabled={isLoading}
-            className="mt-6 bg-red-secondary text-white text-xl font-secondary py-2"
+            className="mt-2 inline-flex items-center justify-center px-6 py-3 rounded-full font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Continue
+            {isLoading ? "Saving…" : "Continue"}
           </button>
         </form>
       </div>

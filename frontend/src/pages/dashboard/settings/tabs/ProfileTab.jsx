@@ -10,35 +10,32 @@ import {
 } from "../../../../features/users/usersApi";
 
 const ProfileTab = () => {
-  const {
-    data: { user },
-  } = useGetProfileQuery();
+  const { data } = useGetProfileQuery();
+  const user = data?.user;
 
   const [deleteUser, { isLoading: isDeletingUser }] = useDeleteUserMutation();
   const [logout] = useLogoutMutation();
-
   const navigate = useNavigate();
 
   const handleDeleteUser = async () => {
     if (!user) return;
 
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to delete your account and ALL your data. This action is irreversible!",
+      title: "Delete your account?",
+      text: "All your data will be lost. This cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete",
     });
-
     if (!result.isConfirmed) {
-      Swal.fire("Account not deleted", "", "info");
+      Swal.fire("Account kept", "", "info");
       return;
     }
 
     try {
       const response = await deleteUser(user?.id).unwrap();
       await Swal.fire({
-        title: "Delete Successful!",
+        title: "Account deleted",
         text: response?.message,
         icon: "success",
         didClose: async () => {
@@ -57,24 +54,25 @@ const ProfileTab = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <PersonalDetailsForm />
       <ProfileDetailsForm />
 
-      <div className="flex flex-row flex-wrap  justify-between items-center md:gap-0 gap-4 bg-gray-200 rounded-sm p-5">
-        <div className="flex flex-col gap-2">
-          <h4 className="font-secondary text-2xl">Delete Account</h4>
-          <p>
-            Deleting your account is irreversible. All your workout progress and
-            account details will be lost forever
+      <div className="bg-white border border-brand/20 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-secondary text-xl tracking-tight uppercase">
+            Delete account
+          </h3>
+          <p className="text-sm text-mute">
+            All workout progress and account details will be lost forever.
           </p>
         </div>
         <button
           disabled={isDeletingUser}
           onClick={handleDeleteUser}
-          className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black "
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-brand text-paper hover:bg-brand-dark transition-colors disabled:opacity-50"
         >
-          <FaRegTrashAlt className="inline text-sm" /> Delete Everything
+          <FaRegTrashAlt className="size-3.5" /> Delete everything
         </button>
       </div>
     </div>

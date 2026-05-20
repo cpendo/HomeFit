@@ -16,43 +16,43 @@ const StreakCalender = () => {
     return data.dates.map(parseDateString).filter(Boolean);
   }, [data]);
 
-  const modifiers = {
-    loggedDay: loggedDayObjects,
-  };
-
-  const modifiersClassNames = {
-    loggedDay: "logged-day",
-  };
+  const modifiers = { loggedDay: loggedDayObjects };
+  const modifiersClassNames = { loggedDay: "logged-day" };
   const minDateForCalendar = data?.firstLogDate
     ? parseDateString(data.firstLogDate)
-    : undefined; 
-
+    : undefined;
   const today = new Date();
 
-  if (isLoading)
-    return (
-      <div className="bg-gray-50 h-80 w-full rounded-sm animate-pulse"></div>
-    );
-
-  if (isError) {
-    return (
-      <div className="bg-gray-50 h-80 w-full rounded-sm animate-pulse">
-        Error occured. Please refresh the page or try again later.
-      </div>
-    );
-  }
-
   return (
-    <div className="w-full h-80 flex justify-center py-2 bg-white rounded-sm ">
-      <DayPicker
-        mode="single"
-        selected={new Date()}
-        disabled={{ before: minDateForCalendar, after: today }}
-        modifiers={modifiers} // Apply the 'loggedDay' modifier
-        modifiersClassNames={modifiersClassNames} // Link modifier to CSS
-        className="text-base"
-      />
-    </div>
+    <section className="dash-card flex flex-col gap-4">
+      <div className="flex items-baseline justify-between">
+        <h2 className="font-secondary text-2xl tracking-tight uppercase">
+          Streak
+        </h2>
+        <span className="text-xs uppercase tracking-[0.18em] text-brand">
+          {loggedDayObjects.length} days
+        </span>
+      </div>
+
+      {isLoading ? (
+        <div className="h-72 bg-paper rounded-lg animate-pulse" />
+      ) : isError ? (
+        <p className="text-sm text-mute">
+          Couldn&apos;t load streak data. Try refreshing.
+        </p>
+      ) : (
+        <div className="flex justify-center -mx-2">
+          <DayPicker
+            mode="single"
+            selected={today}
+            disabled={{ before: minDateForCalendar, after: today }}
+            modifiers={modifiers}
+            modifiersClassNames={modifiersClassNames}
+            className="text-sm"
+          />
+        </div>
+      )}
+    </section>
   );
 };
 

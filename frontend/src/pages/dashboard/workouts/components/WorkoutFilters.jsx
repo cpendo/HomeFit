@@ -16,36 +16,37 @@ const WorkoutFilters = ({ showFilters, filters, onUpdate, handleFilters }) => {
   return (
     <div
       className={`transition-all duration-300 ease-in-out overflow-hidden ${
-        showFilters ? "max-h-[200px] opacity-100" : "max-h-0 opacity-0"
+        showFilters ? "max-h-[260px] opacity-100" : "max-h-0 opacity-0"
       }`}
     >
-      <div className="flex flex-row flex-wrap gap-6 p-4 bg-gray-100 rounded-sm items-end">
-        {/* Search */}
-
-        <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Workout Name</label>
+      <div className="flex flex-row flex-wrap gap-4 p-4 sm:p-5 bg-white border border-line rounded-xl items-end">
+        <div className="flex flex-col gap-1 min-w-[220px]">
+          <label className="text-xs uppercase tracking-[0.14em] text-mute">
+            Workout name
+          </label>
           <input
             type="text"
             placeholder="Search workout name"
-            className="p-2 rounded-sm bg-white border-1 border-gray-400 focus:border-black"
+            className="px-3 py-2 rounded-lg bg-white border border-line focus:border-ink focus:ring-2 focus:ring-brand/15 outline-none transition-colors"
             value={filters.search}
             onChange={(e) => onUpdate("search", e.target.value)}
           />
         </div>
 
-        {/* Category */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Category</label>
+        <div className="flex flex-col gap-1 min-w-[200px]">
+          <label className="text-xs uppercase tracking-[0.14em] text-mute">
+            Category
+          </label>
           <Select
             className="basic-single"
             classNamePrefix="select"
-            placeholder="Select workout category"
+            placeholder="All categories"
             isLoading={isLoadingCategories}
             isSearchable
             isClearable
             options={categoryOptions}
             styles={selectStyles}
-            menuPortalTarget={document.body} // moves the dropdown to body
+            menuPortalTarget={document.body}
             menuPosition="absolute"
             value={
               categoryOptions.find((opt) => opt.value === filters.category) ||
@@ -55,17 +56,18 @@ const WorkoutFilters = ({ showFilters, filters, onUpdate, handleFilters }) => {
           />
         </div>
 
-        {/* Difficulty */}
-        <div className="flex flex-col">
-          <label className="text-sm font-medium mb-1">Difficulty</label>
+        <div className="flex flex-col gap-1 min-w-[180px]">
+          <label className="text-xs uppercase tracking-[0.14em] text-mute">
+            Difficulty
+          </label>
           <Select
             className="basic-single"
             classNamePrefix="select"
-            placeholder="Select difficulty level"
+            placeholder="Any difficulty"
             isClearable
             options={intensityOptions}
             styles={selectStyles}
-            menuPortalTarget={document.body} // moves the dropdown to body
+            menuPortalTarget={document.body}
             menuPosition="absolute"
             value={
               intensityOptions.find(
@@ -78,16 +80,12 @@ const WorkoutFilters = ({ showFilters, filters, onUpdate, handleFilters }) => {
           />
         </div>
 
-        {/* Search Button */}
-
         <button
           disabled={isLoadingCategories}
           onClick={handleFilters}
-          className={`p-2 rounded-sm bg-red-secondary text-white hover:bg-black ${
-            isLoadingCategories ? "cursor-not-allowed" : "cursor-pointer"
-          }`}
+          className="px-5 py-2 rounded-full text-sm font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-50"
         >
-          Apply Filters
+          Apply filters
         </button>
       </div>
     </div>
@@ -102,7 +100,7 @@ WorkoutFilters.propTypes = {
     search: PropTypes.string,
   }),
   onUpdate: PropTypes.func,
-  handleFilters: PropTypes.func
+  handleFilters: PropTypes.func,
 };
 
 export default WorkoutFilters;

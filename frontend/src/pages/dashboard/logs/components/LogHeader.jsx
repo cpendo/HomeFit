@@ -1,4 +1,4 @@
-import { LuSettings2 } from "react-icons/lu";
+import { LuSettings2, LuPlus } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
@@ -9,50 +9,42 @@ const LogHeader = ({
   handleResetFilters,
 }) => {
   return (
-    <div className="flex flex-row justify-between items-center">
+    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
       <div>
-        <h4 className="text-3xl font-secondary">Logs</h4>
+        <h1 className="font-secondary text-3xl sm:text-4xl tracking-tight uppercase">
+          Logs
+        </h1>
         {isLoading ? (
-          <div className="w-full h-5 bg-gray-300 animate-pulse rounded"></div>
+          <div className="w-32 h-4 bg-line animate-pulse rounded mt-1" />
         ) : (
-          <p className="text-sm text-gray-500">{total} logs</p>
-        )}{" "}
+          <p className="text-sm text-mute mt-1">
+            {total} {total === 1 ? "session" : "sessions"} recorded
+          </p>
+        )}
       </div>
 
-      {/* buttons */}
-      <div className="flex flex-row gap-2 font-secondary">
+      <div className="flex flex-wrap items-center gap-2">
         <button
-          //   onClick={() => {
-          //     resetFilters(), setShowFilters(false);
-          //   }}
           onClick={handleResetFilters}
-          className="p-2 rounded-sm hover:cursor-pointer bg-black text-white"
+          className="px-4 py-2 rounded-full text-sm font-medium border border-line text-ink hover:bg-ink hover:text-paper transition-colors"
         >
-          Reset Filters
+          Reset
         </button>
-
         <button
-          //   onClick={() => {
-          //     setShowFilters(!showFilters), clearFilters();
-          //   }}
           disabled={isLoading}
           onClick={handleShowFilters}
-          className={`p-2 rounded-sm text-black bg-gray-300 ${
-            isLoading
-              ? "cursor-not-allowed"
-              : "hover:bg-gray-400 cursor-pointer"
-          }`}
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border border-line text-ink hover:bg-ink hover:text-paper transition-colors disabled:opacity-50"
         >
-          <LuSettings2 className="inline" /> Filter
+          <LuSettings2 className="size-4" />
+          Filter
         </button>
         <Link to="add">
           <button
             disabled={isLoading}
-            className={`p-2 rounded-sm text-white bg-red-secondary ${
-              isLoading ? "cursor-not-allowed" : "cursor-pointer hover:bg-black"
-            }`}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium bg-brand text-paper hover:bg-brand-dark transition-colors disabled:opacity-50"
           >
-            Add New Log
+            <LuPlus className="size-4" />
+            Log workout
           </button>
         </Link>
       </div>

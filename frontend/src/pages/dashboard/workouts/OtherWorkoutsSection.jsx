@@ -1,9 +1,10 @@
 import { IoMdRefreshCircle, IoIosSpeedometer } from "react-icons/io";
 import SkeletonWorkoutsSection from "./components/SkeletonWorkoutsSection";
 import { useGetSimilarWorkoutsQuery } from "../../../features/workouts/workoutsApi";
-//import { IoMdRefreshCircle } from "react-icons/io";
 import PropTypes from "prop-types";
 import { Link } from "react-router";
+
+const titles = { easy: "Beginner", medium: "Intermediate", hard: "Advanced" };
 
 const OtherWorkoutsSection = ({ id, difficulty }) => {
   const {
@@ -12,74 +13,60 @@ const OtherWorkoutsSection = ({ id, difficulty }) => {
     error,
   } = useGetSimilarWorkoutsQuery({ id, difficulty });
 
-  // console.log("workouts", workouts);
-  // console.log("error", error);
-
-  const titles = { easy: "Beginner", medium: "intermediate", hard: "advanced" };
-
   if (loading) return <SkeletonWorkoutsSection />;
+
   return (
     <>
-      <h4 className="font-secondary text-xl uppercase">
-        More {titles[difficulty]} Workouts
-      </h4>
+      <div className="flex items-baseline justify-between">
+        <h3 className="font-secondary text-xl tracking-tight uppercase">
+          More {titles[difficulty]} workouts
+        </h3>
+      </div>
 
       <div className="flex flex-col gap-2">
         {workouts?.map((workout, index) => (
-          <div
-            key={index}
-            className="flex flex-row items-center gap-5 bg-gray-200 rounded-sm p-3"
+          <Link
+            key={workout?.id ?? index}
+            to={`/dashboard/workouts/${workout?.id}`}
+            className="flex items-center gap-4 p-3 bg-white border border-line rounded-xl hover:border-ink transition-colors group"
           >
-            <h1 className="flex items-center justify-center bg-black text-white size-11 rounded-full text-xl">
+            <span className="inline-flex items-center justify-center size-9 rounded-full bg-ink text-paper text-sm font-medium">
               {index + 1}
-            </h1>
-            <div className="flex flex-col gap-1">
-              <Link
-                to={`/dashboard/workouts/${workout?.id}`}
-                className="font-secondary text-xl hover:underline hover:text-red-secondary"
-              >
+            </span>
+            <div className="flex flex-col gap-1 min-w-0">
+              <span className="font-medium truncate group-hover:text-brand transition-colors">
                 {workout?.name}
-              </Link>
-              <div className="flex flex-row gap-4 text-base">
-                <p className="flex flex-row gap-1 items-center capitalize">
-                  <IoIosSpeedometer className="inline text-2xl text-red-secondary" />{" "}
+              </span>
+              <div className="flex flex-wrap gap-3 text-xs text-mute">
+                <span className="inline-flex items-center gap-1 capitalize">
+                  <IoIosSpeedometer className="size-3.5 text-brand" />
                   {workout?.difficulty}
-                </p>
-
-                <p className="flex flex-row gap-1 items-center capitalize">
-                  <IoMdRefreshCircle className="inline text-2xl text-red-secondary" />{" "}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <IoMdRefreshCircle className="size-3.5 text-brand" />
                   {workout?.suggested_reps}
-                </p>
+                </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
 
         {workouts?.length === 0 && (
-          <div className="flex flex-col gap-4">
-            <p className="text-lg text-gray-500">
-              {" "}
-              No other {titles[difficulty]} workouts available yet. Check back
-              later or explore other difficulty levels.
-            </p>
-
-            <div className="h-15 flex flex-row items-center bg-gray-200 text-gray-500 rounded-sm p-3">
-              <p>New workouts coming soon!</p>
-            </div>
-
+          <div className="bg-white border border-line border-dashed rounded-xl p-4 text-sm text-mute">
+            No other {titles[difficulty]?.toLowerCase()} workouts yet. Browse
             <Link
               to="/dashboard/workouts"
-              className="bg-red-secondary w-fit text-white p-2 text-sm rounded-sm"
+              className="text-brand hover:underline ml-1"
             >
-              Browse all workouts
+              all workouts
             </Link>
+            .
           </div>
         )}
 
         {error && (
-          <p className="text-lg text-red-secondary">
-            The workouts you&apos;re looking for don&apos;t exist or
-            couldn&apos;t be loaded. Try again later.
+          <p className="text-sm text-brand">
+            Couldn&apos;t load similar workouts. Try again later.
           </p>
         )}
       </div>
@@ -88,8 +75,8 @@ const OtherWorkoutsSection = ({ id, difficulty }) => {
 };
 
 OtherWorkoutsSection.propTypes = {
-  id: PropTypes.number.isRequired,
-  difficulty: PropTypes.string.isRequired,
+  id: PropTypes.number,
+  difficulty: PropTypes.string,
 };
 
 export default OtherWorkoutsSection;

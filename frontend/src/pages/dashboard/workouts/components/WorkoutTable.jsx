@@ -1,10 +1,24 @@
 import DataTable from "react-data-table-component";
 import { MdModeEdit, MdDelete } from "react-icons/md";
+import { LuBicepsFlexed } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import { customStyles } from "../../styles";
 import PropTypes from "prop-types";
-import boxImage from "../../../../assets/paper.png";
 import { useGetProfileQuery } from "../../../../features/users/usersApi";
+
+const Tag = ({ children, variant }) => {
+  const styles = {
+    personal: "bg-brand/10 text-brand border-brand/20",
+    default: "bg-ink/5 text-ink/70 border-line",
+  };
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium uppercase tracking-wider border ${styles[variant]}`}
+    >
+      {children}
+    </span>
+  );
+};
 
 const WorkoutTable = ({
   data,
@@ -12,22 +26,21 @@ const WorkoutTable = ({
   handleDeleteWorkout,
   isDeletingWorkout,
 }) => {
-  const {
-    data: { user },
-  } = useGetProfileQuery();
+  const { data: profileData } = useGetProfileQuery();
+  const user = profileData?.user;
 
   const columns = [
     {
-      name: "Id",
+      name: "#",
       selector: (row, index) => `#${(currentPage - 1) * 7 + index + 1}`,
       width: "60px",
     },
     {
-      name: "Workout Name",
+      name: "Workout",
       selector: (row) => (
         <Link
           to={`${row.id}`}
-          className="hover:text-red-secondary hover:text-base"
+          className="font-medium text-ink hover:text-brand transition-colors"
         >
           {row.name}
         </Link>
@@ -45,55 +58,63 @@ const WorkoutTable = ({
       width: "120px",
     },
     {
-      name: "Suggested Reps",
+      name: "Suggested reps",
       selector: (row) => row.suggested_reps,
       grow: 1,
     },
     {
-      name: "Tags",
+      name: "Tag",
       selector: (row) =>
         row.creator_id === user?.id ? (
-          <p className="bg-red-secondary text-white text-xs rounded-sm p-2">
-            Personal
-          </p>
+          <Tag variant="personal">Personal</Tag>
         ) : (
-          <p className="bg-gray-400 text-black text-xs rounded-sm p-2">
-            Default
-          </p>
+          <Tag variant="default">Default</Tag>
         ),
       width: "120px",
     },
     {
-      name: "Action",
-      width: "150px",
+      name: "Actions",
+      width: "130px",
       ignoreRowClick: true,
       selector: (row) =>
         row.creator_id === user?.id ? (
           <div className="flex gap-2">
             <Link to={`update/${row.id}`}>
-              <button className="bg-red-secondary text-white p-2 rounded-sm cursor-pointer">
-                <MdModeEdit />
+              <button
+                className="inline-flex items-center justify-center size-8 rounded-full bg-ink text-paper hover:bg-brand transition-colors"
+                aria-label="Edit workout"
+              >
+                <MdModeEdit className="size-4" />
               </button>
             </Link>
             <button
               disabled={isDeletingWorkout}
               onClick={() => handleDeleteWorkout(row.id)}
-              className={` p-2 rounded-sm  ${
+              className={`inline-flex items-center justify-center size-8 rounded-full transition-colors ${
                 isDeletingWorkout
-                  ? "cursor-not-allowed bg-gray-400 text-gray-600"
-                  : "cursor-pointer bg-red-secondary text-white"
+                  ? "bg-line text-mute cursor-not-allowed"
+                  : "bg-brand/10 text-brand hover:bg-brand hover:text-paper"
               }`}
+              aria-label="Delete workout"
             >
-              <MdDelete />
+              <MdDelete className="size-4" />
             </button>
           </div>
         ) : (
           <div className="flex gap-2">
-            <button className="bg-gray-400 text-gray-600 p-2 rounded-sm cursor-not-allowed">
-              <MdModeEdit />
+            <button
+              className="inline-flex items-center justify-center size-8 rounded-full bg-line text-mute cursor-not-allowed"
+              disabled
+              aria-label="Edit disabled"
+            >
+              <MdModeEdit className="size-4" />
             </button>
-            <button className="bg-gray-400 text-gray-600 p-2 rounded-sm cursor-not-allowed">
-              <MdDelete />
+            <button
+              className="inline-flex items-center justify-center size-8 rounded-full bg-line text-mute cursor-not-allowed"
+              disabled
+              aria-label="Delete disabled"
+            >
+              <MdDelete className="size-4" />
             </button>
           </div>
         ),
@@ -101,22 +122,26 @@ const WorkoutTable = ({
   ];
 
   return (
-    <div className="h-105 flex justify-center items-start">
+    <div className="min-h-[420px] -mx-4 sm:mx-0 px-4 sm:px-0 overflow-x-auto">
       <DataTable
         columns={columns}
         data={data}
         customStyles={customStyles}
         fixedHeader
+        responsive
         noDataComponent={
-          <div className="bg-gray-100 h-90  w-full flex flex-col justify-center items-center gap-5 rounded-sm">
-            <img
-              src={boxImage}
-              alt="Illustration of an empty box"
-              className="w-25 h-auto object-contain"
-            />
-            <h1 className="font-secondary text-3xl">
-              No workouts found. Add your first workout!
-            </h1>
+          <div className="w-full py-16 flex flex-col items-center gap-4 bg-white border border-line border-dashed rounded-xl">
+            <span className="inline-flex items-center justify-center size-14 rounded-full bg-brand/10 text-brand">
+              <LuBicepsFlexed className="size-6" />
+            </span>
+            <div className="text-center">
+              <h3 className="font-secondary text-2xl tracking-tight uppercase">
+                No workouts yet
+              </h3>
+              <p className="text-sm text-mute mt-1">
+                Add your first workout to start building your library.
+              </p>
+            </div>
           </div>
         }
         persistTableHead={true}
@@ -126,20 +151,7 @@ const WorkoutTable = ({
 };
 
 WorkoutTable.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      name: PropTypes.string,
-      difficulty: PropTypes.string,
-      suggested_reps: PropTypes.string,
-      is_ai_generated: PropTypes.bool,
-      creator_id: PropTypes.number,
-      category: PropTypes.shape({
-        name: PropTypes.string,
-        id: PropTypes.number,
-      }),
-    })
-  ),
+  data: PropTypes.array,
   currentPage: PropTypes.string,
   handleDeleteWorkout: PropTypes.func,
   isDeletingWorkout: PropTypes.bool,

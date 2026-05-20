@@ -13,17 +13,14 @@ import { useNavigate } from "react-router-dom";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 const SecurityTab = () => {
-  const {
-    data: { user },
-    isLoading,
-  } = useGetProfileQuery();
+  const { data, isLoading } = useGetProfileQuery();
+  const user = data?.user;
 
   const [changePassword, { isLoading: isUpdatingPassword }] =
     useChangePasswordMutation();
   const [logout] = useLogoutMutation();
   const [deleteUserWorkouts, { isLoading: isDeletingWorkouts }] =
     useDeleteUserWorkoutsMutation();
-
   const navigate = useNavigate();
 
   const schema = yup.object({
@@ -47,10 +44,9 @@ const SecurityTab = () => {
   const onSubmit = async (formData) => {
     if (!user) return;
     const data = { ...formData, id: user?.id };
-
     try {
       const response = await changePassword(data).unwrap();
-      await Swal.fire("Update Successful!", response?.message, "success");
+      await Swal.fire("Password updated", response?.message, "success");
       await logout().unwrap();
       await new Promise((r) => setTimeout(r, 1000));
       navigate("/auth");
@@ -65,23 +61,20 @@ const SecurityTab = () => {
 
   const handleDeleteUserWorkouts = async () => {
     if (!user) return;
-
     const result = await Swal.fire({
-      title: "Are you sure?",
-      text: "You are about to delete ALL your workouts and related logs. This action is irreversible!",
+      title: "Delete all workouts and logs?",
+      text: "This cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete",
     });
-
     if (!result.isConfirmed) {
-      Swal.fire("Workouts not deleted", "", "info");
+      Swal.fire("Data kept", "", "info");
       return;
     }
-
     try {
       const response = await deleteUserWorkouts(user?.id).unwrap();
-      await Swal.fire("Delete Successful!", response?.message, "success");
+      await Swal.fire("Data deleted", response?.message, "success");
     } catch (error) {
       Swal.fire(
         "Delete Failed!",
@@ -92,73 +85,65 @@ const SecurityTab = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-4 ">
-      <div className="flex flex-col bg-gray-200 rounded-sm p-5">
-        <h4 className="font-secondary text-2xl">Change Password</h4>
-        <p className="text-sm text-gray-600 mb-5">
-          If password is successfully updated, you&apos;ll need to login again.
-        </p>
+    <div className="flex flex-col gap-4">
+      <div className="bg-white border border-line rounded-2xl p-5 sm:p-6 flex flex-col gap-4">
+        <div>
+          <h3 className="font-secondary text-2xl tracking-tight uppercase">
+            Change password
+          </h3>
+          <p className="text-sm text-mute mt-1">
+            You&apos;ll be signed out and need to log in again after updating.
+          </p>
+        </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="sm:w-3/4 w-full pb-3"
+          className="flex flex-col gap-4 max-w-md"
         >
           <FormInput
-            label="Current Password"
+            label="Current password"
             id="current_password"
-            type="text"
-            register={register("current_password", {
-              required: "Current Password is required",
-            })}
+            type="password"
+            register={register("current_password")}
             error={errors.current_password}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
           />
-
           <FormInput
-            label="New Password"
+            label="New password"
             id="new_password"
-            type="text"
-            register={register("new_password", {
-              required: "New Password is required",
-            })}
+            type="password"
+            register={register("new_password")}
             error={errors.new_password}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
           />
-
           <FormInput
-            label="Confirm Password"
+            label="Confirm new password"
             id="confirm_password"
-            type="text"
-            register={register("confirm_password", {
-              required: "Confirm Password is required",
-            })}
+            type="password"
+            register={register("confirm_password")}
             error={errors.confirm_password}
-            styles="bg-white border-1 border-gray-400 outline-none text-base p-1 rounded-sm focus:border-black"
           />
-
           <button
             disabled={isLoading || isUpdatingPassword}
-            className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-secondary p-2 rounded-sm cursor-pointer hover:bg-black focus:outline"
+            className="mt-2 inline-flex items-center justify-center px-6 py-3 rounded-full font-medium bg-ink text-paper hover:bg-brand transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {/* {isLoading ? "Reseting..." : " Reset Password"} */}
-            {isUpdatingPassword ? "Updating Password" : "Change Password"}
+            {isUpdatingPassword ? "Updating…" : "Change password"}
           </button>
         </form>
       </div>
 
-      <div className="flex flex-row flex-wrap justify-between items-center md:gap-0 gap-4  bg-gray-200 rounded-sm p-5">
-        <div className="flex flex-col gap-2">
-          <h4 className="font-secondary text-2xl">Delete Workout Data</h4>
-          <p>
-            Deleting your workouts is irreversible. All your workouts and
-            related workout logs will be lost forever
+      <div className="bg-white border border-brand/20 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-1">
+          <h3 className="font-secondary text-xl tracking-tight uppercase">
+            Delete workout data
+          </h3>
+          <p className="text-sm text-mute">
+            All workouts and related logs will be lost forever.
           </p>
         </div>
         <button
           disabled={isDeletingWorkouts}
           onClick={handleDeleteUserWorkouts}
-          className="bg-red-secondary text-white flex flex-row items-center gap-1 py-1 px-2 rounded-sm cursor-pointer hover:bg-black"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-brand text-paper hover:bg-brand-dark transition-colors disabled:opacity-50"
         >
-          <FaRegTrashAlt className="inline text-sm" /> Delete Data
+          <FaRegTrashAlt className="size-3.5" /> Delete data
         </button>
       </div>
     </div>

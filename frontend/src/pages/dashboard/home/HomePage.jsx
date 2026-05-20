@@ -1,19 +1,23 @@
-import ActivitySummary from "./components/ActivitySummary";
-import CategoryBreakdown from "./components/CategoryBreakdown";
-import UserStatsSection from "./components/UserStatsSection";
+import HeroBanner from "./components/HeroBanner";
 import WeeklyActivity from "./components/WeeklyActivity";
+import CategoryBreakdown from "./components/CategoryBreakdown";
+import StreakCalender from "./components/StreakCalender";
+import WorkoutStats from "./components/WorkoutStats";
 
 const HomePage = () => {
   return (
-    <div className="w-full h-fit mt-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="md:col-span-2 grid gap-y-4">
-          <WeeklyActivity />
-          <ActivitySummary />
-        </div>
+    <div className="w-full flex flex-col gap-5 sm:gap-6 pt-6 sm:pt-8">
+      <HeroBanner />
 
-        <CategoryBreakdown />
-        <UserStatsSection />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 sm:gap-6">
+        <div className="xl:col-span-2 flex flex-col gap-5 sm:gap-6">
+          <WeeklyActivity />
+          <CategoryBreakdown />
+        </div>
+        <div className="flex flex-col gap-5 sm:gap-6">
+          <StreakCalender />
+          <WorkoutStats />
+        </div>
       </div>
     </div>
   );

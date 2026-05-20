@@ -29,17 +29,11 @@ const LogsPage = () => {
     useDeleteWorkoutLogMutation();
 
   const logs = data?.logs ?? [];
-  const totalLogs = data?.total ?? 1;
+  const totalLogs = data?.total ?? 0;
   const totalPages = data?.totalPages ?? 1;
   const currentPage = data?.currentPage;
 
-  const cleared = {
-    dateFrom: "",
-    dateTo: "",
-    category: "",
-    difficulty: "",
-  };
-
+  const cleared = { dateFrom: "", dateTo: "", category: "", difficulty: "" };
   const clearFilters = () => setFilters(cleared);
 
   const handleShowFilters = () => {
@@ -81,29 +75,23 @@ const LogsPage = () => {
       Object.entries(filters).filter(([_, v]) => v !== "")
     );
 
-    triggerSearch({
-      page: 1,
-      filters: cleanedFilters,
-    });
+    triggerSearch({ page: 1, filters: cleanedFilters });
   };
 
   const handleDeleteLog = async (id) => {
     const result = await Swal.fire({
-      title: "Do you want to delete this workout log?",
+      title: "Delete this log?",
       showCancelButton: true,
-      confirmButtonText: "Yes",
+      confirmButtonText: "Yes, delete",
     });
-
     if (!result.isConfirmed) {
-      Swal.fire("Workout log not deleted", "", "info");
+      Swal.fire("Log kept", "", "info");
       return;
     }
-
     try {
       const response = await deleteWorkoutLog(id).unwrap();
       await Swal.fire(response.message, "", "success");
     } catch (error) {
-      //console.error("Delete failed:", error);
       Swal.fire(
         "Delete Log Failed!",
         error?.data?.message || "An error occurred",
@@ -117,7 +105,7 @@ const LogsPage = () => {
   }, [page, triggerSearch]);
 
   return (
-    <div className="w-full h-fit mt-4 flex flex-col gap-2">
+    <div className="w-full pt-6 sm:pt-8 flex flex-col gap-4">
       <LogHeader
         total={totalLogs}
         isLoading={isFetchingLogs}
@@ -143,7 +131,6 @@ const LogsPage = () => {
         />
       )}
 
-      {/* pagination */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}

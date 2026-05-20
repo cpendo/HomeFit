@@ -7,17 +7,26 @@ const DoughnutChart = () => {
     labels: ["Cardio", "Strength", "Core", "HIIT"],
     datasets: [
       {
-        data: [5, 5, 20, 10],
-        backgroundColor: ["#fff", "#000", "#a4161a", "#6b7383"],
-        borderWidth: 0,
+        data: [20, 10, 10, 5],
+        backgroundColor: ["#bc2c3e", "#0d0d0e", "#6f6f73", "#d4d1ca"],
+        borderColor: "#ffffff",
+        borderWidth: 4,
+        hoverOffset: 6,
       },
     ],
   };
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
+    cutout: "65%",
     plugins: {
-      legend: {
-        display: false,
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: "#0d0d0e",
+        titleFont: { family: "DM Sans", weight: "600" },
+        bodyFont: { family: "DM Sans" },
+        padding: 10,
+        cornerRadius: 8,
       },
     },
   };

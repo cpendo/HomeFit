@@ -93,38 +93,39 @@ body {
   background-repeat: no-repeat;
 }
 
-.dashboard-menu-div {
-  justify-content: center;
-  align-items: center;
-  background-color: black;
-  color: white;
-  max-width: max-content;
-  padding-block: 4px;
-  border-radius: 5px;
+/* Dashboard surfaces — match landing system */
+.dash-card {
+  background-color: #ffffff;
+  border: 1px solid var(--color-line);
+  border-radius: 0.875rem;
+  padding: 1.25rem;
+}
+@media (min-width: 640px) {
+  .dash-card {
+    padding: 1.5rem;
+  }
 }
 
-.dashboard-menu-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  border-radius: 4px;
-  padding: 6px;
+.dash-stat-num {
+  font-family: var(--font-secondary);
+  font-size: 1.875rem;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 /* react-day-picker */
 .rdp-root {
-  --rdp-accent-color: var(--color-brand-dark);
-  --rdp-today-color: #000;
+  --rdp-accent-color: var(--color-brand);
+  --rdp-today-color: var(--color-ink);
   --rdp-day-height: 36px;
   --rdp-day-width: 36px;
   --rdp-day_button-height: 36px;
   --rdp-day_button-width: 36px;
+  font-family: var(--font-primary);
 }
 
 .logged-day {
-  background-color: var(--color-brand-dark);
+  background-color: var(--color-brand);
   color: #fff;
   border-radius: 50%;
 }
