@@ -71,12 +71,12 @@ const ResetPassword = () => {
 
   return (
     <div className="w-4/5 mx-auto flex-1 flex flex-col justify-center items-center">
-      <div className="w-full flex flex-col">
-        <h3 className="uppercase font-secondary font-normal lg:text-4xl text-2xl">
-          Create a new Password
+      <div className="w-full flex flex-col mb-2">
+        <h3 className="uppercase font-secondary lg:text-4xl text-3xl tracking-tight">
+          New <span className="text-brand">password</span>.
         </h3>
-        <p className="lg:text-xl text-lg font-light pt-1 pb-2">
-          Must be atleast 8 characters
+        <p className="text-base sm:text-lg text-ink/70 font-light pt-1">
+          Must be at least 8 characters.
         </p>
       </div>
 
@@ -105,33 +105,29 @@ const ResetPassword = () => {
             id="checkbox"
             className="size-4 focus:outline"
           />
-          <label htmlFor="checkbox" className="text-sm font-medium text-nowrap">
-            {" "}
+          <label htmlFor="checkbox" className="text-sm font-medium text-ink/80">
             Accept our{" "}
-            <span className="text-blue-600 underline">
-              Terms & Conditions
-            </span>{" "}
+            <span className="text-brand underline">Terms & Conditions</span>
           </label>
         </div>
         {errors.checkbox && (
-          <span className="text-red-600 text-sm">
-            {errors.checkbox?.message}
-          </span>
+          <span className="text-brand text-sm">{errors.checkbox?.message}</span>
         )}
 
         <button
           disabled={isLoading}
-          className="w-full lg:text-lg mt-6 text-white font-secondary font-medium bg-red-primary p-2 rounded-xs cursor-pointer hover:bg-red-secondary focus:outline"
+          className="w-full mt-6 inline-flex items-center justify-center bg-ink text-paper px-6 py-3 rounded-full font-medium hover:bg-brand transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Reseting..." : " Reset Password"}
+          {isLoading ? "Resetting…" : "Reset password"}
         </button>
       </form>
 
-      <button className="font-secondary text-gray-800 lg:text-lg text-base mt-4">
-        <Link to="/auth" className="underline text-black">
-          Back to Sign In
-        </Link>
-      </button>
+      <Link
+        to="/auth"
+        className="text-base text-ink/70 mt-4 underline hover:text-brand transition-colors"
+      >
+        Back to Sign In
+      </Link>
     </div>
   );
 };

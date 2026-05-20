@@ -1,4 +1,6 @@
-const CodeInput = ({value, onChange, onKeyDown, inputRef}) => {
+import PropTypes from "prop-types";
+
+const CodeInput = ({ value, onChange, onKeyDown, inputRef }) => {
   return (
     <input
       type="text"
@@ -7,12 +9,10 @@ const CodeInput = ({value, onChange, onKeyDown, inputRef}) => {
       onKeyDown={onKeyDown}
       ref={inputRef}
       maxLength={1}
-      className="bg-gray-300 sm:size-14 size-10 sm:text-5xl text-3xl text-center outline-none border-gray-300 border-2 rounded-xl focus:border-black"
+      className="bg-white sm:size-14 size-10 sm:text-4xl text-2xl text-center outline-none border border-line rounded-xl focus:border-brand focus:ring-1 focus:ring-brand/30 transition-colors"
     />
   );
 };
-
-import PropTypes from 'prop-types';
 
 CodeInput.propTypes = {
   value: PropTypes.string.isRequired,
@@ -20,8 +20,8 @@ CodeInput.propTypes = {
   onKeyDown: PropTypes.func,
   inputRef: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) })
-  ])
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 export default CodeInput;

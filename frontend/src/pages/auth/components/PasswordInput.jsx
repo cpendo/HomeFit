@@ -1,4 +1,3 @@
-// components/PasswordInput.jsx
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import PropTypes from "prop-types";
@@ -8,28 +7,32 @@ const PasswordInput = ({ label, id, register, error }) => {
 
   return (
     <div className="flex flex-col mt-3 w-full">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id} className="text-sm font-medium text-ink/80 mb-1.5">
+        {label}
+      </label>
       <div className="relative">
         <input
           {...register(id)}
           type={visible ? "text" : "password"}
           id={id}
-          className="bg-[#D3D3D3] text-base w-full p-1.5 rounded-xs outline-none border-2 border-[#D3D3D3] focus:bg-white focus:border-black pr-10"
+          className="bg-white text-base w-full px-3 py-2.5 rounded-md outline-none border border-line focus:border-brand focus:ring-1 focus:ring-brand/30 transition-colors pr-10 placeholder:text-mute"
         />
         <button
           type="button"
           onClick={() => setVisible(!visible)}
-          className="absolute top-1/2 right-3 transform -translate-y-1/2 text-black"
+          className="absolute top-1/2 right-3 -translate-y-1/2 text-mute hover:text-ink transition-colors"
+          aria-label={visible ? "Hide password" : "Show password"}
         >
           {visible ? <FaEye /> : <FaEyeSlash />}
         </button>
       </div>
       {error && (
-        <span className="text-red-600 text-sm">{error.message}</span>
+        <span className="text-brand text-sm mt-1">{error.message}</span>
       )}
     </div>
   );
 };
+
 PasswordInput.propTypes = {
   label: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,

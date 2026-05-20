@@ -26,13 +26,15 @@ const VerifyAccount = () => {
 
     try {
       await verify({ token, pin }).unwrap();
-
       sessionStorage.removeItem("token");
       resetTimer();
       navigate("/auth");
     } catch (error) {
-      await Swal.fire(error?.data?.title || "Verification Failed!", error?.data?.message, "error");
-
+      await Swal.fire(
+        error?.data?.title || "Verification Failed!",
+        error?.data?.message,
+        "error"
+      );
       if (error.status === 400 && error.data.redirect) {
         navigate("/auth");
       }
@@ -43,11 +45,9 @@ const VerifyAccount = () => {
     try {
       const response = await resendPin({ token }).unwrap();
       await Swal.fire(response.message, "", "success");
-
       resetTimer();
     } catch (error) {
       await Swal.fire("Resend Failed!", error?.data?.message, "error");
-
       if (error.status === 400 && error.data.redirect) {
         navigate("/auth");
       }
@@ -55,17 +55,18 @@ const VerifyAccount = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center">
-      <div className="flex flex-col justify-center items-center">
-        <h1 className="font-secondary sm:text-5xl text-4xl mb-2">
-          Check your inbox
+    <div className="flex-1 flex flex-col justify-center items-center px-4">
+      <div className="flex flex-col justify-center items-center text-center mb-2">
+        <h1 className="uppercase font-secondary sm:text-5xl text-4xl tracking-tight">
+          Check your <span className="text-brand">inbox</span>.
         </h1>
-        <p className="sm:text-xl text-lg sm:text-start text-center">
-          We have sent you a verification pin via email
+        <p className="text-base sm:text-lg text-ink/70 font-light pt-2 max-w-md">
+          We sent a verification pin to your email. Enter it below to confirm
+          your account.
         </p>
       </div>
 
-      <form className="flex flex-col justify-center items-center gap-5 my-9">
+      <form className="flex flex-col justify-center items-center gap-5 my-9 w-full max-w-md">
         <div className="flex flex-row sm:gap-3 gap-2">
           {values.map((val, index) => (
             <CodeInput
@@ -78,7 +79,7 @@ const VerifyAccount = () => {
           ))}
         </div>
 
-        <div className="w-full sm:text-lg text-sm flex flex-row justify-between items-center ">
+        <div className="w-full text-sm sm:text-base flex flex-row justify-between items-center text-ink/70">
           <div>
             Can&apos;t find the code?
             <button
@@ -87,28 +88,27 @@ const VerifyAccount = () => {
               disabled={!resendAvailable}
               className={`ml-2 underline transition-opacity ${
                 !resendAvailable
-                  ? "text-gray-400 cursor-not-allowed opacity-50"
-                  : "text-red-secondary hover:opacity-80"
+                  ? "text-mute cursor-not-allowed opacity-50"
+                  : "text-brand hover:opacity-80"
               }`}
             >
               Resend
             </button>
           </div>
-
-          <div>{formatTime(timeLeft)}</div>
+          <div className="font-mono text-mute">{formatTime(timeLeft)}</div>
         </div>
 
         <button
           type="button"
           onClick={handleVerifyUser}
           disabled={!isComplete}
-          className={`w-full font-secondary text-2xl p-2 rounded-sm mt-4  ${
+          className={`w-full inline-flex items-center justify-center px-6 py-3 rounded-full font-medium mt-4 transition-colors duration-300 ${
             isComplete
-              ? "bg-red-secondary text-white hover:bg-black cursor-pointer"
-              : "bg-gray-300 text-gray-600 cursor-not-allowed"
-          } `}
+              ? "bg-ink text-paper hover:bg-brand cursor-pointer"
+              : "bg-line text-mute cursor-not-allowed"
+          }`}
         >
-          {isVerifying ? "Verifying" : "Verify"}
+          {isVerifying ? "Verifying…" : "Verify"}
         </button>
       </form>
     </div>

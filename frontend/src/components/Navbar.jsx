@@ -12,14 +12,16 @@ const menuItems = [
 ];
 
 const Navbar = () => {
-  const { data } = useGetProfileQuery();
-  const user = data?.user;
+  const { data, error } = useGetProfileQuery();
+  // `!error` flips the CTA back to "Sign in" after logout — RTK Query
+  // keeps stale `data` on failed refetches, so we have to check `error`.
+  const user = !error && data?.user;
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  // Default to Register; once the profile resolves with a user, swap to Dashboard.
+  // Default to Sign in; once the profile resolves with a user, swap to Dashboard.
   // No `isFetching` gate — nav renders immediately on first paint.
-  const ctaTo = user ? "/dashboard" : "/auth/register";
-  const ctaText = user ? "Dashboard" : "Register";
+  const ctaTo = user ? "/dashboard" : "/auth";
+  const ctaText = user ? "Dashboard" : "Sign in";
 
   return (
     <header className="w-full font-primary h-14 sm:h-17 py-3 px-4 bg-black text-[#F5F3F4] sticky top-0 z-40 border-b border-white/5">
