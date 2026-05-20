@@ -1,39 +1,50 @@
-const usageInstructions = [
+const STEPS = [
   {
     title: "Create an account",
     description:
       "Sign up and set your fitness goals to personalize your experience.",
   },
   {
-    title: "Add Your Workouts",
+    title: "Add your workouts",
     description:
-      "Select from pre-defined exercises or create custom workout sets.",
+      "Pick from the pre-built library or create your own custom workout sets.",
   },
   {
-    title: "Log Your Progress",
-    description: "After each session, log your sets, reps, and duration.",
+    title: "Log your progress",
+    description:
+      "After each session, record your sets, reps, and duration. Watch the streak grow.",
   },
 ];
 
 const HowTo = () => {
   return (
-    <section className="w-full flex flex-col items-center gap-8 sm:py-16 py-10">
-      <h1 className="font-secondary sm:text-5xl text-4xl capitalize">How to get started</h1>
+    <section
+      id="how-it-works"
+      className="w-full bg-ink text-paper scroll-mt-20"
+    >
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-20 sm:py-28">
+        <div className="flex flex-col gap-4 max-w-2xl mb-12 sm:mb-16">
+          <h2 className="font-secondary uppercase text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight">
+            Three steps. <span className="text-brand">Then go.</span>
+          </h2>
+        </div>
 
-      <div className="flex lg:flex-row flex-col items-center justify-between flex-wrap gap-10">
-        
-
-        {usageInstructions.map(({ title, description}, index) => (
-          <div key={index} className="slg:size-80 size-70 flex flex-col justify-center gap-5 px-4 border-2 bg-[#d3d3d3]">
-            <h3 className="text-6xl font-secondary">{`0${index + 1}`}</h3>
-            <h4 className="text-3xl capitalize font-secondary text-red-secondary">
-              {title}
-            </h4>
-            <p className="text-xl">
-              {description}
-            </p>
-          </div>
-        ))}
+        <ol className="grid md:grid-cols-3 gap-5">
+          {STEPS.map(({ title, description }, index) => (
+            <li
+              key={title}
+              className="relative rounded-2xl border border-paper/15 bg-paper/[0.04] p-7 sm:p-8 flex flex-col gap-4 transition-colors hover:border-brand/60"
+            >
+              <span className="font-secondary text-7xl sm:text-8xl leading-none text-brand">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <h3 className="font-secondary uppercase text-2xl sm:text-3xl tracking-tight">
+                {title}
+              </h3>
+              <p className="text-paper/70 leading-relaxed">{description}</p>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

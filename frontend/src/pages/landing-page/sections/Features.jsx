@@ -6,67 +6,77 @@ const features = [
   {
     name: "Workout tracking",
     description:
-      " Log exercises, sets, reps, and durations to keep track of your progress.",
+      "Log exercises, sets, reps, and durations. See your progress build session by session.",
     icon: IoBarChartSharp,
   },
   {
     name: "Personalization",
     description:
-      "Create personalized workout sets for different fitness goals (e.g.'Leg Day', 'Cardio Blast').",
+      "Build workout sets around your goals — Leg Day, Cardio Blast, your own routines.",
     icon: RiListSettingsLine,
   },
   {
-    name: "Exercise Library",
+    name: "Exercise library",
     description:
-      "Explore a diverse range of exercises, complete with descriptions, and demonstrations.",
+      "Browse a diverse catalog of exercises with descriptions and video demos.",
     icon: RiListCheck,
   },
 ];
 
 const Features = () => {
   return (
-    <section className="w-full flex flex-col items-center gap-12 bg-[#D3D3D3] sm:py-16 py-10">
-      <h1 className="font-secondary sm:text-5xl text-4xl capitalize">what we offer</h1>
-
-      <div className="w-[90%] flex lg:flex-row flex-col items-center gap-5 lg:h-[500px]">
-        <div className="flex-2 h-full flex justify-center">
-          <img
-            src={FeaturesImg}
-            alt=""
-            className="w-full h-full object-cover rounded-2xl"
-          />
-        </div>
-        <div className="flex-1 h-full flex flex-col justify-center bg-black rounded-2xl opacity-85 p-6">
-          <h1 className="text-4xl font-secondary font-extrabold tracking-wide text-red-secondary">
-            We Elevate Your Fitness Journey
-          </h1>
-
-          <p className="font-light text-white text-lg py-4 leading-relaxed">
-            Every workout counts, and we ensure you get the most out of every
-            session. Our platform is designed to help you stay consistent, track
-            your progress, and achieve real results.
-          </p>
-
-          <p className="text-xl text-gray-300 font-secondary font-medium">
-            Whether you&apos;re a beginner or an experienced athlete, we provide
-            the structure, tools, and motivation to keep you pushing forward.
-          </p>
-        </div>
-      </div>
-
-      <div className="w-[90%] grid md:grid-cols-3 grid-cols-1 gap-12 text-center">
-        {features.map(({ name, description, icon: Icon }, index) => (
-          <div key={index} className="flex flex-col items-center gap-4">
-          <Icon className="text-5xl text-red-secondary" />
-
-          <h2 className="text-black font-secondary text-3xl ">
-            {name}
+    <section id="features" className="w-full bg-paper text-ink scroll-mt-20">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-20 sm:py-28">
+        <div className="flex flex-col gap-4 max-w-2xl mb-12 sm:mb-16">
+          <h2 className="font-secondary uppercase text-4xl sm:text-5xl lg:text-6xl leading-tight tracking-tight">
+            Built to keep you <span className="text-brand">consistent</span>.
           </h2>
-          <p className="text-center font-light text-lg text-gray-700">
-            {description}
-          </p>
         </div>
-        ))}
+
+        {/* Editorial spotlight: image + statement */}
+        <div className="grid lg:grid-cols-12 gap-8 mb-16 sm:mb-20">
+          <div className="lg:col-span-7 relative overflow-hidden rounded-2xl bg-ink/5">
+            <img
+              src={FeaturesImg}
+              alt="HomeFit interface"
+              className="w-full h-full object-cover aspect-[16/10] lg:aspect-auto"
+              loading="lazy"
+            />
+          </div>
+          <div className="lg:col-span-5 flex flex-col justify-center gap-5">
+            <h3 className="font-secondary uppercase text-3xl sm:text-4xl leading-tight tracking-tight">
+              We elevate your{" "}
+              <span className="text-brand">fitness journey</span>.
+            </h3>
+            <p className="text-base sm:text-lg text-ink/70 leading-relaxed">
+              Every workout counts. HomeFit helps you stay consistent, track
+              your progress, and see real results whether you&apos;re just
+              starting or pushing your limits.
+            </p>
+            <p className="text-base text-ink/60">
+              Beginner or experienced athlete, you get the structure, tools, and
+              motivation to keep moving forward.
+            </p>
+          </div>
+        </div>
+
+        {/* Feature trio */}
+        <div className="grid md:grid-cols-3 gap-5">
+          {features.map(({ name, description, icon: Icon }) => (
+            <article
+              key={name}
+              className="card flex flex-col gap-4 transition-colors hover:border-brand/40"
+            >
+              <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand/10 text-brand">
+                <Icon className="text-xl" />
+              </div>
+              <h3 className="font-secondary uppercase text-2xl tracking-tight">
+                {name}
+              </h3>
+              <p className="text-ink/70 leading-relaxed">{description}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

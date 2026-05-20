@@ -1,19 +1,76 @@
 @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import "tailwindcss";
+
+/* ─────────────────────────────────────────────────────────────────
+   HomeFit — Sport Club Editorial design system
+   ─────────────────────────────────────────────────────────────────
+   Tone     editorial sport club (Tracksmith × Strava × Equinox)
+   Display  Anton — condensed bold, gym-poster headline weight
+   Body     DM Sans — clean modern sans with character
+
+   Surface  bg-paper (warm off-white)  ·  bg-ink (near-black)
+   Accent   text-brand / bg-brand (deep crimson, not Christmas red)
+   Lines    border-line (warm light gray)
+   Muted    text-mute (zinc-500 equivalent)
+
+   Type ramp
+     Hero h1    font-secondary text-5xl sm:text-7xl lg:text-8xl tracking-tight
+     Section h2 font-secondary text-4xl sm:text-5xl tracking-tight
+     Card h3    font-secondary text-2xl sm:text-3xl
+     Eyebrow    text-xs uppercase tracking-[0.18em] text-brand
+     Body       text-base text-ink/80 leading-relaxed
+     Lede       text-lg sm:text-xl text-ink/80 font-light leading-relaxed
+     Muted      text-sm text-mute
+
+   Layout
+     Container    max-w-6xl mx-auto px-6 sm:px-8
+     Section pad  py-20 sm:py-28
+     Card pad     p-6 sm:p-8
+     Card radius  rounded-2xl
+   ───────────────────────────────────────────────────────────────── */
 
 @theme {
   --font-secondary: "Anton", serif;
-  --font-primary: "Lexend Deca", serif;
+  --font-primary: "DM Sans", sans-serif;
 
-  --color-red-primary: #e5383b;
-  --color-red-secondary: #a4161a;
+  /* Brand */
+  --color-brand: #bc2c3e;
+  --color-brand-dark: #8d1c2a;
+  --color-ink: #0d0d0e;
+  --color-paper: #fafaf7;
+  --color-mute: #6f6f73;
+  --color-line: #e6e3dc;
+
+  /* Legacy aliases (some components still reference these — kept to avoid breaking the dashboard) */
+  --color-red-primary: #bc2c3e;
+  --color-red-secondary: #8d1c2a;
   --color-dash-secondary: #d3d3d3;
   --color-dash-bg: #e8ecf2;
+  --color-surface: #ffffff;
+  --color-surface-muted: #fafaf7;
+  --color-border: #e6e3dc;
+  --color-border-strong: #d4d1ca;
+}
+
+/* Card utility — used across landing and dashboard */
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 1.75rem; /* p-7 */
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font-primary);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .not-found-text {
@@ -31,35 +88,17 @@ body {
   background-position: center;
 }
 
-.blob-bg {
-  background-image: url("./assets/blob.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-}
-
 .card-bg {
   background-image: url("./assets/29620.jpg");
   background-repeat: no-repeat;
 }
 
-.card:hover {
-  transform: scale(1.02);
-  cursor: pointer;
-}
-
-.card:hover .play-button {
-  color: red;
-}
-
 .dashboard-menu-div {
-  /* display: flex; */
   justify-content: center;
   align-items: center;
   background-color: black;
   color: white;
-  max-width: max-content; /* Fallback for older browsers */
-  max-width: fit-content;
+  max-width: max-content;
   padding-block: 4px;
   border-radius: 5px;
 }
@@ -74,26 +113,55 @@ body {
   padding: 6px;
 }
 
-/* react date picker */
-/* --rdp-accent-background-color: #000; Change the accent background color. */
-/* Add more CSS variables here. */
+/* react-day-picker */
 .rdp-root {
-  --rdp-accent-color: var(--color-red-secondary);
+  --rdp-accent-color: var(--color-brand-dark);
   --rdp-today-color: #000;
   --rdp-day-height: 36px;
   --rdp-day-width: 36px;
   --rdp-day_button-height: 36px;
   --rdp-day_button-width: 36px;
-  }
+}
 
-  .logged-day {
-    background-color: var(--color-red-secondary); 
-    color: #fff;
-    border-radius: 50%
-  }
-  
+.logged-day {
+  background-color: var(--color-brand-dark);
+  color: #fff;
+  border-radius: 50%;
+}
+
 .settings-tab li {
   border-radius: 4px;
   padding: 8px;
   cursor: pointer;
+}
+
+/* ─── Landing page motion ───────────────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+.fade-up-1 { animation-delay: 0.05s; }
+.fade-up-2 { animation-delay: 0.15s; }
+.fade-up-3 { animation-delay: 0.25s; }
+.fade-up-4 { animation-delay: 0.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
+  .fade-up-1,
+  .fade-up-2,
+  .fade-up-3,
+  .fade-up-4 {
+    animation: none;
+  }
 }

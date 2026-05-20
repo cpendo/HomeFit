@@ -1,95 +1,92 @@
 import { FaDumbbell } from "react-icons/fa6";
-import { NavLink } from "react-router";
 import { FaTelegramPlane } from "react-icons/fa";
 
-const quickLinks = [
-  {
-    text: "Home",
-    route: "/",
-  },
-  {
-    text: "Training",
-    route: "/training",
-  },
-  {
-    text: "Help",
-    route: "/get-help",
-  },
+const QUICK_LINKS = [
+  { text: "Features", href: "#features" },
+  { text: "How it works", href: "#how-it-works" },
+  { text: "FAQ", href: "#faq" },
 ];
 
 const Footer = () => {
   return (
-    <section className="w-full bg-[#D3D3D3]">
-      {/* Get Email Alerts */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-5 sm:gap-10 py-10 sm:py-20 font-light">
-        <div className="flex flex-col items-center justify-center">
-          <h4 className="font-secondary capitalize text-4xl sm:text-5xl">
-            Be the first to know
-          </h4>
-          <p className="font-medium sm:text-base text-sm  text-red-secondary sm:tracking-widest">
-            Get the latest workouts and news alerts.
-          </p>
-        </div>
-        <div className="bg-white sm:h-20 rounded-full py-2 sm:py-0 px-2 flex flex-row justify-center items-center">
-          <input
-            type="text"
-            placeholder="johndoe@gmail.com"
-            className="bg-white sm:text-2xl rounded-3xl px-4 border-none outline-none"
-            // className="bg-white text-lg py-3 px-8 border-none outline-none rounded-3xl"
-          />
-          <div className="flex justify-center items-center bg-red-secondary size-9 sm:size-12 rounded-3xl cursor-pointer hover:bg-black">
-            <FaTelegramPlane className="text-white text-2xl" />
+    <footer className="w-full bg-paper text-ink">
+      {/* Newsletter band */}
+      <div className="border-t border-line">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 py-16 sm:py-20 grid lg:grid-cols-12 gap-8 items-center">
+          <div className="lg:col-span-7">
+            <h3 className="font-secondary uppercase text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+              Be the first to know.
+            </h3>
+            <p className="text-base text-ink/70 mt-2">
+              New workouts and updates, straight to your inbox.
+            </p>
           </div>
+          <form
+            className="lg:col-span-5 flex items-center gap-2 bg-white border border-line rounded-full pl-5 pr-1.5 py-1.5"
+            onSubmit={(e) => e.preventDefault()}
+          >
+            <input
+              type="email"
+              placeholder="you@example.com"
+              className="flex-1 bg-transparent text-base text-ink placeholder:text-mute outline-none py-2"
+              aria-label="Email address"
+            />
+            <button
+              type="submit"
+              className="flex items-center justify-center bg-brand hover:bg-brand-dark text-white w-11 h-11 rounded-full transition-colors"
+              aria-label="Subscribe"
+            >
+              <FaTelegramPlane className="text-base" />
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Footer Content */}
-      <div className="flex flex-col bg-black text-white font-light rounded-t-xl p-5 sm:p-10">
-        <div className="flex flex-col sm:flex-row gap-10 justify-between items-start pb-5">
-          <div>
-            <div className="flex items-center">
-              <FaDumbbell className="sm:size-8 size-9 text-red-secondary rotate-90" />
-              <h1 className="font-secondary sm:text-3xl text-3xl font-medium">
-                HomeFit
-              </h1>
+      {/* Footer band */}
+      <div className="bg-ink text-paper">
+        <div className="max-w-6xl mx-auto px-6 sm:px-8 py-12 sm:py-16">
+          <div className="grid sm:grid-cols-12 gap-10 sm:gap-8">
+            {/* Brand */}
+            <div className="sm:col-span-7 flex flex-col gap-3">
+              <div className="flex items-center gap-1">
+                <FaDumbbell className="size-8 text-brand rotate-90" />
+                <span className="font-secondary uppercase text-3xl tracking-tight">
+                  HomeFit
+                </span>
+              </div>
+              <p className="text-paper/70 max-w-sm leading-relaxed">
+                Customize your workouts, track every session, and stay in
+                control of your fitness journey.
+              </p>
             </div>
-            <p className="sm:w-90">
-              Customize your workouts, track every session, and stay in control
-              of your fitness journey.
-            </p>
+
+            {/* Links */}
+            <div className="sm:col-span-5">
+              <h4 className="font-secondary uppercase text-sm tracking-[0.18em] text-paper/60 mb-4">
+                Explore
+              </h4>
+              <ul className="flex flex-col gap-2.5">
+                {QUICK_LINKS.map(({ text, href }) => (
+                  <li key={href}>
+                    <a
+                      href={href}
+                      className="text-paper/85 hover:text-brand transition-colors"
+                    >
+                      {text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div className="flex flex-row gap-20 capitalize">
-            <div className="">
-              <h5 className="font-secondary text-xl text-nowrap underline">
-                Quick links
-              </h5>
-              {quickLinks.map(({ text, route }, index) => (
-                <NavLink
-                  key={index}
-                  to={route}
-                  className="block  hover:text-red-secondary hover:underline"
-                >
-                  {text}
-                </NavLink>
-              ))}
-            </div>
-            <div>
-              <h5 className="font-secondary text-xl underline">Legal</h5>
-              <p className="hover:text-red-secondary hover:underline">
-                privacy policy
-              </p>
-              <p className="hover:text-red-secondary hover:underline">
-                terms of service
-              </p>
-            </div>
+
+          <div className="border-t border-paper/15 mt-12 pt-6 flex flex-col sm:flex-row gap-2 justify-between text-sm text-paper/55">
+            <p>© {new Date().getFullYear()} HomeFit.</p>
+            <p>Built with React, Tailwind &amp; SQLite.</p>
           </div>
         </div>
-        <hr />
-        <p className="capitalize text-sm text-center text-nowrap pt-2">
-          © 2025 HomeFit. all rights reserved.
-        </p>
       </div>
-    </section>
+    </footer>
   );
 };
 

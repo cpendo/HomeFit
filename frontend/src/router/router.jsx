@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router";
 import App from "../App";
 import NotFound from "../components/NotFound";
 import LandingPage from "../pages/landing-page/LandingPage";
-import HelpPage from "../pages/contact-us/HelpPage";
 import {
   AuthLayout,
   Login,
@@ -35,8 +34,8 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "get-help",
-        element: <HelpPage />,
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
@@ -103,10 +102,6 @@ const router = createBrowserRouter([
       },
       { path: "settings", element: <SettingsPage /> },
     ],
-  },
-  {
-    path: "*",
-    element: <NotFound />,
   },
 ]);
 

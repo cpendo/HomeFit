@@ -1,37 +1,28 @@
 import { useState } from "react";
 import { FaDumbbell } from "react-icons/fa6";
 import { IoMenu } from "react-icons/io5";
+import { Link } from "react-router";
 
-import { Link, NavLink } from "react-router";
 import { useGetProfileQuery } from "../features/users/usersApi";
 
 const menuItems = [
-  {
-    text: "Home",
-    route: "/",
-  },
-  {
-    text: "Training",
-    route: "/training",
-  },
-  {
-    text: "Help",
-    route: "/get-help",
-  },
+  { text: "Features", href: "#features" },
+  { text: "How it works", href: "#how-it-works" },
+  { text: "FAQ", href: "#faq" },
 ];
 
 const Navbar = () => {
-  const { data, isFetching, error } = useGetProfileQuery();
+  const { data } = useGetProfileQuery();
   const user = data?.user;
-
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
-  if (isFetching) {
-    return null; // Optionally, show a loading spinner or placeholder
-  }
+  // Default to Register; once the profile resolves with a user, swap to Dashboard.
+  // No `isFetching` gate — nav renders immediately on first paint.
+  const ctaTo = user ? "/dashboard" : "/auth/register";
+  const ctaText = user ? "Dashboard" : "Register";
 
   return (
-    <header className="w-full font-primary h-14 sm:h-17 py-3 px-4 bg-black text-[#F5F3F4]">
+    <header className="w-full font-primary h-14 sm:h-17 py-3 px-4 bg-black text-[#F5F3F4] sticky top-0 z-40 border-b border-white/5">
       <nav className="flex items-center justify-between">
         <Link to="/">
           <div className="flex items-center">
@@ -42,73 +33,55 @@ const Navbar = () => {
           </div>
         </Link>
 
-        <div className="sm:flex hidden flex-row items-center gap-4 text-lg">
-          <ul className="flex flex-row gap-4 font-medium">
-            {menuItems.map(({ text, route }, index) => (
-              <NavLink
-                key={index}
-                to={route}
-                className={({ isActive }) =>
-                  isActive ? "text-red-secondary" : "text-[#F5F3F4]"
-                }
-              >
-                {text}
-              </NavLink>
+        <div className="sm:flex hidden flex-row items-center gap-6 text-lg">
+          <ul className="flex flex-row gap-6 font-medium">
+            {menuItems.map(({ text, href }) => (
+              <li key={href}>
+                <a
+                  href={href}
+                  className="text-[#F5F3F4] hover:text-red-secondary transition-colors"
+                >
+                  {text}
+                </a>
+              </li>
             ))}
           </ul>
         </div>
 
-        <div className="sm:flex hidden items-center gap-2">
-          {!error ? (
-            <Link to="/dashboard">
-              <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
-                Dashboard
-              </button>
-            </Link>
-          ) : (
-            <Link to="/auth/register">
-              <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white">
-                Register
-              </button>
-            </Link>
-          )}
+        <div className="sm:flex hidden items-center">
+          <Link to={ctaTo}>
+            <button className="bg-[#F5F3F4] text-black py-2 px-4 rounded-4xl cursor-pointer hover:bg-red-secondary hover:text-white transition-colors">
+              {ctaText}
+            </button>
+          </Link>
         </div>
 
         {/* Mobile Nav */}
         <IoMenu
-          className="size-8 sm:hidden block"
+          className="size-8 sm:hidden block cursor-pointer"
           onClick={() => setShowMobileMenu(!showMobileMenu)}
+          aria-label="Open menu"
         />
         {showMobileMenu && (
-          <div className="sm:hidden absolute right-2 top-12 w-30 p-2 bg-[#F5F3F4] shadow-lg rounded-xs z-40">
-            <ul className="flex flex-col gap-2">
-              {menuItems.map(({ text, route }, index) => (
-                <NavLink
-                  key={index}
-                  to={route}
-                  className={({ isActive }) =>
-                    isActive ? "text-red-secondary" : "text-black"
-                  }
-                  onClick={() => setShowMobileMenu(!showMobileMenu)}
-                >
-                  {text}
-                </NavLink>
+          <div className="sm:hidden absolute right-2 top-12 w-40 p-3 bg-[#F5F3F4] shadow-lg rounded-md z-40">
+            <ul className="flex flex-col gap-2 text-black">
+              {menuItems.map(({ text, href }) => (
+                <li key={href}>
+                  <a
+                    href={href}
+                    onClick={() => setShowMobileMenu(false)}
+                    className="block py-1 hover:text-red-secondary"
+                  >
+                    {text}
+                  </a>
+                </li>
               ))}
-
-              <li>
-                {user ? (
-                  <Link to="/dashboard">
-                    <button className="bg-black py-1 px-4 rounded-xs">
-                      Dashboard
-                    </button>
-                  </Link>
-                ) : (
-                  <Link to="/auth/register">
-                    <button className="bg-black py-1 px-4 rounded-xs">
-                      Register
-                    </button>
-                  </Link>
-                )}
+              <li className="pt-1">
+                <Link to={ctaTo} onClick={() => setShowMobileMenu(false)}>
+                  <button className="w-full bg-black text-white py-1.5 px-3 rounded-md">
+                    {ctaText}
+                  </button>
+                </Link>
               </li>
             </ul>
           </div>

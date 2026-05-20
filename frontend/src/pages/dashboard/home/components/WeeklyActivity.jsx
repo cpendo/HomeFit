@@ -1,24 +1,13 @@
 import BarChart from "../charts/BarChart";
-import Select from "react-select";
 
 const WeeklyActivity = () => {
   return (
-    <div className="flex flex-col gap-4 bg-gray-200 p-3 rounded-sm">
-      <div className="flex justify-between">
-        <h4 className="font-secondary text-2xl flex flex-row items-center gap-2">
-          Activity <span className="text-base font-primary">/ 120 mins</span>
-        </h4>
-
-        {/* add a calender to pick any week range for chart since the user started */}
-        <div>
-          <Select
-            className="basic-single"
-            classNamePrefix="select"
-            name="color"
-            // options={["This week", "Last week"]}
-            // styles={selectStyles}
-          />
-        </div>
+    <div className="card flex flex-col gap-4">
+      <div className="flex items-baseline justify-between gap-3">
+        <h2 className="font-secondary text-2xl text-zinc-900">Activity</h2>
+        <p className="text-xs text-muted uppercase tracking-wider">
+          120 min this week
+        </p>
       </div>
       <div className="flex justify-center items-center">
         <BarChart />
