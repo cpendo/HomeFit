@@ -1,6 +1,7 @@
 import DataTable from "react-data-table-component";
 import { MdDelete } from "react-icons/md";
 import { FaNoteSticky } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import { customStyles } from "../../styles";
 import PropTypes from "prop-types";
 
@@ -15,7 +16,12 @@ const LogTable = ({ data, currentPage, handleDeleteLog, isDeletingLog }) => {
       name: "Workout",
       grow: 2,
       selector: (row) => (
-        <span className="font-medium text-ink">{row.workouts.name}</span>
+        <Link
+          to={`${row.id}`}
+          className="font-medium text-ink hover:text-brand transition-colors"
+        >
+          {row.workouts.name}
+        </Link>
       ),
     },
     {

@@ -7,5 +7,6 @@ export { default as WorkoutPage } from "./workouts/WorkoutPage.jsx";
 export { default as AddWorkoutPage } from "./workouts/AddWorkoutPage.jsx";
 export { default as UpdateWorkoutPage } from "./workouts/UpdateWorkoutPage.jsx"
 export { default as WorkoutDetailsPage } from "./workouts/WorkoutDetailsPage.jsx";
-export {default as AddLogPage} from "./logs/AddLogPage.jsx"
+export { default as AddLogPage } from "./logs/AddLogPage.jsx";
+export { default as LogDetailsPage } from "./logs/LogDetailsPage.jsx";
 

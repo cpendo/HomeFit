@@ -86,6 +86,38 @@ const addWorkoutLog = async (req, res) => {
   }
 };
 
+const getWorkoutLogById = async (req, res) => {
+  const logId = parseInt(req.params.id);
+  const userId = req.user?.id;
+
+  if (!userId) return res.status(401).json({ message: "Unauthorized" });
+  if (Number.isNaN(logId))
+    return res.status(400).json({ message: "Invalid log id" });
+
+  try {
+    const log = await WorkoutLogs.findOne({
+      where: { id: logId, user_id: userId },
+      include: [
+        {
+          model: Workout,
+          as: "workouts",
+          attributes: ["id", "name", "difficulty", "suggested_reps"],
+          include: [
+            { model: Category, as: "category", attributes: ["name", "id"] },
+          ],
+        },
+      ],
+    });
+
+    if (!log) return res.status(404).json({ message: "Workout log not found" });
+
+    return res.status(200).json({ log });
+  } catch (error) {
+    console.error("Error fetching log:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 const deleteWorkoutLog = async (req, res) => {
   const logId = parseInt(req.params.id);
   const userId = req.user?.id;
@@ -147,6 +179,7 @@ const getStreakDates = async (req, res) => {
 
 module.exports = {
   getWorkoutLogs,
+  getWorkoutLogById,
   addWorkoutLog,
   deleteWorkoutLog,
   getStreakDates,

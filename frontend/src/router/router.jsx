@@ -20,6 +20,7 @@ import {
   AddWorkoutPage,
   WorkoutDetailsPage,
   AddLogPage,
+  LogDetailsPage,
   UpdateWorkoutPage,
 } from "../pages/dashboard";
 import { PrivateRoute, ProtectedRoute } from "./index";
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
       {
         path: "logs/add",
         element: <AddLogPage />,
+      },
+      {
+        path: "logs/:id",
+        element: <LogDetailsPage />,
       },
       { path: "settings", element: <SettingsPage /> },
     ],
