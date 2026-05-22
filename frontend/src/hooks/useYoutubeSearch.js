@@ -14,7 +14,7 @@ const useYoutubeSearch = (workoutName) => {
       setError(null);
 
       try {
-        const apiBase = import.meta.env.PROD || "http://localhost:5000";
+        const apiBase = import.meta.env.PROD ? "" : "http://localhost:5000";
         const response = await fetch(`${apiBase}/api/youtube?q=${workoutName}`);
         const data = await response.json();
 
