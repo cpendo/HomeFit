@@ -18,7 +18,7 @@ export const logsApi = createApi({
         if (filters.category) params.append("category", filters.category);
         if (filters.difficulty) params.append("difficulty", filters.difficulty);
 
-        return `/?${params.toString()}`;
+        return `?${params.toString()}`;
       },
       providesTags: (result) =>
         result?.data

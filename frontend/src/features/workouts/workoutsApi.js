@@ -17,7 +17,7 @@ export const workoutsApi = createApi({
         if (filters.category) params.append("category", filters.category);
         if (filters.difficulty) params.append("difficulty", filters.difficulty);
 
-        return `/?${params.toString()}`;
+        return `?${params.toString()}`;
       },
       providesTags: (result) =>
         result?.data
@@ -54,7 +54,7 @@ export const workoutsApi = createApi({
     }),
     addWorkout: build.mutation({
       query: (body) => ({
-        url: "/",
+        url: "",
         method: "POST",
         body,
       }),
