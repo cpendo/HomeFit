@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/workout-logs`;
+const baseUrl = import.meta.env.PROD
+  ? "/api/workout-logs"
+  : "http://localhost:5000/api/workout-logs";
 
 export const logsApi = createApi({
   reducerPath: "logsApi",
@@ -45,7 +47,7 @@ export const logsApi = createApi({
       invalidatesTags: [{ type: "Logs", id: "ALL" }],
     }),
     getStreakDates: build.query({
-      query: () => "/streak-dates"
+      query: () => "/streak-dates",
     }),
     getWorkoutLogById: build.query({
       query: (id) => `/${id}`,

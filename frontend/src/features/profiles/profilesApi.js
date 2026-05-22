@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/user-profiles`;
+const baseUrl = import.meta.env.PROD
+  ? "/api/user-profiles"
+  : "http://localhost:5000/api/user-profiles";
 
 export const profilesApi = createApi({
   reducerPath: "profilesApi",
@@ -29,7 +31,7 @@ export const profilesApi = createApi({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["Profile-Data"]
+      invalidatesTags: ["Profile-Data"],
     }),
   }),
 });
@@ -38,5 +40,5 @@ export const {
   useGetAllGoalsQuery,
   useGetProfileDataQuery,
   useCreateProfileMutation,
-  useUpdateProfileMutation
+  useUpdateProfileMutation,
 } = profilesApi;

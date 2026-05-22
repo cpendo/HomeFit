@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/workouts`;
+const baseUrl = import.meta.env.PROD
+  ? "/api/workouts"
+  : "http://localhost:5000/api/workouts";
 
 export const workoutsApi = createApi({
   reducerPath: "workoutsApi",
@@ -34,7 +36,7 @@ export const workoutsApi = createApi({
     }),
     getWorkoutById: build.query({
       query: (id) => `/${id}`,
-      providesTags: (result, error,  id) => [{ type: "Workouts", id }],
+      providesTags: (result, error, id) => [{ type: "Workouts", id }],
     }),
     getSimilarWorkouts: build.query({
       query: ({ id, difficulty }) =>
